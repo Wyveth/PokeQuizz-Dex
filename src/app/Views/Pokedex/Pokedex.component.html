@@ -1,0 +1,6 @@
+<p *ngFor="let pokemon of pokemons; let idx=index">
+  <img src="{{pokemon.UrlImg}}" alt="{{pokemon.FR.Name}}">
+  <a [routerLink]="['/pokemon', pokemon.Id]">
+    {{pokemon.Number}} - {{pokemon.FR.Name}}
+  </a>
+</p>
