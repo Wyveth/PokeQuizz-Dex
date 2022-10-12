@@ -1,6 +1,6 @@
 <div class="max-w-6xl mx-auto flex">
-  <div class="grid grid-cols-3 border-l border-gray-300">
-    <div class="border-b border-r border-gray-300 text-center p-10" *ngFor="let pokemon of pokemons">
+  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 border-l border-gray-300">
+    <div class="border-b border-r border-gray-300 px-5 pt-10 pb-10" *ngFor="let pokemon of pokemons">
       <app-Pokemon-Item [pokemon]="pokemon"></app-Pokemon-Item>
     <div>
   </div>

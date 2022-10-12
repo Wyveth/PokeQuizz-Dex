@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { DataInfo } from 'src/app/Shared/Models/DataInfo.model';
 import { Pokemon } from 'src/app/Shared/Models/Pokemon.model';
+import { TypePok } from 'src/app/Shared/Models/TypePok.model';
 import { PokemonService } from 'src/app/Shared/Services/Pokemon.service';
 
 @Component({
@@ -8,17 +11,27 @@ import { PokemonService } from 'src/app/Shared/Services/Pokemon.service';
   templateUrl: './Pokemon-Details.component.html',
   styleUrls: ['./Pokemon-Details.component.css']
 })
-export class PokemonDetailsComponent implements OnInit {
+export class PokemonDetailsComponent implements OnInit, OnDestroy {
   pokemon!: Pokemon;
+  firstType!: TypePok;
+
+  pokemonSubscription!: Subscription;
+  
   key!: number;
+
   constructor(private route: ActivatedRoute, private pokemonService: PokemonService, private router: Router) { }
 
   ngOnInit() {
     this.key = this.route.snapshot.params['id'];
-    this.pokemonService.getPokemon(this.key).subscribe(
+    this.pokemonSubscription = this.pokemonService.getPokemon(this.key).subscribe(
       (pokemon: Pokemon) => {
         this.pokemon = pokemon;
+        this.firstType = this.pokemon.Types[0];
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.pokemonSubscription.unsubscribe();
   }
 }

@@ -42,7 +42,7 @@ export class AppConfig {
             request = this.http.get('./assets/env/env.' + envResponse.env + '.json');
           } break;
 
-          case 'qualification': {
+          case 'staging': {
             request = this.http.get('./assets/env/env.' + envResponse.env + '.json');
           } break;
 

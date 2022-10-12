@@ -28,6 +28,10 @@ export class PokedexComponent implements OnInit, OnDestroy {
         pokemons.forEach(pokemon => {
           pokemon.UrlImg = this.config.getConfig('img_root') + pokemon.UrlImg,
           pokemon.UrlSprite = this.config.getConfig('img_root') + pokemon.UrlSprite
+
+          pokemon.Types.forEach(type => {
+            type.typePok.UrlMiniHome_FR = this.config.getConfig('img_root') + type.typePok.UrlMiniHome_FR;
+          });
         });
         this.waiting = false;
       }

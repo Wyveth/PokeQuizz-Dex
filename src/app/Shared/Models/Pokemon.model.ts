@@ -27,7 +27,7 @@ export class Pokemon {
     jp!: DataInfo;
 
     //Types
-    TypePoks!: TypePok[];
+    Types!: TypePok[];
 
     //Weaknesses
     Weaknesses!: TypePok[];
@@ -61,9 +61,7 @@ export class Pokemon {
 
     //Url de l'Image
     UrlImg!: string;
-    DataImg!: Blob;
 
     //Sprite Url
     UrlSprite!: string;
-    DataSprite!: Blob;
 }
