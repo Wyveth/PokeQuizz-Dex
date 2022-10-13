@@ -102,5 +102,8 @@
       }
     }
   },
-  "defaultProject": "PokeQuizz-Dex"
+  "defaultProject": "PokeQuizz-Dex",
+  "cli": {
+    "analytics": false
+  }
 }
