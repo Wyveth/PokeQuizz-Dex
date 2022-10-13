@@ -14,11 +14,11 @@
     <p>{{pokemon.FR.WhenEvolution}}</p>
 
     <div *ngFor="let type of pokemon.Types">
-        <p>{{type.Name_FR}}</p>
+        <p>{{type.typePok.Name_FR}}</p>
     </div>
 
     <div *ngFor="let type of pokemon.Weaknesses">
-      <p>{{type.Name_FR}}</p>
+      <p>{{type.typePok.Name_FR}}</p>
     </div>
   </div>
 </div>

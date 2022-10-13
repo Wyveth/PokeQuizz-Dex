@@ -13,7 +13,7 @@ import { PokemonService } from 'src/app/Shared/Services/Pokemon.service';
 })
 export class PokemonDetailsComponent implements OnInit, OnDestroy {
   pokemon!: Pokemon;
-  firstType!: TypePok;
+  firstTypes!: TypePok;
 
   pokemonSubscription!: Subscription;
   
@@ -26,7 +26,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
     this.pokemonSubscription = this.pokemonService.getPokemon(this.key).subscribe(
       (pokemon: Pokemon) => {
         this.pokemon = pokemon;
-        this.firstType = this.pokemon.Types[0];
+        this.firstTypes = this.pokemon.Types[0].typePok;
       }
     );
   }
