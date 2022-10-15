@@ -1,12 +1,23 @@
 module.exports = {
   purge: [],
-  darkMode: false, // or 'media' or 'class'
-  content: ["./src/**/*.{html,js}"],
+  darkMode: 'class', // or 'media' or 'class'
+  content: [
+    "./src/**/*.{html,ts}",
+  ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: theme => ({
+        'day': "url('assets/Images/nature-day.jpg')",
+        'night': "url('assets/Images/nature-night.jpg')",
+      })
+    },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundImage: ['dark']
+    },
   },
-  plugins: [],
+  plugins: [
+    require('flowbite/plugin')
+  ],
 }

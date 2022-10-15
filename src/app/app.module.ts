@@ -1,7 +1,9 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import {DockModule} from 'primeng/dock';
 
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
@@ -38,8 +40,10 @@ export function initConfig(config: AppConfig) {
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    DockModule
   ],
   providers: [
     AppConfig,
