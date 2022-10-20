@@ -1,9 +1,10 @@
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import {DockModule} from 'primeng/dock';
+import { DockModule } from 'primeng/dock';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
@@ -43,7 +44,8 @@ export function initConfig(config: AppConfig) {
     BrowserAnimationsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    DockModule
+    DockModule,
+    SpeedDialModule
   ],
   providers: [
     AppConfig,

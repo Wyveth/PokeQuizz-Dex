@@ -31,6 +31,12 @@ export class PokemonService {
      );
   }
 
+  getPokemonsLight(limit: boolean, max: number): Observable<any> {
+    return this.http.get<any>(this.api_pokemon + "/Light/" + limit + "/" + max, this.httpOptions).pipe(
+      map(this.extractData)
+    );
+ }
+
   getPokemon(id: number): Observable<any> {
     return this.http.get<any>(this.api_pokemon + '/' + id, this.httpOptions).pipe(
       map(this.extractData)

@@ -24,7 +24,7 @@ export class Pokemon {
     //Chinese
     CN!: DataInfo;
     //Partial Japanese
-    jp!: DataInfo;
+    JP!: DataInfo;
 
     //Types
     Types!: TypePok[];
