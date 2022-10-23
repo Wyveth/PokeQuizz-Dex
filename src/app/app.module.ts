@@ -16,12 +16,16 @@ import { FooterComponent } from './Shared/Components/Footer/Footer.component';
 import { PokemonService } from './Shared/Services/Pokemon.service';
 import { PokemonItemComponent } from './Views/Pokemon-Item/Pokemon-Item.component';
 import { PokemonDetailsComponent } from './Views/Pokemon-Details/Pokemon-Details.component';
+import { LanguageComponent } from './Shared/Components/Language/Language.component';
 
 const appRoutes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'pokedex', component: PokedexComponent },
-  { path: 'pokedex/pokemon/:id', component: PokemonDetailsComponent },
+  { path: ':loc/home', component: HomeComponent },
+  { path: ':loc/pokedex', component: PokedexComponent },
+  { path: ':loc/pokedex/pokemon/:id', component: PokemonDetailsComponent },
   { path: '', component: HomeComponent },
+  { path: 'pokedex', redirectTo: 'EN/pokedex' },
+  { path: 'pokedex/pokemon/:id', redirectTo: 'pokedex/pokemon/:id' },
+  { path: 'home', redirectTo: 'EN/home' },
   { path: '**', redirectTo: 'home' }
 ];
 
@@ -34,6 +38,7 @@ export function initConfig(config: AppConfig) {
     BreadcrumbsComponent,
     HeaderComponent,
     FooterComponent,
+    LanguageComponent,
     PokedexComponent,
     PokemonItemComponent,
     PokemonDetailsComponent,

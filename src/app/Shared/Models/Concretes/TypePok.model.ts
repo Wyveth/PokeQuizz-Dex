@@ -1,4 +1,6 @@
-export class TypePok {
+import { Base } from "../Abstract/Base.model";
+
+export class TypePok extends Base {
     //French Name
     Name_FR!: string;
     UrlMiniHome_FR!: string;

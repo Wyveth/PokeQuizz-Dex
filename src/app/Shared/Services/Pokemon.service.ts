@@ -43,6 +43,18 @@ export class PokemonService {
     );
   }
 
+  getEvolChain(family: string): Observable<any> {
+    return this.http.get<any>(this.api_pokemon + '/GetEvol/' + family, this.httpOptions).pipe(
+      map(this.extractData)
+    );  
+  }
+
+  getVariants(number: string): Observable<any> {
+    return this.http.get<any>(this.api_pokemon + '/GetVariant/' + number, this.httpOptions).pipe(
+      map(this.extractData)
+    );  
+  }
+
   private extractData(res: Response) {
     let body = res;
     return body || {};

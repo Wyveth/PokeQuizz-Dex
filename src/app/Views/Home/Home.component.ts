@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, Observer } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-Home',
@@ -8,19 +7,20 @@ import { Observable, Observer } from 'rxjs';
   styleUrls: ['./Home.component.css']
 })
 export class HomeComponent implements OnInit {
+  loc!: string;
   // now!: Date;
   // time!: Observable<string>;
   // greeting: Promise<string>|null = null;
   // arrived: boolean = false;
-
   // private resolve: Function|null = null;
 
-  constructor(private router: Router) { 
+  constructor(private route: ActivatedRoute) { 
     // setInterval(() => {
     //   this.now = new Date();
     // }, 1);
 
     // this.reset();
+    this.loc = this.route.snapshot.params['loc'];
   }
 
   // reset() {
@@ -44,5 +44,4 @@ export class HomeComponent implements OnInit {
     //   setInterval(() => observer.next(new Date().toString()), 1000);
     // });
   }
-
 }

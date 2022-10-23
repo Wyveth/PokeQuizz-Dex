@@ -1,4 +1,6 @@
-export class DataInfo {
+import { Base } from "../Abstract/Base.model";
+
+export class DataInfo extends Base {
     //Name
     Name!: string;
 

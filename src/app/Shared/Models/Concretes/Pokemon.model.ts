@@ -1,9 +1,9 @@
+import { Base } from "../Abstract/Base.model";
 import { DataInfo } from "./DataInfo.model";
+import { Talent } from "./Talent.model";
 import { TypePok } from "./TypePok.model";
 
-export class Pokemon {
-    //Pokemon ID
-    Id!: number;
+export class Pokemon extends Base {
     //Pokemon Number
     Number!: string;
 
@@ -25,6 +25,9 @@ export class Pokemon {
     CN!: DataInfo;
     //Partial Japanese
     JP!: DataInfo;
+
+    //Talents
+    Talents!: Talent[];
 
     //Types
     Types!: TypePok[];
@@ -64,4 +67,12 @@ export class Pokemon {
 
     //Sprite Url
     UrlSprite!: string;
+
+    /**
+     *
+     */
+    constructor() {
+        super();
+        
+    }
 }

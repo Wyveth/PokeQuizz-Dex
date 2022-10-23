@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/app.config';
-import { Pokemon } from 'src/app/Shared/Models/Pokemon.model';
+import { Pokemon } from 'src/app/Shared/Models/Concretes/Pokemon.model';
 
-export class pokemonVm{
+export class PokemonVM{
   Id!: Number;
   Number!: string;
   Name!: string;
@@ -18,27 +18,25 @@ export class pokemonVm{
 })
 export class PokemonItemComponent implements OnInit {
   @Input() pokemon!: Pokemon;
-  @Input() localisation: string = "DE";
-  pokemonVm!: pokemonVm;
+  @Input() location!: string;
+  pokemonVm: PokemonVM = new PokemonVM();
 
-  constructor(private router: Router, private config: AppConfig) { 
-    this.pokemonVm = new pokemonVm();
-  }
+  constructor(private router: Router, private config: AppConfig) { }
 
   ngOnInit() {
-    this.getDataByLocalisation(this.pokemonVm, this.localisation);
+    this.getDataByLocalisation(this.pokemonVm, this.location);
   }
 
   public goToPokemonDetails(Id: Number): void {
-    this.router.navigate([`/pokedex/pokemon/${Id}`]);
+    this.router.navigate(['/'+ this.location + '/pokedex/pokemon/' + Id]);
   }
 
-  private getDataByLocalisation(pokemonVm: pokemonVm, localisation: string): void{
+  private getDataByLocalisation(pokemonVm: PokemonVM, location: string): void{
     this.pokemonVm.Id = this.pokemon.Id;
     this.pokemonVm.Number = this.pokemon.Number;
     this.pokemonVm.UrlImg = this.config.getConfig('img_root') + this.pokemon.UrlImg;
 
-    switch (localisation) {
+    switch (location) {
       case "FR":
         this.pokemonVm.Name = this.pokemon.FR.Name;
         this.pokemon.Types.forEach(type => {
@@ -91,12 +89,6 @@ export class PokemonItemComponent implements OnInit {
         this.pokemonVm.Name = this.pokemon.JP.Name;
         this.pokemon.Types.forEach(type => {
           this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_JP);
-        });
-        break;
-      default:
-        this.pokemonVm.Name = this.pokemon.FR.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_FR);
         });
         break;
     }
