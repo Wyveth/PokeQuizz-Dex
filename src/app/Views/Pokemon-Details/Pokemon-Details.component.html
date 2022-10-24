@@ -18,6 +18,8 @@
     
     <p>{{pokemonVm.WhenEvolution}}</p>
 
+    <img src="{{pokemonVm.Types[0].UrlFondGo}}" />
+
     <div *ngFor="let type of pokemonVm.Types">
         <p>{{type.Name}}</p>
         <p><img src="{{type.UrlImg}}" /></p>

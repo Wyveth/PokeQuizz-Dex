@@ -97,11 +97,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.FR);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_FR, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_FR));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_FR, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_FR));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -112,11 +112,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.EN);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_EN, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_EN));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_EN, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_EN));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -127,11 +127,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.ES);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_ES, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_ES));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_ES, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_ES));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -142,11 +142,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.IT);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_IT, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_IT));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_IT, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_IT));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -157,11 +157,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.DE);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_DE, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_DE));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_DE, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_DE));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -172,11 +172,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.RU);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_RU, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_RU));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_RU, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_RU));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -187,11 +187,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.CO);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_CO, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CO));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_CO, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CO));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -202,11 +202,11 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         this.getDataInfo(pokemonVm, this.pokemon.CN);
 
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_CN, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CN));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_CN, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CN));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -215,13 +215,12 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         break;
       case "JP":
         this.getDataInfo(pokemonVm, this.pokemon.JP);
-
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.Types.push(new TypeVM(type.typePok.Name_JP, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_JP));
+          this.pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Weaknesses.forEach(type => {
-          this.pokemonVm.Weakness.push(new TypeVM(type.typePok.Name_JP, this.config.getConfig('img_root') + type.typePok.UrlMiniHome_JP));
+          this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
         this.pokemon.Talents.forEach(talent => {
@@ -251,25 +250,25 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
   private createTypeVMByLocation(typePok: TypePok, location: string): TypeVM{
     switch (location) {
       case "FR":
-        return new TypeVM(typePok.Name_FR, this.config.getConfig('img_root') + typePok.UrlMiniHome_FR);
+        return new TypeVM(typePok.Name_FR, this.config.getConfig('img_root') + typePok.UrlMiniHome_FR, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "EN":
-        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN);
+        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "ES":
-        return new TypeVM(typePok.Name_ES, this.config.getConfig('img_root') + typePok.UrlMiniHome_ES);
+        return new TypeVM(typePok.Name_ES, this.config.getConfig('img_root') + typePok.UrlMiniHome_ES, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "IT":
-        return new TypeVM(typePok.Name_IT, this.config.getConfig('img_root') + typePok.UrlMiniHome_IT);
+        return new TypeVM(typePok.Name_IT, this.config.getConfig('img_root') + typePok.UrlMiniHome_IT, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "DE":
-        return new TypeVM(typePok.Name_DE, this.config.getConfig('img_root') + typePok.UrlMiniHome_DE);
+        return new TypeVM(typePok.Name_DE, this.config.getConfig('img_root') + typePok.UrlMiniHome_DE, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "RU":
-        return new TypeVM(typePok.Name_RU, this.config.getConfig('img_root') + typePok.UrlMiniHome_RU);
+        return new TypeVM(typePok.Name_RU, this.config.getConfig('img_root') + typePok.UrlMiniHome_RU, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "CO":
-        return new TypeVM(typePok.Name_CO, this.config.getConfig('img_root') + typePok.UrlMiniHome_CO);
+        return new TypeVM(typePok.Name_CO, this.config.getConfig('img_root') + typePok.UrlMiniHome_CO, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "CN":
-        return new TypeVM(typePok.Name_CN, this.config.getConfig('img_root') + typePok.UrlMiniHome_CN);
+        return new TypeVM(typePok.Name_CN, this.config.getConfig('img_root') + typePok.UrlMiniHome_CN, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "JP":
-        return new TypeVM(typePok.Name_JP, this.config.getConfig('img_root') + typePok.UrlMiniHome_JP);
+        return new TypeVM(typePok.Name_JP, this.config.getConfig('img_root') + typePok.UrlMiniHome_JP, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       default:
-        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN);
+        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
     }
   }
 
