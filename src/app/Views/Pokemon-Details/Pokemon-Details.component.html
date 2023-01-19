@@ -1,8 +1,15 @@
 <div class="max-w-6xl mx-auto flex">
   <div *ngIf="pokemonVm"> 
     <p>{{pokemonVm.Number}}</p>
-    <p><img src="{{pokemonVm.UrlImg}}" /></p>
-    <p><img src="{{pokemonVm.UrlSprite}}" /></p>
+    <p><img [src]="pokemonVm.UrlImg" /></p>
+    <p><img [src]="pokemonVm.UrlSprite" /></p>
+    <p><audio
+      controls
+      [src]="pokemonVm.UrlSound">
+          <a [href]="pokemonVm.UrlSound">
+              Download audio
+          </a>
+  </audio></p>
     <p>{{pokemonVm.Name}}</p>
     <p>{{pokemonVm.DisplayName}}</p>
     <p>{{pokemonVm.DescriptionVx}}</p>
@@ -18,57 +25,57 @@
     
     <p>{{pokemonVm.WhenEvolution}}</p>
 
-    <img src="{{pokemonVm.Types[0].UrlFondGo}}" />
+    <img [src]="pokemonVm.Types[0].UrlFondGo" />
 
     <div *ngFor="let type of pokemonVm.Types">
         <p>{{type.Name}}</p>
-        <p><img src="{{type.UrlImg}}" /></p>
+        <p><img [src]="type.UrlImg" /></p>
     </div>
 
     <div *ngFor="let type of pokemonVm.Weakness">
         <p>{{type.Name}}</p>
-        <p><img src="{{type.UrlImg}}" /></p>
+        <p><img [src]="type.UrlImg" /></p>
     </div>
 
     <div *ngFor="let pok of pokemonVm.Evolutions">
       <p>{{pok.Name}}</p>
-      <p><img src="{{pok.UrlSprite}}" /></p>
-      <p><img src="{{pok.UrlImg}}" /></p>
+      <p><img [src]="pok.UrlSprite" /></p>
+      <p><img [src]="pok.UrlImg" /></p>
       <p>{{pok.WhenEvolution}}</p>
     </div>
 
     <div *ngFor="let pok of pokemonVm.MegaEvolutions">
       <p>{{pok.Name}}</p>
-      <p><img src="{{pok.UrlSprite}}" /></p>
-      <p><img src="{{pok.UrlImg}}" /></p>
+      <p><img [src]="pok.UrlSprite" /></p>
+      <p><img [src]="pok.UrlImg" /></p>
       <p>{{pok.WhenEvolution}}</p>
     </div>
 
     <div *ngFor="let pok of pokemonVm.GigaEvolutions">
       <p>{{pok.Name}}</p>
-      <p><img src="{{pok.UrlSprite}}" /></p>
-      <p><img src="{{pok.UrlImg}}" /></p>
+      <p><img [src]="pok.UrlSprite" /></p>
+      <p><img [src]="pok.UrlImg" /></p>
       <p>{{pok.WhenEvolution}}</p>
     </div>
 
     <div *ngFor="let pok of pokemonVm.AlolaForms">
       <p>{{pok.Name}}</p>
-      <p><img src="{{pok.UrlSprite}}" /></p>
-      <p><img src="{{pok.UrlImg}}" /></p>
+      <p><img [src]="pok.UrlSprite" /></p>
+      <p><img [src]="pok.UrlImg" /></p>
       <p>{{pok.WhenEvolution}}</p>
     </div>
 
     <div *ngFor="let pok of pokemonVm.GalarForms">
       <p>{{pok.Name}}</p>
-      <p><img src="{{pok.UrlSprite}}" /></p>
-      <p><img src="{{pok.UrlImg}}" /></p>
+      <p><img [src]="pok.UrlSprite" /></p>
+      <p><img [src]="pok.UrlImg" /></p>
       <p>{{pok.WhenEvolution}}</p>
     </div>
 
     <div *ngFor="let pok of pokemonVm.HisuiForms">
       <p>{{pok.Name}}</p>
-      <p><img src="{{pok.UrlSprite}}" /></p>
-      <p><img src="{{pok.UrlImg}}" /></p>
+      <p><img [src]="pok.UrlSprite" /></p>
+      <p><img [src]="pok.UrlImg" /></p>
       <p>{{pok.WhenEvolution}}</p>
     </div>
   </div>

@@ -231,6 +231,7 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
 
     this.pokemonVm.UrlImg = this.config.getConfig('img_root') + this.pokemon.UrlImg;
     this.pokemonVm.UrlSprite = this.config.getConfig('img_root') + this.pokemon.UrlSprite;
+    this.pokemonVm.UrlSound = this.config.getConfig('img_root') + this.pokemon.UrlSound;
     this.pokemonVm.Stats = [this.pokemon.StatPv, this.pokemon.StatAttaque, this.pokemon.StatDefense, this.pokemon.StatAttaqueSpe, this.pokemon.StatDefenseSpe, this.pokemon.StatVitesse];
     this.pokemonVm.StatTotal = this.config.getConfig('img_root') + this.pokemon.StatTotal;
   }

@@ -22,6 +22,7 @@ export class PokemonVM{
     WhenEvolution!: string;
     UrlImg!: string;
     UrlSprite!: string;
+    UrlSound!: string;
     Types: TypeVM[] = [];
     Weakness: TypeVM[] = [];
     Stats!: number[];

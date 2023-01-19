@@ -62,11 +62,14 @@ export class Pokemon extends Base {
     //Generation Number
     Generation!: number;
 
-    //Url de l'Image
+    //Picture Url
     UrlImg!: string;
 
     //Sprite Url
     UrlSprite!: string;
+
+    //Sound Url
+    UrlSound!: string;
 
     /**
      *
