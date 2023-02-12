@@ -1,12 +1,12 @@
 <div class="max-w-6xl mx-auto flex">
   <div *ngIf="pokemonVm"> 
     <p>{{pokemonVm.Number}}</p>
-    <p><img [src]="pokemonVm.UrlImg" /></p>
-    <p><img [src]="pokemonVm.UrlSprite" /></p>
+    <p><img [src]="pokemonVm.PathImg" /></p>
+    <p><img [src]="pokemonVm.PathSprite" /></p>
     <p><audio
       controls
-      [src]="pokemonVm.UrlSound">
-          <a [href]="pokemonVm.UrlSound">
+      [src]="pokemonVm.PathSound">
+          <a [href]="pokemonVm.PathSound">
               Download audio
           </a>
   </audio></p>
@@ -25,16 +25,16 @@
     
     <p>{{pokemonVm.WhenEvolution}}</p>
 
-    <img [src]="pokemonVm.Types[0].UrlFondGo" />
-
     <div *ngFor="let type of pokemonVm.Types">
         <p>{{type.Name}}</p>
-        <p><img [src]="type.UrlImg" /></p>
+        <p><img [src]="type.PathImg" /></p>
     </div>
+
+    <img *ngIf="pokemonVm.Types[0]" [src]="pokemonVm.Types[0].PathFondGo" />
 
     <div *ngFor="let type of pokemonVm.Weakness">
         <p>{{type.Name}}</p>
-        <p><img [src]="type.UrlImg" /></p>
+        <p><img [src]="type.PathImg" /></p>
     </div>
 
     <div *ngFor="let pok of pokemonVm.Evolutions">

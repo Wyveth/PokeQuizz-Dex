@@ -35,6 +35,9 @@ export class Pokemon extends Base {
     //Weaknesses
     Weaknesses!: TypePok[];
 
+    //Attack
+    Attaques!: any[];
+
     //Type Evolution : Normal, Méga, Gigamax, Alola, Galar, Hisui
     TypeEvolution!: string;
 
@@ -64,12 +67,14 @@ export class Pokemon extends Base {
 
     //Picture Url
     UrlImg!: string;
+    PathImg!: string;
 
     //Sprite Url
+    PathSprite!: string;
     UrlSprite!: string;
 
     //Sound Url
-    UrlSound!: string;
+    PathSound!: string;
 
     /**
      *

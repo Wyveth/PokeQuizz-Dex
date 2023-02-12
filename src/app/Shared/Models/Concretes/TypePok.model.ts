@@ -37,13 +37,13 @@ export class TypePok extends Base {
     Name_JP!: string;
     UrlMiniHome_JP!: string;
 
-    UrlMiniGo!: string;
+    PathMiniGo!: string;
     
-    UrlFondGo!: string;
+    PathFondGo!: string;
 
-    UrlIconHome!: string;
+    PathIconHome!: string;
 
-    UrlAutoHome!: string;
+    PathAutoHome!: string;
 
     ImgColor!: string;
     InfoColor!: string;

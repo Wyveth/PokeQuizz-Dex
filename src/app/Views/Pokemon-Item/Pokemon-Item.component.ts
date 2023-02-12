@@ -7,8 +7,8 @@ export class PokemonVM{
   Id!: Number;
   Number!: string;
   Name!: string;
-  UrlImg!: string;
-  UrlTypes: string[] = [];
+  PathImg!: string;
+  PathTypes: string[] = [];
 }
 
 @Component({
@@ -34,61 +34,61 @@ export class PokemonItemComponent implements OnInit {
   private getDataByLocalisation(pokemonVm: PokemonVM, location: string): void{
     this.pokemonVm.Id = this.pokemon.Id;
     this.pokemonVm.Number = this.pokemon.Number;
-    this.pokemonVm.UrlImg = this.config.getConfig('img_root') + this.pokemon.UrlImg;
+    this.pokemonVm.PathImg = this.config.getConfig('img_root') + this.pokemon.PathImg;
 
     switch (location) {
       case "FR":
         this.pokemonVm.Name = this.pokemon.FR.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_FR);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_FR);
         });
         break;
       case "EN":
         this.pokemonVm.Name = this.pokemon.EN.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_EN);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_EN);
         });
         break;
       case "ES":
         this.pokemonVm.Name = this.pokemon.ES.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_ES);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_ES);
         });
         break;
       case "IT":
         this.pokemonVm.Name = this.pokemon.IT.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_IT);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_IT);
         });
         break;
       case "DE":
         this.pokemonVm.Name = this.pokemon.DE.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_DE);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_DE);
         });
         break;
       case "RU":
         this.pokemonVm.Name = this.pokemon.RU.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_RU);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_RU);
         });
         break;
       case "CO":
         this.pokemonVm.Name = this.pokemon.CO.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CO);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CO);
         });
         break;
       case "CN":
         this.pokemonVm.Name = this.pokemon.CN.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CN);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CN);
         });
         break;
       case "JP":
         this.pokemonVm.Name = this.pokemon.JP.Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.UrlTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_JP);
+          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_JP);
         });
         break;
     }

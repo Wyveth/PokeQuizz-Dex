@@ -19,10 +19,11 @@ export class PokemonVM{
     AlolaForms: PokemonEvoVM[] = [];
     GalarForms: PokemonEvoVM[] = [];
     HisuiForms: PokemonEvoVM[] = [];
+    PaldeaForms: PokemonEvoVM[] = [];
     WhenEvolution!: string;
-    UrlImg!: string;
-    UrlSprite!: string;
-    UrlSound!: string;
+    PathImg!: string;
+    PathSprite!: string;
+    PathSound!: string;
     Types: TypeVM[] = [];
     Weakness: TypeVM[] = [];
     Stats!: number[];

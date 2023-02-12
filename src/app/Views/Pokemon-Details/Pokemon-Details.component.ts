@@ -74,6 +74,9 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
                 case "Hisui":
                   this.pokemonVm.HisuiForms.push(this.createPokemonEvoVMByLocation(pokemon, this.typesVm, this.location));
                 break;
+                case "Paldea":
+                  this.pokemonVm.PaldeaForms.push(this.createPokemonEvoVMByLocation(pokemon, this.typesVm, this.location));
+                break;
               }
             });
           });
@@ -91,6 +94,9 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
   private getDataByLocalisation(pokemonVm: PokemonVM, location: string): void{
     this.pokemonVm.Id = this.pokemon.Id;
     this.pokemonVm.Number = this.pokemon.Number;
+
+    console.log('Talents', this.pokemon.Talents);
+    console.log('Attacks', this.pokemon.Attaques);
 
     switch (location) {
       case "FR":
@@ -229,9 +235,9 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.pokemonVm.UrlImg = this.config.getConfig('img_root') + this.pokemon.UrlImg;
-    this.pokemonVm.UrlSprite = this.config.getConfig('img_root') + this.pokemon.UrlSprite;
-    this.pokemonVm.UrlSound = this.config.getConfig('img_root') + this.pokemon.UrlSound;
+    this.pokemonVm.PathImg = this.config.getConfig('img_root') + this.pokemon.PathImg;
+    this.pokemonVm.PathSprite = this.config.getConfig('img_root') + this.pokemon.PathSprite;
+    this.pokemonVm.PathSound = this.config.getConfig('img_root') + this.pokemon.PathSound;
     this.pokemonVm.Stats = [this.pokemon.StatPv, this.pokemon.StatAttaque, this.pokemon.StatDefense, this.pokemon.StatAttaqueSpe, this.pokemon.StatDefenseSpe, this.pokemon.StatVitesse];
     this.pokemonVm.StatTotal = this.config.getConfig('img_root') + this.pokemon.StatTotal;
   }
@@ -251,50 +257,50 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
   private createTypeVMByLocation(typePok: TypePok, location: string): TypeVM{
     switch (location) {
       case "FR":
-        return new TypeVM(typePok.Name_FR, this.config.getConfig('img_root') + typePok.UrlMiniHome_FR, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_FR, this.config.getConfig('img_root') + typePok.UrlMiniHome_FR, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "EN":
-        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "ES":
-        return new TypeVM(typePok.Name_ES, this.config.getConfig('img_root') + typePok.UrlMiniHome_ES, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_ES, this.config.getConfig('img_root') + typePok.UrlMiniHome_ES, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "IT":
-        return new TypeVM(typePok.Name_IT, this.config.getConfig('img_root') + typePok.UrlMiniHome_IT, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_IT, this.config.getConfig('img_root') + typePok.UrlMiniHome_IT, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "DE":
-        return new TypeVM(typePok.Name_DE, this.config.getConfig('img_root') + typePok.UrlMiniHome_DE, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_DE, this.config.getConfig('img_root') + typePok.UrlMiniHome_DE, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "RU":
-        return new TypeVM(typePok.Name_RU, this.config.getConfig('img_root') + typePok.UrlMiniHome_RU, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_RU, this.config.getConfig('img_root') + typePok.UrlMiniHome_RU, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "CO":
-        return new TypeVM(typePok.Name_CO, this.config.getConfig('img_root') + typePok.UrlMiniHome_CO, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_CO, this.config.getConfig('img_root') + typePok.UrlMiniHome_CO, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "CN":
-        return new TypeVM(typePok.Name_CN, this.config.getConfig('img_root') + typePok.UrlMiniHome_CN, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_CN, this.config.getConfig('img_root') + typePok.UrlMiniHome_CN, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       case "JP":
-        return new TypeVM(typePok.Name_JP, this.config.getConfig('img_root') + typePok.UrlMiniHome_JP, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_JP, this.config.getConfig('img_root') + typePok.UrlMiniHome_JP, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
       default:
-        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN, this.config.getConfig('img_root') + typePok.UrlFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
+        return new TypeVM(typePok.Name_EN, this.config.getConfig('img_root') + typePok.UrlMiniHome_EN, this.config.getConfig('img_root') + typePok.PathFondGo, typePok.ImgColor, typePok.InfoColor, typePok.TypeColor);
     }
   }
 
   private createPokemonEvoVMByLocation(pokemon: Pokemon, typesVM: TypeVM[], location: string): PokemonEvoVM{
     switch (location) {
       case "FR":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.FR.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.FR.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.FR.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.FR.WhenEvolution)
       case "EN":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.EN.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.EN.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.EN.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.EN.WhenEvolution)
       case "ES":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.ES.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.ES.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.ES.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.ES.WhenEvolution)
       case "IT":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.IT.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.IT.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.IT.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.IT.WhenEvolution)
       case "DE":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.DE.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.DE.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.DE.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.DE.WhenEvolution)
       case "RU":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.RU.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.RU.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.RU.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.RU.WhenEvolution)
       case "CO":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.CO.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.CO.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.CO.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.CO.WhenEvolution)
       case "CN":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.CN.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.CN.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.CN.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.CN.WhenEvolution)
       case "JP":
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.JP.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.JP.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.JP.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.JP.WhenEvolution)
       default:
-        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.EN.Name, typesVM, this.config.getConfig('img_root') + pokemon.UrlImg, this.config.getConfig('img_root') + pokemon.UrlSprite, pokemon.EN.WhenEvolution)
+        return new PokemonEvoVM(pokemon.Id, pokemon.Number, pokemon.EN.Name, typesVM, this.config.getConfig('img_root') + pokemon.PathImg, this.config.getConfig('img_root') + pokemon.PathSprite, pokemon.EN.WhenEvolution)
     }
   }
   //#endregion
