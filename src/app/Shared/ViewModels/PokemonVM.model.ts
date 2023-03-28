@@ -1,3 +1,4 @@
+import { AttackVM } from "./AttackVM.model";
 import { PokemonEvoVM } from "./PokemonEvoVM.model";
 import { TalentVM } from "./TalentVM.model";
 import { TypeVM } from "./TypeVM.model";
@@ -12,7 +13,7 @@ export class PokemonVM{
     Size!: string;
     Category!: string;
     Weight!: string;
-    Talent: TalentVM[] = [];
+    Talents: TalentVM[] = [];
     Evolutions: PokemonEvoVM[] = [];
     MegaEvolutions: PokemonEvoVM[] = [];
     GigaEvolutions: PokemonEvoVM[] = [];
@@ -26,6 +27,7 @@ export class PokemonVM{
     PathSound!: string;
     Types: TypeVM[] = [];
     Weakness: TypeVM[] = [];
+    Attacks: AttackVM[] = [];
     Stats!: number[];
     StatTotal!: number;
   }

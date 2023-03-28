@@ -110,8 +110,9 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_FR, talent.Description_FR));
+        this.pokemon.Talents.forEach(talentResponse => {
+          console.log('Talent', talentResponse);
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_FR, talentResponse.talent.Description_FR, talentResponse.isHidden ));
         });
         break;
       case "EN":
@@ -125,8 +126,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_EN, talent.Description_EN));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_EN, talentResponse.talent.Description_EN, talentResponse.isHidden));
         });
         break;
       case "ES":
@@ -140,8 +141,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_ES, talent.Description_ES));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_ES, talentResponse.talent.Description_ES, talentResponse.isHidden));
         });
         break;
       case "IT":
@@ -155,8 +156,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_IT, talent.Description_IT));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_IT, talentResponse.talent.Description_IT, talentResponse.isHidden));
         });
         break;
       case "DE":
@@ -170,8 +171,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_DE, talent.Description_DE));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_DE, talentResponse.talent.Description_DE, talentResponse.isHidden));
         });
         break;
       case "RU":
@@ -185,8 +186,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_RU, talent.Description_RU));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_RU, talentResponse.talent.Description_RU, talentResponse.isHidden));
         });
         break;
       case "CO":
@@ -200,8 +201,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_CO, talent.Description_CO));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_CO, talentResponse.talent.Description_CO, talentResponse.isHidden));
         });
         break;
       case "CN":
@@ -215,8 +216,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_CN, talent.Description_CN));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_CN, talentResponse.talent.Description_CN, talentResponse.isHidden));
         });
         break;
       case "JP":
@@ -229,8 +230,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
           this.pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
         });
 
-        this.pokemon.Talents.forEach(talent => {
-          this.pokemonVm.Talent.push(new TalentVM(talent.Name_JP, talent.Description_JP));
+        this.pokemon.Talents.forEach(talentResponse => {
+          this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_JP, talentResponse.talent.Description_JP, talentResponse.isHidden));
         });
         break;
     }
@@ -240,6 +241,8 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
     this.pokemonVm.PathSound = this.config.getConfig('img_root') + this.pokemon.PathSound;
     this.pokemonVm.Stats = [this.pokemon.StatPv, this.pokemon.StatAttaque, this.pokemon.StatDefense, this.pokemon.StatAttaqueSpe, this.pokemon.StatDefenseSpe, this.pokemon.StatVitesse];
     this.pokemonVm.StatTotal = this.config.getConfig('img_root') + this.pokemon.StatTotal;
+
+    console.log('Talents', this.pokemonVm.Talents);
   }
 
   //#region Private Methods

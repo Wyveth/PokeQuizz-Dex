@@ -1,5 +1,10 @@
 import { Base } from "../Abstract/Base.model";
 
+export class TalentResponse extends Base {
+    isHidden!: boolean;
+    talent!: Talent;
+}
+
 export class Talent extends Base {
     Name_FR!: string;
     Description_FR!: string;

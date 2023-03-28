@@ -1,6 +1,6 @@
 import { Base } from "../Abstract/Base.model";
 import { DataInfo } from "./DataInfo.model";
-import { Talent } from "./Talent.model";
+import { Talent, TalentResponse } from "./Talent.model";
 import { TypePok } from "./TypePok.model";
 
 export class Pokemon extends Base {
@@ -23,11 +23,11 @@ export class Pokemon extends Base {
     CO!: DataInfo;
     //Chinese
     CN!: DataInfo;
-    //Partial Japanese
+    //Japanese
     JP!: DataInfo;
 
     //Talents
-    Talents!: Talent[];
+    Talents!: TalentResponse[];
 
     //Types
     Types!: TypePok[];

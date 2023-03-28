@@ -17,6 +17,7 @@ import { PokemonService } from './Shared/Services/Pokemon.service';
 import { PokemonItemComponent } from './Views/Pokemon-Item/Pokemon-Item.component';
 import { PokemonDetailsComponent } from './Views/Pokemon-Details/Pokemon-Details.component';
 import { LanguageComponent } from './Shared/Components/Language/Language.component';
+import { PokemonEvolutionComponent } from './Views/Pokemon-Evolution/Pokemon-Evolution.component';
 
 const appRoutes: Routes = [
   { path: ':loc/home', component: HomeComponent },
@@ -42,6 +43,7 @@ export function initConfig(config: AppConfig) {
     PokedexComponent,
     PokemonItemComponent,
     PokemonDetailsComponent,
+    PokemonEvolutionComponent,
     HomeComponent
   ],
   imports: [
