@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AppConfig } from 'src/app/app.config';
-import { Pokemon } from 'src/app/Shared/Models/Concretes/Pokemon.model';
+import { DataInfoLight } from 'src/app/Shared/Models/Concretes/DataInfo.model';
+import { PokemonLight } from 'src/app/Shared/Models/Concretes/Pokemon.model';
 import { PokemonService } from 'src/app/Shared/Services/Pokemon.service';
 
 @Component({
@@ -12,7 +13,7 @@ import { PokemonService } from 'src/app/Shared/Services/Pokemon.service';
   styleUrls: ['./Pokedex.component.css']
 })
 export class PokedexComponent implements OnInit, OnDestroy {
-  pokemons!: Pokemon[];
+  pokemons!: PokemonLight[];
   pokemonSubscription!: Subscription;
   loc!: string;
   
@@ -25,15 +26,47 @@ export class PokedexComponent implements OnInit, OnDestroy {
   
   ngOnInit() {
     this.waiting = true;
+
+    let first = localStorage.getItem('1');
+    if(!first) 
     this.pokemonSubscription = this.pokemonService.getPokemonsLight(false, 10).subscribe(
-      (pokemons: Pokemon[]) => {
+      (pokemons: PokemonLight[]) => {
         this.pokemons = pokemons;
+
+        pokemons.forEach(pokemon => {
+          localStorage.setItem(pokemon.Id.toString(), JSON.stringify(new PokemonLight(
+            pokemon.Id, 
+            pokemon.Number,
+            new DataInfoLight(pokemon.FR.Name), 
+            new DataInfoLight(pokemon.EN.Name), 
+            new DataInfoLight(pokemon.ES.Name), 
+            new DataInfoLight(pokemon.IT.Name), 
+            new DataInfoLight(pokemon.DE.Name),
+            new DataInfoLight(pokemon.RU.Name),
+            new DataInfoLight(pokemon.CO.Name), 
+            new DataInfoLight(pokemon.CN.Name), 
+            new DataInfoLight(pokemon.JP.Name),
+            pokemon.Types,
+            pokemon.PathImg 
+            )));
+        });
+        
         this.waiting = false;
       }
     );
+    else{
+      this.pokemons = [];
+      for(let i = 1; i < 1008; i++){
+        let pokemon = JSON.parse(localStorage.getItem(i.toString())!);
+        this.pokemons.push(pokemon);
+      }
+      this.waiting = false;
+    }
+    
   }
 
   ngOnDestroy(): void {
+    if(this.pokemonSubscription)
     this.pokemonSubscription.unsubscribe();
   }
 }

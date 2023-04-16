@@ -43,3 +43,13 @@ export class DataInfo extends Base {
     //Next Pokemon
     NextUrl!: string;
 }
+
+export class DataInfoLight extends Base {
+    //Name
+    Name!: string;
+
+    constructor(Name: string) {
+        super();
+        this.Name = Name;
+    }
+}

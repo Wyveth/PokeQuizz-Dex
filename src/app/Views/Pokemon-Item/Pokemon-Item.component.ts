@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppConfig } from 'src/app/app.config';
-import { Pokemon } from 'src/app/Shared/Models/Concretes/Pokemon.model';
+import { PokemonLight } from 'src/app/Shared/Models/Concretes/Pokemon.model';
+import { PokemonService } from 'src/app/Shared/Services/Pokemon.service';
 
 export class PokemonVM{
   Id!: Number;
@@ -17,11 +18,13 @@ export class PokemonVM{
   styleUrls: ['./Pokemon-Item.component.css']
 })
 export class PokemonItemComponent implements OnInit {
-  @Input() pokemon!: Pokemon;
+  @Input() pokemon!: PokemonLight;
   @Input() location!: string;
   pokemonVm: PokemonVM = new PokemonVM();
 
-  constructor(private router: Router, private config: AppConfig) { }
+  constructor(private router: Router, private config: AppConfig) { 
+    console.log(this.pokemon);
+  }
 
   ngOnInit() {
     this.getDataByLocalisation(this.pokemonVm, this.location);
