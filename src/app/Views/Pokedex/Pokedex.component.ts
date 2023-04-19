@@ -27,8 +27,8 @@ export class PokedexComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.waiting = true;
 
-    let first = localStorage.getItem('1');
-    if(!first) 
+    let pokedexOK = localStorage.getItem('pokedex');
+    if(!pokedexOK) 
     this.pokemonSubscription = this.pokemonService.getPokemonsLight(false, 10).subscribe(
       (pokemons: PokemonLight[]) => {
         this.pokemons = pokemons;
@@ -50,13 +50,15 @@ export class PokedexComponent implements OnInit, OnDestroy {
             pokemon.PathImg 
             )));
         });
+
+        localStorage.setItem('pokedex', 'true');
         
         this.waiting = false;
       }
     );
     else{
       this.pokemons = [];
-      for(let i = 1; i < 1008; i++){
+      for(let i = 1; i < 1250; i++){
         let pokemon = JSON.parse(localStorage.getItem(i.toString())!);
         this.pokemons.push(pokemon);
       }

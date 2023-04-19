@@ -111,7 +111,6 @@ export class PokemonDetailsComponent implements OnInit, OnDestroy {
         });
 
         this.pokemon.Talents.forEach(talentResponse => {
-          console.log('Talent', talentResponse);
           this.pokemonVm.Talents.push(new TalentVM(talentResponse.talent.Name_FR, talentResponse.talent.Description_FR, talentResponse.isHidden ));
         });
         break;
