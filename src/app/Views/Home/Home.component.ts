@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-Home',
   templateUrl: './Home.component.html',
-  styleUrls: ['./Home.component.css']
+  styleUrls: ['./Home.component.scss']
 })
 export class HomeComponent implements OnInit {
   loc!: string;

@@ -4,7 +4,7 @@ import {MenuItem} from 'primeng/api';
 @Component({
   selector: 'app-Header',
   templateUrl: './Header.component.html',
-  styleUrls: ['./Header.component.css']
+  styleUrls: ['./Header.component.scss']
 })
 export class HeaderComponent implements OnInit {
   dockItems!: MenuItem[];

@@ -15,7 +15,7 @@ export class PokemonVM{
 @Component({
   selector: 'app-Pokemon-Item',
   templateUrl: './Pokemon-Item.component.html',
-  styleUrls: ['./Pokemon-Item.component.css']
+  styleUrls: ['./Pokemon-Item.component.scss']
 })
 export class PokemonItemComponent implements OnInit {
   @Input() pokemon!: PokemonLight;

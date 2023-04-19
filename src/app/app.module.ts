@@ -26,7 +26,7 @@ const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'pokedex', redirectTo: 'EN/pokedex' },
   { path: 'pokedex/pokemon/:id', redirectTo: 'pokedex/pokemon/:id' },
-  { path: 'home', redirectTo: 'EN/home' },
+  { path: 'home', redirectTo: 'EN/pokedex' },
   { path: '**', redirectTo: 'home' }
 ];
 

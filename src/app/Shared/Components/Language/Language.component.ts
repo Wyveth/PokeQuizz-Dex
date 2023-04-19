@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 @Component({
   selector: 'app-Language',
   templateUrl: './Language.component.html',
-  styleUrls: ['./Language.component.css']
+  styleUrls: ['./Language.component.scss']
 })
 export class LanguageComponent implements OnInit {
   location!: any;

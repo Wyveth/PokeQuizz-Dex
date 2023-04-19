@@ -10,7 +10,7 @@ import { PokemonService } from 'src/app/Shared/Services/Pokemon.service';
 @Component({
   selector: 'app-Pokedex',
   templateUrl: './Pokedex.component.html',
-  styleUrls: ['./Pokedex.component.css']
+  styleUrls: ['./Pokedex.component.scss']
 })
 export class PokedexComponent implements OnInit, OnDestroy {
   pokemons!: PokemonLight[];

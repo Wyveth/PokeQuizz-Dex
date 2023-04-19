@@ -14,7 +14,7 @@ import { TypeVM } from 'src/app/Shared/ViewModels/TypeVM.model';
 @Component({
   selector: 'app-Pokemon-Details',
   templateUrl: './Pokemon-Details.component.html',
-  styleUrls: ['./Pokemon-Details.component.css']
+  styleUrls: ['./Pokemon-Details.component.scss']
 })
 export class PokemonDetailsComponent implements OnInit, OnDestroy {
   pokemon!: Pokemon;
