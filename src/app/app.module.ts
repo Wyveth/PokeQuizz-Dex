@@ -8,16 +8,16 @@ import { SpeedDialModule } from 'primeng/speeddial';
 
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
-import { PokedexComponent } from './Views/Pokedex/Pokedex.component';
-import { HomeComponent } from './Views/Home/Home.component';
+import { PokedexComponent } from './Views/Pokedex-1/Pokedex.component';
+import { HomeComponent } from './Views/Home-1/Home.component';
 import { BreadcrumbsComponent } from './Shared/Components/Breadcrumbs/Breadcrumbs.component';
 import { HeaderComponent } from './Shared/Components/Header/Header.component';
 import { FooterComponent } from './Shared/Components/Footer/Footer.component';
 import { PokemonService } from './Shared/Services/Pokemon.service';
-import { PokemonItemComponent } from './Views/Pokemon-Item/Pokemon-Item.component';
-import { PokemonDetailsComponent } from './Views/Pokemon-Details/Pokemon-Details.component';
+import { PokemonItemComponent } from './Views/Pokemon-Item-1/Pokemon-Item.component';
+import { PokemonDetailsComponent } from './Views/Pokemon-Details-1/Pokemon-Details.component';
 import { LanguageComponent } from './Shared/Components/Language/Language.component';
-import { PokemonEvolutionComponent } from './Views/Pokemon-Evolution/Pokemon-Evolution.component';
+import { PokemonEvolutionComponent } from './Views/Pokemon-Evolution-1/Pokemon-Evolution.component';
 
 const appRoutes: Routes = [
   { path: ':loc/home', component: HomeComponent },
