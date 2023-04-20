@@ -5,19 +5,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { DockModule } from 'primeng/dock';
 import { SpeedDialModule } from 'primeng/speeddial';
-
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
-import { PokedexComponent } from './Views/Pokedex-1/Pokedex.component';
-import { HomeComponent } from './Views/Home-1/Home.component';
-import { BreadcrumbsComponent } from './Shared/Components/Breadcrumbs/Breadcrumbs.component';
-import { HeaderComponent } from './Shared/Components/Header/Header.component';
-import { FooterComponent } from './Shared/Components/Footer/Footer.component';
-import { PokemonService } from './Shared/Services/Pokemon.service';
-import { PokemonItemComponent } from './Views/Pokemon-Item-1/Pokemon-Item.component';
-import { PokemonDetailsComponent } from './Views/Pokemon-Details-1/Pokemon-Details.component';
-import { LanguageComponent } from './Shared/Components/Language/Language.component';
-import { PokemonEvolutionComponent } from './Views/Pokemon-Evolution-1/Pokemon-Evolution.component';
+import { PokemonService } from './api/services/pokemon.service';
+import { BreadcrumbsComponent } from './shared/components/breadcrumbs/breadcrumbs.component';
+import { FooterComponent } from './shared/components/footer/footer.component';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { LanguageComponent } from './shared/components/language/language.component';
+import { HomeComponent } from './views/home/home.component';
+import { PokedexComponent } from './views/pokedex/pokedex.component';
+import { PokemonDetailsComponent } from './views/pokemon-details/pokemon-details.component';
+import { PokemonEvolutionComponent } from './views/pokemon-evolution/pokemon-evolution.component';
+import { PokemonItemComponent } from './views/pokemon-item/pokemon-item.component';
 
 const appRoutes: Routes = [
   { path: ':loc/home', component: HomeComponent },
