@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
+import { AppConfig } from 'src/app/app.config';
+import { AppResource } from 'src/app/app.resource';
+import { BaseComponent } from 'src/app/shared/components/base/base.component';
 
 export class PokemonVM{
   Id!: Number;
@@ -13,12 +18,13 @@ export class PokemonVM{
   templateUrl: './pokemon-item.component.html',
   styleUrls: ['./pokemon-item.component.scss']
 })
-export class PokemonItemComponent implements OnInit {
+export class PokemonItemComponent extends BaseComponent implements OnInit {
   @Input() pokemon!: PokemonLight;
   @Input() location!: string;
   pokemonVm: PokemonVM = new PokemonVM();
 
-  constructor(private router: Router, private config: AppConfig) { 
+  constructor(resources: AppResource, private router: Router, private config: AppConfig) { 
+    super(resources);
     console.log(this.pokemon);
   }
 

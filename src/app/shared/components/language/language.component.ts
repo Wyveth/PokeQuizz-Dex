@@ -1,25 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from '../base/base.component';
+import { AppResource } from 'src/app/app.resource';
 
 @Component({
   selector: 'app-language',
   templateUrl: './language.component.html',
-  styleUrls: ['./language.component.scss']
+  styleUrls: ['./language.component.scss'],
 })
-export class LanguageComponent implements OnInit {
+export class LanguageComponent extends BaseComponent implements OnInit {
   location!: any;
   url: string = this.router.url;
 
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) { 
-    this.router.routeReuseStrategy.shouldReuseRoute = function() {
+  constructor(
+    resources: AppResource,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
+    super(resources);
+    this.router.routeReuseStrategy.shouldReuseRoute = function () {
       return false;
     };
   }
 
-  ngOnInit() {
-  }
-
-  public navigateTo(language: string): void{
+  public navigateTo(language: string): void {
     this.location = this.router.url.split('/')[1];
     this.url = this.router.url.replace(this.location, language);
     this.router.navigate([this.url]);

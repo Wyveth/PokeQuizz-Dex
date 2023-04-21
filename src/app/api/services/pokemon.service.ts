@@ -13,26 +13,26 @@ export class PokemonService extends AbstractService {
   parametersRequest!: ParametersRequest
   api_pokemon: string;
 
-  constructor(private config: AppConfig, private httpClient: HttpClient) {
+  constructor(config: AppConfig, httpClient: HttpClient) {
     super(config, httpClient);
-    this.api_pokemon = this.basePath + this.config.getConfig('pokemons_api');
+    this.api_pokemon = config.getConfig('pokemons_api');
     console.log("API Pokemon: " + this.api_pokemon);
   }
   
   public getPokemons(limit: boolean, max: number): Observable<any> {
     this.parametersRequest = {
-      url: this.config.getConfig('pokemons_api'),
+      url: this.api_pokemon,
       parameters: [{ name: 'limit', value:limit },
                   { name: 'max', value:max }]
     }
 
-     const path = this.basePath + this.parametersRequest.url;
+     const path = this.basePath + this.parametersRequest.url ;
      return ApiRequest.get(this.httpClient, this.defaultHeaders, this.configuration, path, this.parametersRequest, undefined, 'body', false);
   }
 
   getPokemonsLight(limit: boolean, max: number): Observable<any> {
     this.parametersRequest = {
-      url: this.config.getConfig('pokemons_api')+ "/Light",
+      url: this.api_pokemon + "/Light",
       parameters: [{ name: 'limit', value:limit },
                   { name: 'max', value:max }]
     }
@@ -43,7 +43,7 @@ export class PokemonService extends AbstractService {
 
   getPokemon(id: number): Observable<any> {
     this.parametersRequest = {
-      url: this.config.getConfig('pokemons_api')+ "/Light",
+      url: this.api_pokemon,
       parameters: [{ name: 'id', value:id }]
     }
 
@@ -53,7 +53,7 @@ export class PokemonService extends AbstractService {
 
   getEvolChain(family: string): Observable<any> {
     this.parametersRequest = {
-      url: this.config.getConfig('pokemons_api')+ "/GetEvol",
+      url: this.api_pokemon + "/GetEvol",
       parameters: [{ name: 'family', value:family }]
     }
 
@@ -63,7 +63,7 @@ export class PokemonService extends AbstractService {
 
   getVariants(number: string): Observable<any> {
     this.parametersRequest = {
-      url: this.config.getConfig('pokemons_api')+ "/GetVariant",
+      url: this.api_pokemon + "/GetVariant",
       parameters: [{ name: 'number', value:number }]
     }
 

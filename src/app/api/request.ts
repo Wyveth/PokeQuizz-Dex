@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders, HttpParams, HttpUrlEncodingCodec } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { Parameter, ParametersRequest } from "./models/shared/parametersRequest";
-import { catchError } from "rxjs";
 import { ApiError } from "./error";
+import { catchError } from "rxjs/operators";
 
 export class ApiRequest {
     static get(
@@ -30,7 +30,8 @@ export class ApiRequest {
             }
 
             if (parameter.value !== undefined && parameter.value !== null) {
-                queryParameters = queryParameters.set(parameter.name, parameter.value.toString());
+                path = path + '/' + parameter.value;
+                //queryParameters = queryParameters.set(parameter.name, parameter.value.toString());
             }
         });
         

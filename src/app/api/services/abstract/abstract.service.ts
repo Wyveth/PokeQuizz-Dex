@@ -7,12 +7,12 @@ import { AppConfig } from 'src/app/app.config';
   providedIn: 'root'
 })
 export class AbstractService {
-  protected basePath = 'apiUrl';
+  protected basePath = 'api_root';
 
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
   
   constructor(private config: AppConfig, protected httpClient: HttpClient) {
-    this.basePath = config.getConfig('apiUrl');
+    this.basePath = config.getConfig(this.basePath);
    }
 }
