@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 const AngularModules = [
   CommonModule,
@@ -22,6 +23,10 @@ const AngularModules = [
   AppRoutingModule,
 ];
 
+const PrimeNGModules = [
+  AutoCompleteModule
+];
+
 @NgModule({
   declarations: [
     BreadcrumbsComponent,
@@ -29,13 +34,14 @@ const AngularModules = [
     HeaderComponent,
     LanguageComponent,
   ],
-  imports: [AngularModules],
+  imports: [AngularModules, PrimeNGModules],
   exports: [
     BreadcrumbsComponent,
     FooterComponent,
     HeaderComponent,
     LanguageComponent,
     AngularModules,
+    PrimeNGModules
   ],
   providers: [],
 })

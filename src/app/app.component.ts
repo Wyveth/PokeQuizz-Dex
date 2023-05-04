@@ -13,7 +13,7 @@ export class AppComponent implements OnInit{
   }
   
   public loadJsFile(url: string) {  
-    let node = document.createElement('script');  
+    const node = document.createElement('script');  
     node.src = url;  
     node.type = 'text/javascript';  
     document.getElementsByTagName('head')[0].appendChild(node);

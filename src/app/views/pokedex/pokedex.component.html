@@ -1,6 +1,9 @@
+<div class="max-w-6xl mx-auto center flex">
+  <app-search [pokemons]="pokemons" [location]="loc" (filteredPokemons)="filterPokemons($event)"></app-search>
+</div>
 <div class="max-w-6xl mx-auto flex">
   <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 border-l border-t border-gray-300">
-    <div class="border-b border-r border-gray-300 px-5 scroll-pt-10 pb-10 bg-white bg-opacity-25" *ngFor="let pokemon of pokemons">
+    <div class="border-b border-r border-gray-300 px-5 scroll-pt-10 pb-10 bg-white bg-opacity-25" *ngFor="let pokemon of filteredPokemons">
       <app-pokemon-item [pokemon]="pokemon" [location]="loc"></app-pokemon-item>
     <div>
   </div>

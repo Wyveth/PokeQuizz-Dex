@@ -4,9 +4,10 @@ import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
 import { AppConfig } from 'src/app/app.config';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
+import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 
 export class PokemonVM{
-  Id!: Number;
+  Id!: number;
   Number!: string;
   Name!: string;
   PathImg!: string;
@@ -23,79 +24,28 @@ export class PokemonItemComponent extends BaseComponent implements OnInit {
   @Input() location!: string;
   pokemonVm: PokemonVM = new PokemonVM();
 
+  imgRoot: string = this.config.getConfig('img_root');
+
   constructor(resources: AppResource, private router: Router, private config: AppConfig) { 
     super(resources);
-    console.log(this.pokemon);
   }
 
   ngOnInit() {
-    this.getDataByLocalisation(this.pokemonVm, this.location);
+    this.getDataByLocalisation(this.pokemonVm);
   }
 
-  public goToPokemonDetails(Id: Number): void {
+  public goToPokemonDetails(Id: number): void {
     this.router.navigate(['/'+ this.location + '/pokedex/pokemon/' + Id]);
   }
 
-  private getDataByLocalisation(pokemonVm: PokemonVM, location: string): void{
-    this.pokemonVm.Id = this.pokemon.Id;
-    this.pokemonVm.Number = this.pokemon.Number;
-    this.pokemonVm.PathImg = this.config.getConfig('img_root') + this.pokemon.PathImg;
+  private getDataByLocalisation(pokemonVm: PokemonVM): void{
+    pokemonVm.Id = this.pokemon.Id;
+    pokemonVm.Number = this.pokemon.Number;
+    pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImg;
 
-    switch (location) {
-      case "FR":
-        this.pokemonVm.Name = this.pokemon.FR.Name;
+    pokemonVm.Name = GenericUtils.getObject(this.pokemon, this.location).Name;
         this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_FR);
+          pokemonVm.PathTypes.push(this.imgRoot + type.typePok['UrlMiniHome_' + this.location]);
         });
-        break;
-      case "EN":
-        this.pokemonVm.Name = this.pokemon.EN.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_EN);
-        });
-        break;
-      case "ES":
-        this.pokemonVm.Name = this.pokemon.ES.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_ES);
-        });
-        break;
-      case "IT":
-        this.pokemonVm.Name = this.pokemon.IT.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_IT);
-        });
-        break;
-      case "DE":
-        this.pokemonVm.Name = this.pokemon.DE.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_DE);
-        });
-        break;
-      case "RU":
-        this.pokemonVm.Name = this.pokemon.RU.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_RU);
-        });
-        break;
-      case "CO":
-        this.pokemonVm.Name = this.pokemon.CO.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CO);
-        });
-        break;
-      case "CN":
-        this.pokemonVm.Name = this.pokemon.CN.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_CN);
-        });
-        break;
-      case "JP":
-        this.pokemonVm.Name = this.pokemon.JP.Name;
-        this.pokemon.Types.forEach(type => {
-          this.pokemonVm.PathTypes.push(this.config.getConfig('img_root') + type.typePok.UrlMiniHome_JP);
-        });
-        break;
-    }
   }
 }

@@ -9,6 +9,7 @@ import { PokemonEvolutionComponent } from './views/pokemon-evolution/pokemon-evo
 import { PokemonItemComponent } from './views/pokemon-item/pokemon-item.component';
 import { AppResource } from './app.resource';
 import { SharedModule } from './shared/modules/shared.module';
+import { SearchComponent } from './views/search/search.component';
 
 export function initConfig(config: AppConfig) {
   return () => config.load();
@@ -25,6 +26,7 @@ export function initResource(resource: AppResource) {
     PokemonItemComponent,
     PokemonDetailsComponent,
     PokemonEvolutionComponent,
+    SearchComponent,
     HomeComponent,
   ],
   imports: [SharedModule],

@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { DataInfoLight } from 'src/app/api/models/concretes/datainfo';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
 import { PokemonService } from 'src/app/api/services/pokemon.service';
@@ -23,6 +26,11 @@ export class PokedexComponent
 
   // Show a "Please wait..." message while loading
   waiting = false;
+
+  filteredPokemons!: PokemonLight[];
+  imgRoot: string = this.config.getConfig('img_root');;
+
+  formSearch!: FormGroup;
 
   constructor(
     resources: AppResource,
@@ -79,9 +87,15 @@ export class PokedexComponent
       }
       this.waiting = false;
     }
+
+    this.filteredPokemons = this.pokemons;
   }
 
   ngOnDestroy(): void {
     if (this.pokemonSubscription) this.pokemonSubscription.unsubscribe();
+  }
+
+  filterPokemons(event: any) {
+    this.filteredPokemons = event;
   }
 }

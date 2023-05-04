@@ -14,6 +14,6 @@ export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
     super(resources);
   }
 
-  ngOnInit() {  }
+  ngOnInit() {}
 
 }
