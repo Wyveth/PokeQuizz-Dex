@@ -1,55 +1,55 @@
-import { Base } from "../abstracts/base";
+import { Base } from '../abstracts/base';
 
 export interface DataInfo extends Base {
-    //Name
-    Name: string;
+  //Name
+  Name: string;
 
-    //DisplayName
-    DisplayName: string;
+  //DisplayName
+  DisplayName: string;
 
-    //Pokemon Description Version X
-    DescriptionVx: string;
+  //Pokemon Description Version X
+  DescriptionVx: string;
 
-    //Pokemon Description Version Y
-    DescriptionVy: string;
+  //Pokemon Description Version Y
+  DescriptionVy: string;
 
-    //Size
-    Size: string;
+  //Size
+  Size: string;
 
-    //Category
-    Category: string;
+  //Category
+  Category: string;
 
-    //Weight
-    Weight: string;
+  //Weight
+  Weight: string;
 
-    //Skill
-    Talent: string;
+  //Skill
+  Talent: string;
 
-    //Skill Description
-    DescriptionTalent: string;
+  //Skill Description
+  DescriptionTalent: string;
 
-    //Pokemon Type
-    Types: string;
+  //Pokemon Type
+  Types: string;
 
-    //Pokemon Weakness
-    Weakness: string;
+  //Pokemon Weakness
+  Weakness: string;
 
-    //Pokemon Family/Evolution
-    Evolutions: string;
+  //Pokemon Family/Evolution
+  Evolutions: string;
 
-    //Know When Where How the pokemon evolves
-    WhenEvolution: string;
+  //Know When Where How the pokemon evolves
+  WhenEvolution: string;
 
-    //Next Pokemon
-    NextUrl: string;
+  //Next Pokemon
+  NextUrl: string;
 }
 
 export class DataInfoLight extends Base {
-    //Name
-    Name!: string;
+  //Name
+  Name!: string;
 
-    constructor(Id: number, Name: string) {
-        super(Id);
-        this.Name = Name;
-    }
+  constructor(Id: number, Name: string) {
+    super(Id);
+    this.Name = Name;
+  }
 }

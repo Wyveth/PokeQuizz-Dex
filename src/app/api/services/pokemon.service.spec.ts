@@ -6,7 +6,7 @@ import { PokemonService } from './pokemon.service';
 describe('Service: Pokemon', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [PokemonService]
+      providers: [PokemonService],
     });
   });
 

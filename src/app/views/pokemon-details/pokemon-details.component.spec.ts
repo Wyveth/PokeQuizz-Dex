@@ -11,9 +11,8 @@ describe('PokemonDetailsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PokemonDetailsComponent ]
-    })
-    .compileComponents();
+      declarations: [PokemonDetailsComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

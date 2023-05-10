@@ -4,15 +4,15 @@ import { Configuration } from '../../configuration';
 import { AppConfig } from 'src/app/app.config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AbstractService {
   protected basePath = 'api_root';
 
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
-  
+
   constructor(private config: AppConfig, protected httpClient: HttpClient) {
     this.basePath = config.getConfig(this.basePath);
-   }
+  }
 }

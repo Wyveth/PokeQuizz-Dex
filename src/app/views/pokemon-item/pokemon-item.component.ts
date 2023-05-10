@@ -6,7 +6,7 @@ import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 
-export class PokemonVM{
+export class PokemonVM {
   Id!: number;
   Number!: string;
   Name!: string;
@@ -17,7 +17,7 @@ export class PokemonVM{
 @Component({
   selector: 'app-pokemon-item',
   templateUrl: './pokemon-item.component.html',
-  styleUrls: ['./pokemon-item.component.scss']
+  styleUrls: ['./pokemon-item.component.scss'],
 })
 export class PokemonItemComponent extends BaseComponent implements OnInit {
   @Input() pokemon!: PokemonLight;
@@ -26,7 +26,11 @@ export class PokemonItemComponent extends BaseComponent implements OnInit {
 
   imgRoot: string = this.config.getConfig('img_root');
 
-  constructor(resources: AppResource, private router: Router, private config: AppConfig) { 
+  constructor(
+    resources: AppResource,
+    private router: Router,
+    private config: AppConfig
+  ) {
     super(resources);
   }
 
@@ -35,17 +39,19 @@ export class PokemonItemComponent extends BaseComponent implements OnInit {
   }
 
   public goToPokemonDetails(Id: number): void {
-    this.router.navigate(['/'+ this.location + '/pokedex/pokemon/' + Id]);
+    this.router.navigate(['/' + this.location + '/pokedex/pokemon/' + Id]);
   }
 
-  private getDataByLocalisation(pokemonVm: PokemonVM): void{
+  private getDataByLocalisation(pokemonVm: PokemonVM): void {
     pokemonVm.Id = this.pokemon.Id;
     pokemonVm.Number = this.pokemon.Number;
     pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImg;
 
     pokemonVm.Name = GenericUtils.getObject(this.pokemon, this.location).Name;
-        this.pokemon.Types.forEach(type => {
-          pokemonVm.PathTypes.push(this.imgRoot + type.typePok['UrlMiniHome_' + this.location]);
-        });
+    this.pokemon.Types.forEach((type) => {
+      pokemonVm.PathTypes.push(
+        this.imgRoot + type.typePok['UrlMiniHome_' + this.location]
+      );
+    });
   }
 }

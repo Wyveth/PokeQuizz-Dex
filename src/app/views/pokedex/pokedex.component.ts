@@ -28,7 +28,7 @@ export class PokedexComponent
   waiting = false;
 
   filteredPokemons!: PokemonLight[];
-  imgRoot: string = this.config.getConfig('img_root');;
+  imgRoot: string = this.config.getConfig('img_root');
 
   formSearch!: FormGroup;
 

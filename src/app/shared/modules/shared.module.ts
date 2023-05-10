@@ -23,9 +23,7 @@ const AngularModules = [
   AppRoutingModule,
 ];
 
-const PrimeNGModules = [
-  AutoCompleteModule
-];
+const PrimeNGModules = [AutoCompleteModule];
 
 @NgModule({
   declarations: [
@@ -41,7 +39,7 @@ const PrimeNGModules = [
     HeaderComponent,
     LanguageComponent,
     AngularModules,
-    PrimeNGModules
+    PrimeNGModules,
   ],
   providers: [],
 })

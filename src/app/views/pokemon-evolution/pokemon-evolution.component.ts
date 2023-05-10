@@ -6,14 +6,13 @@ import { PokemonEvoVM } from 'src/app/shared/models/pokemonEvoVM';
 @Component({
   selector: 'app-pokemon-evolution',
   templateUrl: './pokemon-evolution.component.html',
-  styleUrls: ['./pokemon-evolution.component.scss']
+  styleUrls: ['./pokemon-evolution.component.scss'],
 })
 export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
   @Input() pokemons!: PokemonEvoVM[];
-  constructor(resources: AppResource) { 
+  constructor(resources: AppResource) {
     super(resources);
   }
 
   ngOnInit() {}
-
 }

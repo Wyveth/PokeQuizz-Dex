@@ -1,54 +1,45 @@
 <div class="max-w-6xl mx-auto flex">
-  <div *ngIf="pokemonVm"> 
-    <p class="dark:text-white">{{pokemonVm.Number}}</p>
+  <div *ngIf="pokemonVm">
+    <p class="dark:text-white">{{ pokemonVm.Number }}</p>
     <p><img [src]="pokemonVm.PathImg" /></p>
     <p><img [src]="pokemonVm.PathSprite" /></p>
-    <p><audio
-      controls
-      [src]="pokemonVm.PathSound">
-          <a [href]="pokemonVm.PathSound">
-              Download audio
-          </a>
-  </audio></p>
-    <p class="dark:text-white">{{pokemonVm.Name}}</p>
-    <p class="dark:text-white">{{pokemonVm.DisplayName}}</p>
-    <p class="dark:text-white">{{pokemonVm.DescriptionVx}}</p>
-    <p class="dark:text-white">{{pokemonVm.DescriptionVy}}</p>
-    <p class="dark:text-white">{{pokemonVm.Size}}</p>
-    <p class="dark:text-white">{{pokemonVm.Category}}</p>
-    <p class="dark:text-white">{{pokemonVm.Weight}}</p>
+    <p>
+      <audio controls [src]="pokemonVm.PathSound">
+        <a [href]="pokemonVm.PathSound"> Download audio </a>
+      </audio>
+    </p>
+    <p class="dark:text-white">{{ pokemonVm.Name }}</p>
+    <p class="dark:text-white">{{ pokemonVm.DisplayName }}</p>
+    <p class="dark:text-white">{{ pokemonVm.DescriptionVx }}</p>
+    <p class="dark:text-white">{{ pokemonVm.DescriptionVy }}</p>
+    <p class="dark:text-white">{{ pokemonVm.Size }}</p>
+    <p class="dark:text-white">{{ pokemonVm.Category }}</p>
+    <p class="dark:text-white">{{ pokemonVm.Weight }}</p>
 
     <div *ngFor="let talent of pokemonVm.Talents">
-      <p class="dark:text-white">{{talent.Name}} <span *ngIf="talent.IsHidden">[Caché]</span></p>
-      <p class="dark:text-white">{{talent.Description}}</p>
+      <p class="dark:text-white">
+        {{ talent.Name }} <span *ngIf="talent.IsHidden">[Caché]</span>
+      </p>
+      <p class="dark:text-white">{{ talent.Description }}</p>
     </div>
-    
-    <p class="dark:text-white">{{pokemonVm.WhenEvolution}}</p>
+
+    <p class="dark:text-white">{{ pokemonVm.WhenEvolution }}</p>
 
     <div *ngFor="let type of pokemonVm.Types">
-        <p class="dark:text-white">{{type.Name}}</p>
-        <p class="dark:text-white"><img [src]="type.PathImg" /></p>
+      <p class="dark:text-white">{{ type.Name }}</p>
+      <p class="dark:text-white"><img [src]="type.PathImg" /></p>
     </div>
 
     <img *ngIf="pokemonVm.Types[0]" [src]="pokemonVm.Types[0].PathFondGo" />
 
     <div *ngFor="let type of pokemonVm.Weakness">
-        <p class="dark:text-white">{{type.Name}}</p>
-        <p class="dark:text-white"><img [src]="type.PathImg" /></p>
+      <p class="dark:text-white">{{ type.Name }}</p>
+      <p class="dark:text-white"><img [src]="type.PathImg" /></p>
     </div>
 
-    <app-pokemon-evolution [pokemons]="pokemonVm.Evolutions"></app-pokemon-evolution>
-
-    <app-pokemon-evolution [pokemons]="pokemonVm.MegaEvolutions"></app-pokemon-evolution>
-
-    <app-pokemon-evolution [pokemons]="pokemonVm.GigaEvolutions"></app-pokemon-evolution>
-
-    <app-pokemon-evolution [pokemons]="pokemonVm.AlolaForms"></app-pokemon-evolution>
-
-    <app-pokemon-evolution [pokemons]="pokemonVm.GalarForms"></app-pokemon-evolution>
-
-    <app-pokemon-evolution [pokemons]="pokemonVm.HisuiForms"></app-pokemon-evolution>
+    <app-pokemon-evolution
+      *ngFor="let pokemon of pokemonVm.Forms"
+      [pokemons]="pokemon.ListForm"
+    ></app-pokemon-evolution>
   </div>
 </div>
-
-

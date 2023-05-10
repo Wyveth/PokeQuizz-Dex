@@ -11,9 +11,8 @@ describe('PokedexComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PokedexComponent ]
-    })
-    .compileComponents();
+      declarations: [PokedexComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

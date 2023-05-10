@@ -6,10 +6,14 @@ import { PokemonDetailsComponent } from 'src/app/views/pokemon-details/pokemon-d
 import { AuthGuardService } from '../guards/auth-guard.service';
 
 const routes: Routes = [
-  { path: ':loc/home', component: HomeComponent, canActivate : [AuthGuardService] },
+  {
+    path: ':loc/home',
+    component: HomeComponent,
+    canActivate: [AuthGuardService],
+  },
   { path: ':loc/pokedex', component: PokedexComponent },
   { path: ':loc/pokedex/pokemon/:id', component: PokemonDetailsComponent },
-  { path: '', component: HomeComponent, canActivate : [AuthGuardService] },
+  { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
   { path: '**', redirectTo: 'home' },
 ];
 

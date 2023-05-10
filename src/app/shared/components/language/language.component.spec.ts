@@ -11,9 +11,8 @@ describe('LanguageComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LanguageComponent ]
-    })
-    .compileComponents();
+      declarations: [LanguageComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
