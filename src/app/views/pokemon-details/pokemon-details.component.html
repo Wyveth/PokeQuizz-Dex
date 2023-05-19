@@ -38,8 +38,13 @@
     </div>
 
     <app-pokemon-evolution
-      *ngFor="let pokemon of pokemonVm.Forms"
-      [pokemons]="pokemon.ListForm"
+      *ngFor="let formVm of pokemonVm.Forms"
+      [formVM]="formVm"
     ></app-pokemon-evolution>
+
+    <app-pokemon-attack
+      *ngFor="let typeLearnAttackVM of pokemonVm.Attacks"
+      [typeLearnAttackVM]="typeLearnAttackVM"
+    ></app-pokemon-attack>
   </div>
 </div>

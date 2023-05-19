@@ -1,6 +1,8 @@
+import { AttackVM } from 'src/app/shared/models/attackVM';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Attaque, AttaqueResponse } from 'src/app/api/models/concretes/attaque';
 import { DataInfo } from 'src/app/api/models/concretes/datainfo';
 import { Pokemon } from 'src/app/api/models/concretes/pokemon';
 import { TypePok } from 'src/app/api/models/concretes/typePok';
@@ -52,6 +54,14 @@ export class PokemonDetailsComponent
       { Name: 'GalarForms', ListForm: [] },
       { Name: 'HisuiForms', ListForm: [] },
       { Name: 'PaldeaForms', ListForm: [] }
+    );
+
+    this.pokemonVm.Attacks.push(
+      { Name: 'Niveau', ListAttack: [] },
+      { Name: 'Evolution', ListAttack: [] },
+      { Name: 'CT/CS', ListAttack: [] },
+      { Name: 'Reproduction', ListAttack: [] },
+      { Name: 'Maître des Capacités', ListAttack: [] }
     );
   }
 
@@ -116,9 +126,6 @@ export class PokemonDetailsComponent
     pokemonVm.Id = this.pokemon.Id;
     pokemonVm.Number = this.pokemon.Number;
 
-    console.log('Talents', this.pokemon.Talents);
-    console.log('Attacks', this.pokemon.Attaques);
-
     this.getDataInfo(
       pokemonVm,
       GenericUtils.getObject(this.pokemon, this.location)
@@ -142,6 +149,16 @@ export class PokemonDetailsComponent
           talentResponse.isHidden
         )
       );
+    });
+
+    this.pokemon.Attaques.forEach((attackResponse) => {
+      this.populateTypeLearnByName(attackResponse.typeLearn, attackResponse);
+      // pokemonVm.Attacks.push(
+      //   new AttackVM(
+      //     attackResponse.attaque['Name_' + this.location],
+      //     attackResponse.attaque['Description_' + this.location]
+      //   )
+      // );
     });
 
     pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImg;
@@ -188,11 +205,11 @@ export class PokemonDetailsComponent
     return new PokemonEvoVM(
       pokemon.Id,
       pokemon.Number,
-      GenericUtils.getObject(this.pokemon, this.location).Name,
+      GenericUtils.getObject(pokemon, this.location).Name,
       typesVM,
       this.imgRoot + pokemon.PathImg,
       this.imgRoot + pokemon.PathSprite,
-      GenericUtils.getObject(this.pokemon, this.location).WhenEvolution
+      GenericUtils.getObject(pokemon, this.location).WhenEvolution
     );
   }
 
@@ -204,6 +221,23 @@ export class PokemonDetailsComponent
     let form = this.pokemonVm.Forms.find((x) => x.Name == formName);
     if (form)
       form.ListForm.push(this.createPokemonEvoVMByLocation(pokemon, typesVm));
+  }
+
+  private createAttackVMByLocation(attack: AttaqueResponse): AttackVM {
+    return new AttackVM(
+      attack.attaque['Name_' + this.location],
+      attack.attaque['Description_' + this.location],
+      this.imgRoot + attack.attaque.TypeAttaque.UrlImg,
+      this.imgRoot + attack.attaque.Types.PathIconHome
+    );
+  }
+
+  private populateTypeLearnByName(
+    typeLearnName: string,
+    attack: AttaqueResponse
+  ) {
+    let att = this.pokemonVm.Attacks.find((x) => x.Name == typeLearnName);
+    if (att) att.ListAttack.push(this.createAttackVMByLocation(attack));
   }
   //#endregion
 }

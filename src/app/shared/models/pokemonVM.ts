@@ -21,13 +21,18 @@ export class PokemonVM {
   PathSound!: string;
   Types: TypeVM[] = [];
   Weakness: TypeVM[] = [];
-  Attacks: AttackVM[] = [];
+  Attacks: TypeLearnAttackVM[] = [];
   Stats!: number[];
   StatTotal!: number;
 }
 
 export class FormVM {
-  [key: string]: any;
+  [key: string]: string | PokemonEvoVM[];
   Name!: string;
   ListForm: PokemonEvoVM[] = [];
+}
+
+export class TypeLearnAttackVM {
+  Name!: string;
+  ListAttack: AttackVM[] = [];
 }

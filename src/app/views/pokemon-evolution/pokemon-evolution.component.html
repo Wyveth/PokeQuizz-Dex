@@ -1,6 +1,9 @@
-<div *ngFor="let pok of pokemons">
-  <p class="dark:text-white">{{ pok.Name }}</p>
-  <p><img [src]="pok.UrlSprite" /></p>
-  <p><img [src]="pok.UrlImg" /></p>
-  <p class="dark:text-white">{{ pok.WhenEvolution }}</p>
+<div *ngIf="formVM.ListForm.length > 0" class="dark:text-white">
+  <p>{{ formVM.Name }}</p>
+  <div *ngFor="let pok of formVM.ListForm">
+    <p>{{ pok.Name }}</p>
+    <p><img [src]="pok.UrlSprite" /></p>
+    <p><img [src]="pok.UrlImg" /></p>
+    <p class="dark:text-white">{{ pok.WhenEvolution }}</p>
+  </div>
 </div>

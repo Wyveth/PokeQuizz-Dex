@@ -1,0 +1,11 @@
+<div class="dark:text-white">
+  <p>{{ typeLearnAttackVM.Name }}</p>
+  <div *ngFor="let att of typeLearnAttackVM.ListAttack">
+    <div class="grid grid-cols-4" *ngIf="att.Name">
+      <p>{{ att.Name }}</p>
+      <p>{{ att.Description }}</p>
+      <p><img [src]="att.UrlTypeAttack" /></p>
+      <p><img [src]="att.UrlTypePok" /></p>
+    </div>
+  </div>
+</div>

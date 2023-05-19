@@ -44,6 +44,14 @@ export class AppConfig {
             }
             break;
 
+          case 'developmentmac':
+            {
+              request = this.http.get(
+                './assets/env/env.' + envResponse.env + '.json'
+              );
+            }
+            break;
+
           case 'staging':
             {
               request = this.http.get(

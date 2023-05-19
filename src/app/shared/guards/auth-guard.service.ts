@@ -26,8 +26,6 @@ export class AuthGuardService implements CanActivate {
         location = 'EN';
     }
 
-    console.log('AuthGuardService', location);
-
     this.router.navigate([location, 'pokedex']);
     return false;
   }

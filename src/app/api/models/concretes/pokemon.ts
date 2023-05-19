@@ -1,4 +1,5 @@
 import { Base } from '../abstracts/base';
+import { AttaqueResponse } from './attaque';
 import { DataInfo, DataInfoLight } from './datainfo';
 import { TalentResponse } from './talent';
 import { TypePok, TypePokLight } from './typePok';
@@ -36,7 +37,7 @@ export interface Pokemon extends Base {
   Weaknesses: TypePok[];
 
   //Attack
-  Attaques: any[];
+  Attaques: AttaqueResponse[];
 
   //Type Evolution : Normal, Méga, Gigamax, Alola, Galar, Hisui
   TypeEvolution: string;
