@@ -49,7 +49,7 @@ export class PokedexComponent
       this.pokemonSubscription = this.pokemonService
         .getPokemonsLight(false, 10)
         .subscribe((pokemons: PokemonLight[]) => {
-          this.pokemons = pokemons;
+          this.filteredPokemons = pokemons;
 
           pokemons.forEach((pokemon) => {
             localStorage.setItem(
