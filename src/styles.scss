@@ -1,3 +1,7 @@
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,6 +14,7 @@ body {
 body {
   background-size: auto 100%;
   background-attachment: fixed;
+  font-family: var(--font-family);
 }
 
 .container_menu {

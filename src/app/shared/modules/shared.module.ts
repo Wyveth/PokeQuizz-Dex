@@ -9,7 +9,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 
 const AngularModules = [
@@ -20,7 +19,6 @@ const AngularModules = [
   RouterModule,
   FormsModule,
   ReactiveFormsModule,
-  AppRoutingModule,
 ];
 
 const PrimeNGModules = [AutoCompleteModule];

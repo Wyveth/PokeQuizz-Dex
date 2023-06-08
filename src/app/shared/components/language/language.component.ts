@@ -23,6 +23,10 @@ export class LanguageComponent extends BaseComponent implements OnInit {
     };
   }
 
+  public getHref(language: string): string {
+    return '/assets/Images/Location/' + language + '.png';
+  }
+
   public navigateTo(language: string): void {
     this.location = this.router.url.split('/')[1];
     this.url = this.router.url.replace(this.location, language);
