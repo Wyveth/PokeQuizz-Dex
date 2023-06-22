@@ -39,7 +39,7 @@ export class PokemonItemComponent extends BaseComponent implements OnInit {
   }
 
   public goToPokemonDetails(Id: number): void {
-    this.router.navigate(['/' + this.location + '/pokedex/pokemon/' + Id]);
+    this.router.navigate(['/' + this.location + '/pokemon/' + Id]);
   }
 
   private getDataByLocalisation(pokemonVm: PokemonVM): void {

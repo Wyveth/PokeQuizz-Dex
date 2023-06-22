@@ -17,7 +17,7 @@ const routes: Routes = [
       ),
   },
   {
-    path: ':loc/pokedex/pokemon/:id',
+    path: ':loc/pokemon/:id',
     loadChildren: () =>
       import('src/app/views/pokemon-details/pokemon-details.module').then(
         (m) => m.PokemonDetailsModule

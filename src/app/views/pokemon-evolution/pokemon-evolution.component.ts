@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
-import { PokemonEvoVM } from 'src/app/shared/models/pokemonEvoVM';
 import { FormVM } from 'src/app/shared/models/pokemonVM';
 
 @Component({
@@ -11,9 +11,24 @@ import { FormVM } from 'src/app/shared/models/pokemonVM';
 })
 export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
   @Input() formVM!: FormVM;
-  constructor(resources: AppResource) {
+  loc!: string;
+
+  constructor(
+    resources: AppResource,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     super(resources);
+    this.loc = this.route.snapshot.params['loc'];
   }
 
   ngOnInit() {}
+
+  navigateTo(id: number) {
+    this.router.navigate(['/' + this.loc, 'pokemon', id]);
+  }
+
+  getNbColumns(nb: number): string {
+    return nb > 5 ? 'grid-cols-5' : 'grid-cols-' + nb;
+  }
 }

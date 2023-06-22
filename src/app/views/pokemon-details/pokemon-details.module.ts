@@ -14,7 +14,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(routes)],
-  exports: [RouterModule],
   declarations: [
     PokemonDetailsComponent,
     PokemonEvolutionComponent,

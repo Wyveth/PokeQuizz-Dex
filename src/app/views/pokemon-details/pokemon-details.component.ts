@@ -153,12 +153,6 @@ export class PokemonDetailsComponent
 
     this.pokemon.Attaques.forEach((attackResponse) => {
       this.populateTypeLearnByName(attackResponse.typeLearn, attackResponse);
-      // pokemonVm.Attacks.push(
-      //   new AttackVM(
-      //     attackResponse.attaque['Name_' + this.location],
-      //     attackResponse.attaque['Description_' + this.location]
-      //   )
-      // );
     });
 
     pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImg;
