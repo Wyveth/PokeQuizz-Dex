@@ -33,7 +33,7 @@ export class GameService extends AbstractService {
       this.configuration,
       path,
       this.parametersRequest,
-      undefined,
+      'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjA4MTY4M2FlLTBlODgtNDQ3Ny1hY2VjLTZhMTBhMDY4Njc4ZSIsInN1YiI6IkNoZXdpZUBLYWFzaHl5ay5jb20iLCJlbWFpbCI6IkNoZXdpZUBLYWFzaHl5ay5jb20iLCJqdGkiOiI0MDU1MGU4MC0xMGQxLTQ2NDQtOTYxZC1jZGZiZGJjOGZmZTciLCJuYmYiOjE3MDA0MzEwNzEsImV4cCI6MTcwMDQ3NDI3MSwiaWF0IjoxNzAwNDMxMDcxfQ.lWiNSoDgZH9Ixz-uIO0xxokcU44fjbm2JbzGg5S_xYP1XqT-cwfdEUkjN45GfePS-o62YPCN98iXAzvntNRVww',
       'body',
       false
     );

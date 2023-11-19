@@ -108,7 +108,6 @@
       }
     }
   },
-  "defaultProject": "PokeQuizz-Dex",
   "cli": {
     "analytics": false
   }

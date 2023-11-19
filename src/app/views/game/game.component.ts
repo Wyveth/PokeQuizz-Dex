@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,6 +11,8 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
   selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class GameComponent extends BaseComponent implements OnInit, OnDestroy {
   games!: Game[];

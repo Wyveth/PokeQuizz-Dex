@@ -10,7 +10,7 @@ const routes: Routes = [
     children: [
       {
         path: ':loc/home',
-        loadChildren: () =>
+        loadComponent: () =>
           import('src/app/views/home/home.component').then(
             (m) => m.HomeComponent
           ),
@@ -18,24 +18,24 @@ const routes: Routes = [
       },
       {
         path: ':loc/pokedex',
-        loadChildren: () =>
+        loadComponent: () =>
           import('src/app/views/pokedex/pokedex.component').then(
             (m) => m.PokedexComponent
           ),
       },
       {
         path: ':loc/pokemon/:id',
-        loadChildren: () =>
+        loadComponent: () =>
           import(
             'src/app/views/pokemon-details/pokemon-details.component'
           ).then((m) => m.PokemonDetailsComponent),
       },
       {
         path: ':loc/game',
-        loadChildren: () =>
-          import(
-            'src/app/views/pokemon-details/pokemon-details.component'
-          ).then((m) => m.PokemonDetailsComponent),
+        loadComponent: () =>
+          import('src/app/views/game/game.component').then(
+            (m) => m.GameComponent
+          ),
       },
       { path: '**', redirectTo: 'home' },
     ],
