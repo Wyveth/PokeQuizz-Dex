@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -8,11 +9,15 @@ import { PokemonService } from 'src/app/api/services/pokemon.service';
 import { AppConfig } from 'src/app/app.config';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
+import { PokemonItemComponent } from '../pokemon-item/pokemon-item.component';
+import { SearchComponent } from '../search/search.component';
 
 @Component({
   selector: 'app-pokedex',
   templateUrl: './pokedex.component.html',
   styleUrls: ['./pokedex.component.scss'],
+  standalone: true,
+  imports: [CommonModule, PokemonItemComponent, SearchComponent],
 })
 export class PokedexComponent
   extends BaseComponent

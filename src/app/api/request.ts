@@ -13,7 +13,7 @@ import { ApiError } from './error';
 import { catchError } from 'rxjs/operators';
 
 export class ApiRequest {
-  static get(
+  static get<T>(
     httpClient: HttpClient,
     headers: HttpHeaders,
     configuration: any,
@@ -22,14 +22,14 @@ export class ApiRequest {
     token?: string,
     observe?: 'body',
     reportProgress?: boolean
-  ): Observable<any> {
+  ): Observable<T> {
     const consumes: string[] = ['application/json'];
     const httpContentTypeSelected: string | undefined =
       configuration.selectHeaderContentType(consumes);
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
       headers = headers.set('Accept', '**');
-      if (token) headers = headers.set('Token', token);
+      if (token) headers = headers.set('Authorization', `Bearer ${token}`);
     }
 
     let queryParameters = new HttpParams({
@@ -62,27 +62,30 @@ export class ApiRequest {
     };
 
     return httpClient
-      .request<any>('GET', path, requestOptions)
-      .pipe(catchError((error: any) => ApiError.handleApiError(path, error)));
+      .request<T>('GET', path, requestOptions)
+      .pipe(
+        catchError((error: any) => ApiError.handleApiError(path, error))
+      ) as Observable<T>;
   }
 
-  static post(
+  static post<T>(
     httpClient: HttpClient,
     headers: HttpHeaders,
     configuration: any,
     path: string,
-    body?: any,
+    body?: T,
     token?: string,
     observe?: 'body',
     reportProgress?: boolean
-  ): Observable<any> {
+  ): Observable<T> {
     const consumes: string[] = ['application/json'];
     const httpContentTypeSelected: string | undefined =
       configuration.selectHeaderContentType(consumes);
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
       headers = headers.set('Accept', '**');
-      if (token) headers = headers.set('Token', token);
+      if (token)
+        headers = headers = headers.set('Authorization', `Bearer ${token}`);
     }
 
     const requestOptions: any = {
@@ -95,7 +98,9 @@ export class ApiRequest {
     };
 
     return httpClient
-      .request<any>('POST', path, requestOptions)
-      .pipe(catchError((error: any) => ApiError.handleApiError(path, error)));
+      .request<T>('POST', path, requestOptions)
+      .pipe(
+        catchError((error: any) => ApiError.handleApiError(path, error))
+      ) as Observable<T>;
   }
 }

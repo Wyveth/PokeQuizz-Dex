@@ -15,11 +15,16 @@ import { PokemonVM } from 'src/app/shared/models/pokemonVM';
 import { TalentVM } from 'src/app/shared/models/talentVM';
 import { TypeVM } from 'src/app/shared/models/typeVM';
 import { GenericUtils } from 'src/app/shared/utils/genericUtils';
+import { CommonModule } from '@angular/common';
+import { PokemonEvolutionComponent } from '../pokemon-evolution/pokemon-evolution.component';
+import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.component';
 
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
   styleUrls: ['./pokemon-details.component.scss'],
+  standalone: true,
+  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent]
 })
 export class PokemonDetailsComponent
   extends BaseComponent

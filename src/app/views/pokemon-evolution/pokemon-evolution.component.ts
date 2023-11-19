@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppResource } from 'src/app/app.resource';
@@ -8,6 +9,8 @@ import { FormVM } from 'src/app/shared/models/pokemonVM';
   selector: 'app-pokemon-evolution',
   templateUrl: './pokemon-evolution.component.html',
   styleUrls: ['./pokemon-evolution.component.scss'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
   @Input() formVM!: FormVM;

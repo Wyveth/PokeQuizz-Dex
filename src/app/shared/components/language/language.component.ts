@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../base/base.component';
 import { AppResource } from 'src/app/app.resource';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-language',
   templateUrl: './language.component.html',
   styleUrls: ['./language.component.scss'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class LanguageComponent extends BaseComponent implements OnInit {
   location!: any;

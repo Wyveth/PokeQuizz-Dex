@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
@@ -18,6 +19,8 @@ export class PokemonVM {
   selector: 'app-pokemon-item',
   templateUrl: './pokemon-item.component.html',
   styleUrls: ['./pokemon-item.component.scss'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class PokemonItemComponent extends BaseComponent implements OnInit {
   @Input() pokemon!: PokemonLight;

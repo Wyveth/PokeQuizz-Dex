@@ -2,7 +2,6 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppConfig } from './app.config';
 import { PokemonService } from './api/services/pokemon.service';
-import { HomeComponent } from './views/home/home.component';
 import { AppResource } from './app.resource';
 import { SharedModule } from './shared/modules/shared.module';
 import { AppRoutingModule } from './shared/modules/app-routing.module';
@@ -16,7 +15,7 @@ export function initResource(resource: AppResource) {
 }
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent],
   imports: [SharedModule, AppRoutingModule],
   providers: [
     AppConfig,
