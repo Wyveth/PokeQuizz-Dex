@@ -6,7 +6,7 @@ import { LocService } from 'src/app/api/services/loc.service';
   providedIn: 'root',
 })
 export class AuthGuardService {
-  constructor(private router: Router, private locService: LocService) {}
+  constructor(private locService: LocService) {}
 
   canActivate(): boolean | UrlTree {
     let location = 'EN';
@@ -27,7 +27,6 @@ export class AuthGuardService {
         location = 'EN';
     }
     this.locService.setLoc(location);
-    this.router.navigate([location, 'pokedex']);
-    return false;
+    return true;
   }
 }

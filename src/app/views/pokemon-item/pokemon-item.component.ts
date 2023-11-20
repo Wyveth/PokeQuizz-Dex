@@ -33,7 +33,7 @@ export class PokemonItemComponent extends BaseComponent implements OnInit {
   constructor(
     resources: AppResource,
     private locService: LocService,
-    
+
     private router: Router,
     private config: AppConfig
   ) {
@@ -49,6 +49,7 @@ export class PokemonItemComponent extends BaseComponent implements OnInit {
   }
 
   public goToPokemonDetails(Id: number): void {
+    console.log('goToPokemonDetails', this.loc);
     this.router.navigate(['/' + this.loc + '/pokemon/' + Id]);
   }
 
@@ -57,7 +58,6 @@ export class PokemonItemComponent extends BaseComponent implements OnInit {
     pokemonVm.Number = this.pokemon.Number;
     pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImg;
 
-    console.log(this.pokemon, this.loc);
     pokemonVm.Name = GenericUtils.getObject(this.pokemon, this.loc).Name;
     this.pokemon.Types.forEach((type) => {
       pokemonVm.PathTypes.push(

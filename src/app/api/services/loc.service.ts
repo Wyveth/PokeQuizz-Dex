@@ -5,14 +5,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class LocService {
-  private locSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  public loc$: Observable<any> = this.locSubject.asObservable();
+  private locSubject: BehaviorSubject<string> = new BehaviorSubject<string>(
+    'FR'
+  );
+  loc$: Observable<string> = this.locSubject.asObservable();
 
   setLoc(loc: string) {
     this.locSubject.next(loc);
-  }
-
-  getLoc() {
-    return this.loc$;
   }
 }

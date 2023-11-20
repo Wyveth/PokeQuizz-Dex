@@ -19,13 +19,9 @@ export class LanguageComponent extends BaseComponent implements OnInit {
   constructor(
     resources: AppResource,
     private router: Router,
-    private locService: LocService,
-    private activatedRoute: ActivatedRoute
+    private locService: LocService
   ) {
     super(resources);
-    this.router.routeReuseStrategy.shouldReuseRoute = function () {
-      return false;
-    };
   }
 
   public getHref(language: string): string {
@@ -36,6 +32,9 @@ export class LanguageComponent extends BaseComponent implements OnInit {
     this.loc = this.router.url.split('/')[1];
     this.locService.setLoc(language);
     this.url = this.router.url.replace(this.loc, language);
-    this.router.navigate([this.url]);
+
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate([this.url]);
+    });
   }
 }

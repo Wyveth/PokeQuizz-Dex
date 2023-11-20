@@ -8,15 +8,15 @@ import {
   faArrowRightFromBracket,
   faArrowRightToBracket,
 } from '@fortawesome/free-solid-svg-icons';
-import { ActivatedRoute } from '@angular/router';
 import { LocService } from 'src/app/api/services/loc.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [CommonModule, LanguageComponent, FontAwesomeModule],
+  imports: [CommonModule, RouterModule, LanguageComponent, FontAwesomeModule],
 })
 export class HeaderComponent extends BaseComponent implements OnInit {
   faArrowRightToBracket = faArrowRightToBracket;
@@ -31,6 +31,4 @@ export class HeaderComponent extends BaseComponent implements OnInit {
       this.loc = loc;
     });
   }
-
-  ngOnInit() {}
 }

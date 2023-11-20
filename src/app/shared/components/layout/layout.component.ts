@@ -21,5 +21,14 @@ import { FooterComponent } from '../footer/footer.component';
 export class LayoutComponent implements OnInit {
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadJsFile('assets/js/main.js');
+  }
+
+  public loadJsFile(url: string) {
+    const node = document.createElement('script');
+    node.src = url;
+    node.type = 'text/javascript';
+    document.getElementsByTagName('head')[0].appendChild(node);
+  }
 }

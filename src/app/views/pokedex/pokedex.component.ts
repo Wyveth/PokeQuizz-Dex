@@ -52,9 +52,6 @@ export class PokedexComponent
   ngOnInit() {
     this.waiting = true;
 
-    if (!this.loc)
-      this.locService.setLoc(this.route.snapshot.paramMap.get('loc')!);
-
     const pokedexOK = localStorage.getItem('pokedex');
     if (!pokedexOK) {
       this.pokemonSubscription = this.pokemonService

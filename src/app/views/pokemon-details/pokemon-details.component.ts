@@ -70,12 +70,13 @@ export class PokemonDetailsComponent
       { Name: 'Reproduction', ListAttack: [] },
       { Name: 'Maître des Capacités', ListAttack: [] }
     );
-  }
 
-  ngOnInit() {
     this.locService.loc$.subscribe((loc: string) => {
       this.loc = loc;
     });
+  }
+
+  ngOnInit() {
     this.key = this.route.snapshot.params['id'];
 
     new Promise<void>((resolve) => {

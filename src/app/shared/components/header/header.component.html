@@ -29,10 +29,13 @@
       ></path>
     </svg>
   </button>
-  <a [href]="loc + '/login'"
+  <a
+    [routerLink]="[loc, 'login']"
+    routerLinkActive="router-link-active"
+    class="rounded-full p-2.5"
     ><fa-icon [icon]="faArrowRightToBracket"></fa-icon
   ></a>
-  <a [href]="loc + '/register'">
+  <a [routerLink]="[loc, 'register']" class="rounded-full p-2.5">
     <fa-icon [icon]="faArrowRightFromBracket"></fa-icon>
   </a>
   <app-language></app-language>
