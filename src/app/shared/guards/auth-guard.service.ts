@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
+import { LocService } from 'src/app/api/services/loc.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthGuardService  {
-  constructor(private router: Router) {}
+export class AuthGuardService {
+  constructor(private router: Router, private locService: LocService) {}
 
   canActivate(): boolean | UrlTree {
     let location = 'EN';
@@ -25,7 +26,7 @@ export class AuthGuardService  {
       default:
         location = 'EN';
     }
-
+    this.locService.setLoc(location);
     this.router.navigate([location, 'pokedex']);
     return false;
   }

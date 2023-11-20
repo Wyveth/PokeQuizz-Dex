@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from '../base/base.component';
 import { AppResource } from 'src/app/app.resource';
 import { CommonModule } from '@angular/common';
+import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
   selector: 'app-language',
@@ -12,12 +13,13 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class LanguageComponent extends BaseComponent implements OnInit {
-  location!: any;
+  loc!: any;
   url: string = this.router.url;
 
   constructor(
     resources: AppResource,
     private router: Router,
+    private locService: LocService,
     private activatedRoute: ActivatedRoute
   ) {
     super(resources);
@@ -31,8 +33,9 @@ export class LanguageComponent extends BaseComponent implements OnInit {
   }
 
   public navigateTo(language: string): void {
-    this.location = this.router.url.split('/')[1];
-    this.url = this.router.url.replace(this.location, language);
+    this.loc = this.router.url.split('/')[1];
+    this.locService.setLoc(language);
+    this.url = this.router.url.replace(this.loc, language);
     this.router.navigate([this.url]);
   }
 }

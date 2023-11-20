@@ -19,7 +19,7 @@ export class PokemonService extends AbstractService {
     console.log('API Pokemon: ' + this.api_pokemon);
   }
 
-  public getPokemons(limit: boolean, max: number): Observable<any> {
+  getPokemons(limit: boolean, max: number): Observable<any> {
     this.parametersRequest = {
       url: this.api_pokemon,
       parameters: [

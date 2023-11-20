@@ -29,7 +29,11 @@
       ></path>
     </svg>
   </button>
-  <button></button>
-  <button></button>
+  <a [href]="loc + '/login'"
+    ><fa-icon [icon]="faArrowRightToBracket"></fa-icon
+  ></a>
+  <a [href]="loc + '/register'">
+    <fa-icon [icon]="faArrowRightFromBracket"></fa-icon>
+  </a>
   <app-language></app-language>
 </div>

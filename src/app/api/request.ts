@@ -97,6 +97,8 @@ export class ApiRequest {
       responseType: 'json',
     };
 
+    console.log('Request: ', requestOptions);
+
     return httpClient
       .request<T>('POST', path, requestOptions)
       .pipe(

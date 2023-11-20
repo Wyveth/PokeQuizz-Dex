@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { LocService } from 'src/app/api/services/loc.service';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 
@@ -11,9 +12,15 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 export class HomeComponent extends BaseComponent implements OnInit {
   loc!: string;
 
-  constructor(resources: AppResource, private route: ActivatedRoute) {
+  constructor(
+    resources: AppResource,
+    private locService: LocService,
+    private route: ActivatedRoute
+  ) {
     super(resources);
-    console.log('Localisation', this.route.snapshot.params['loc']);
-    this.loc = this.route.snapshot.params['loc'];
+
+    this.locService.loc$.subscribe((loc: string) => {
+      this.loc = loc;
+    });
   }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Game } from 'src/app/api/models/concretes/game';
 import { GameService } from 'src/app/api/services/game.service';
+import { LocService } from 'src/app/api/services/loc.service';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 
@@ -22,10 +23,14 @@ export class GameComponent extends BaseComponent implements OnInit, OnDestroy {
   constructor(
     resources: AppResource,
     private gameService: GameService,
+    private locService: LocService,
     private route: ActivatedRoute
   ) {
     super(resources);
-    this.loc = this.route.snapshot.params['loc'];
+
+    this.locService.loc$.subscribe((loc: string) => {
+      this.loc = loc;
+    });
   }
 
   ngOnInit() {
@@ -33,6 +38,7 @@ export class GameComponent extends BaseComponent implements OnInit, OnDestroy {
       .getGames()
       .subscribe((games: Game[]) => {
         this.games = games;
+        console.log(this.games);
       });
   }
 

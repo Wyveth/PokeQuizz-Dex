@@ -18,13 +18,14 @@ import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 import { CommonModule } from '@angular/common';
 import { PokemonEvolutionComponent } from '../pokemon-evolution/pokemon-evolution.component';
 import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.component';
+import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
   styleUrls: ['./pokemon-details.component.scss'],
   standalone: true,
-  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent]
+  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent],
 })
 export class PokemonDetailsComponent
   extends BaseComponent
@@ -39,7 +40,7 @@ export class PokemonDetailsComponent
   pokemonSubscription!: Subscription;
 
   key!: number;
-  location!: string;
+  loc!: string;
 
   typesVm: TypeVM[] = [];
 
@@ -47,6 +48,7 @@ export class PokemonDetailsComponent
     resources: AppResource,
     private route: ActivatedRoute,
     private config: AppConfig,
+    private locService: LocService,
     private pokemonService: PokemonService
   ) {
     super(resources);
@@ -71,7 +73,9 @@ export class PokemonDetailsComponent
   }
 
   ngOnInit() {
-    this.location = this.route.snapshot.params['loc'];
+    this.locService.loc$.subscribe((loc: string) => {
+      this.loc = loc;
+    });
     this.key = this.route.snapshot.params['id'];
 
     new Promise<void>((resolve) => {
@@ -79,7 +83,7 @@ export class PokemonDetailsComponent
         .getPokemon(this.key)
         .subscribe((pokemon: Pokemon) => {
           this.pokemon = pokemon;
-          this.getDataByLocalisation(this.pokemonVm, this.location);
+          this.getDataByLocalisation(this.pokemonVm, this.loc);
 
           this.pokemonService
             .getEvolChain(this.pokemon.FR.Evolutions)
@@ -87,7 +91,7 @@ export class PokemonDetailsComponent
               pokemons.forEach((pokemon) => {
                 pokemon.Types.forEach((type) => {
                   this.typesVm.push(
-                    this.createTypeVMByLocation(type, this.location)
+                    this.createTypeVMByLocation(type, this.loc)
                   );
                 });
 
@@ -102,7 +106,7 @@ export class PokemonDetailsComponent
               pokemons.forEach((pokemon) => {
                 pokemon.Types.forEach((type) => {
                   this.typesVm.push(
-                    this.createTypeVMByLocation(type, this.location)
+                    this.createTypeVMByLocation(type, this.loc)
                   );
                 });
 
@@ -131,10 +135,7 @@ export class PokemonDetailsComponent
     pokemonVm.Id = this.pokemon.Id;
     pokemonVm.Number = this.pokemon.Number;
 
-    this.getDataInfo(
-      pokemonVm,
-      GenericUtils.getObject(this.pokemon, this.location)
-    );
+    this.getDataInfo(pokemonVm, GenericUtils.getObject(this.pokemon, this.loc));
 
     this.pokemon.Types.forEach((type) => {
       pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
@@ -149,8 +150,8 @@ export class PokemonDetailsComponent
     this.pokemon.Talents.forEach((talentResponse) => {
       pokemonVm.Talents.push(
         new TalentVM(
-          talentResponse.talent['Name_' + this.location],
-          talentResponse.talent['Description_' + this.location],
+          talentResponse.talent['Name_' + this.loc],
+          talentResponse.talent['Description_' + this.loc],
           talentResponse.isHidden
         )
       );
@@ -188,8 +189,8 @@ export class PokemonDetailsComponent
 
   private createTypeVMByLocation(typePok: TypePok, location: string): TypeVM {
     return new TypeVM(
-      typePok['Name_' + this.location],
-      this.imgRoot + typePok['UrlMiniHome_' + this.location],
+      typePok['Name_' + this.loc],
+      this.imgRoot + typePok['UrlMiniHome_' + this.loc],
       this.imgRoot + typePok.PathFondGo,
       typePok.ImgColor,
       typePok.InfoColor,
@@ -204,11 +205,11 @@ export class PokemonDetailsComponent
     return new PokemonEvoVM(
       pokemon.Id,
       pokemon.Number,
-      GenericUtils.getObject(pokemon, this.location).Name,
+      GenericUtils.getObject(pokemon, this.loc).Name,
       typesVM,
       this.imgRoot + pokemon.PathImg,
       this.imgRoot + pokemon.PathSprite,
-      GenericUtils.getObject(pokemon, this.location).WhenEvolution
+      GenericUtils.getObject(pokemon, this.loc).WhenEvolution
     );
   }
 
@@ -224,8 +225,8 @@ export class PokemonDetailsComponent
 
   private createAttackVMByLocation(attack: AttaqueResponse): AttackVM {
     return new AttackVM(
-      attack.attaque['Name_' + this.location],
-      attack.attaque['Description_' + this.location],
+      attack.attaque['Name_' + this.loc],
+      attack.attaque['Description_' + this.loc],
       this.imgRoot + attack.attaque.TypeAttaque.UrlImg,
       this.imgRoot + attack.attaque.Types.PathIconHome
     );

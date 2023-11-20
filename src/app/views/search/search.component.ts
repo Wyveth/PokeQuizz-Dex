@@ -9,6 +9,7 @@ import {
 import { InputTextModule } from 'primeng/inputtext';
 import { debounceTime } from 'rxjs/operators';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
+import { LocService } from 'src/app/api/services/loc.service';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { GenericUtils } from 'src/app/shared/utils/genericUtils';
@@ -22,13 +23,18 @@ import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 })
 export class SearchComponent extends BaseComponent implements OnInit {
   @Input() pokemons!: PokemonLight[];
-  @Input() location!: string;
+  loc!: string;
   @Output() filteredPokemons = new EventEmitter<PokemonLight[]>();
 
   formSearch!: FormGroup;
 
-  constructor(resources: AppResource) {
+  constructor(resources: AppResource, private locService: LocService) {
     super(resources);
+
+    this.locService.loc$.subscribe((loc: string) => {
+      this.loc = loc;
+    });
+
     this.initForm();
   }
 
@@ -41,7 +47,7 @@ export class SearchComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < this.pokemons.length; i++) {
           const pokemon = this.pokemons[i];
           if (
-            GenericUtils.getObject(pokemon, this.location)
+            GenericUtils.getObject(pokemon, this.loc)
               .Name.toLowerCase()
               .includes(query.toLowerCase())
           )

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LocService } from 'src/app/api/services/loc.service';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { FormVM } from 'src/app/shared/models/pokemonVM';
@@ -18,11 +19,15 @@ export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
 
   constructor(
     resources: AppResource,
+    private locService: LocService,
     private router: Router,
     private route: ActivatedRoute
   ) {
     super(resources);
-    this.loc = this.route.snapshot.params['loc'];
+
+    this.locService.loc$.subscribe((loc: string) => {
+      this.loc = loc;
+    });
   }
 
   ngOnInit() {}

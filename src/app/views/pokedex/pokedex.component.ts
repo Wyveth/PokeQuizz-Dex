@@ -11,6 +11,7 @@ import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { PokemonItemComponent } from '../pokemon-item/pokemon-item.component';
 import { SearchComponent } from '../search/search.component';
+import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
   selector: 'app-pokedex',
@@ -38,15 +39,21 @@ export class PokedexComponent
   constructor(
     resources: AppResource,
     private pokemonService: PokemonService,
+    private locService: LocService,
     private config: AppConfig,
     private route: ActivatedRoute
   ) {
     super(resources);
-    this.loc = this.route.snapshot.params['loc'];
+    this.locService.loc$.subscribe((loc: string) => {
+      this.loc = loc;
+    });
   }
 
   ngOnInit() {
     this.waiting = true;
+
+    if (!this.loc)
+      this.locService.setLoc(this.route.snapshot.paramMap.get('loc')!);
 
     const pokedexOK = localStorage.getItem('pokedex');
     if (!pokedexOK) {

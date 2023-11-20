@@ -5,6 +5,8 @@ import { PokemonService } from './api/services/pokemon.service';
 import { AppResource } from './app.resource';
 import { SharedModule } from './shared/modules/shared.module';
 import { AppRoutingModule } from './shared/modules/app-routing.module';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './shared/interceptor/AuthInterceptor';
 
 export function initConfig(config: AppConfig) {
   return () => config.load();
@@ -32,7 +34,11 @@ export function initResource(resource: AppResource) {
       deps: [AppConfig],
       multi: true,
     },
-    PokemonService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

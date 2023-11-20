@@ -5,11 +5,11 @@ import { LayoutComponent } from '../components/layout/layout.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':loc',
     component: LayoutComponent,
     children: [
       {
-        path: ':loc/home',
+        path: 'home',
         loadComponent: () =>
           import('src/app/views/home/home.component').then(
             (m) => m.HomeComponent
@@ -17,29 +17,44 @@ const routes: Routes = [
         canActivate: [AuthGuardService],
       },
       {
-        path: ':loc/pokedex',
+        path: 'pokedex',
         loadComponent: () =>
           import('src/app/views/pokedex/pokedex.component').then(
             (m) => m.PokedexComponent
           ),
       },
       {
-        path: ':loc/pokemon/:id',
+        path: 'pokemon/:id',
         loadComponent: () =>
           import(
             'src/app/views/pokemon-details/pokemon-details.component'
           ).then((m) => m.PokemonDetailsComponent),
       },
       {
-        path: ':loc/game',
+        path: 'game',
         loadComponent: () =>
           import('src/app/views/game/game.component').then(
             (m) => m.GameComponent
           ),
       },
-      { path: '**', redirectTo: 'home' },
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('src/app/views/login/login.component').then(
+            (m) => m.LoginComponent
+          ),
+      },
+      {
+        path: 'register',
+        loadComponent: () =>
+          import('src/app/views/register/register.component').then(
+            (m) => m.RegisterComponent
+          ),
+      },
     ],
   },
+  { path: '', redirectTo: 'EN/home', pathMatch: 'full' },
+  { path: '**', redirectTo: 'home' },
 ];
 
 @NgModule({
