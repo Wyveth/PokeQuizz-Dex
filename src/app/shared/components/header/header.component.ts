@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { AppResource } from 'src/app/app.resource';
 import { CommonModule } from '@angular/common';
