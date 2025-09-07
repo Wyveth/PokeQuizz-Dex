@@ -7,11 +7,10 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { FormVM } from 'src/app/shared/models/pokemonVM';
 
 @Component({
-  selector: 'app-pokemon-evolution',
-  templateUrl: './pokemon-evolution.component.html',
-  styleUrls: ['./pokemon-evolution.component.scss'],
-  standalone: true,
-  imports: [CommonModule],
+    selector: 'app-pokemon-evolution',
+    templateUrl: './pokemon-evolution.component.html',
+    styleUrls: ['./pokemon-evolution.component.scss'],
+    imports: [CommonModule]
 })
 export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
   @Input() formVM!: FormVM;

@@ -12,11 +12,10 @@ import { LocService } from 'src/app/api/services/loc.service';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  standalone: true,
-  imports: [CommonModule, RouterModule, LanguageComponent, FontAwesomeModule],
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    imports: [CommonModule, RouterModule, LanguageComponent, FontAwesomeModule]
 })
 export class HeaderComponent extends BaseComponent implements OnInit {
   faArrowRightToBracket = faArrowRightToBracket;

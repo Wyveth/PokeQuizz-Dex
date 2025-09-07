@@ -21,11 +21,10 @@ import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.compone
 import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
-  selector: 'app-pokemon-details',
-  templateUrl: './pokemon-details.component.html',
-  styleUrls: ['./pokemon-details.component.scss'],
-  standalone: true,
-  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent],
+    selector: 'app-pokemon-details',
+    templateUrl: './pokemon-details.component.html',
+    styleUrls: ['./pokemon-details.component.scss'],
+    imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent]
 })
 export class PokemonDetailsComponent
   extends BaseComponent

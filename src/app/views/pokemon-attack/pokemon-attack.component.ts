@@ -5,11 +5,10 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { TypeLearnAttackVM } from 'src/app/shared/models/pokemonVM';
 
 @Component({
-  selector: 'app-pokemon-attack',
-  templateUrl: './pokemon-attack.component.html',
-  styleUrls: ['./pokemon-attack.component.scss'],
-  standalone: true,
-  imports: [CommonModule],
+    selector: 'app-pokemon-attack',
+    templateUrl: './pokemon-attack.component.html',
+    styleUrls: ['./pokemon-attack.component.scss'],
+    imports: [CommonModule]
 })
 export class PokemonAttackComponent extends BaseComponent implements OnInit {
   @Input() typeLearnAttackVM!: TypeLearnAttackVM;

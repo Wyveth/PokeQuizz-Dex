@@ -14,11 +14,10 @@ import { SearchComponent } from '../search/search.component';
 import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
-  selector: 'app-pokedex',
-  templateUrl: './pokedex.component.html',
-  styleUrls: ['./pokedex.component.scss'],
-  standalone: true,
-  imports: [CommonModule, PokemonItemComponent, SearchComponent],
+    selector: 'app-pokedex',
+    templateUrl: './pokedex.component.html',
+    styleUrls: ['./pokedex.component.scss'],
+    imports: [CommonModule, PokemonItemComponent, SearchComponent]
 })
 export class PokedexComponent
   extends BaseComponent

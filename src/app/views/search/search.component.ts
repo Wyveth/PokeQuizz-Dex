@@ -15,11 +15,10 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule],
+    selector: 'app-search',
+    templateUrl: './search.component.html',
+    styleUrls: ['./search.component.scss'],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule]
 })
 export class SearchComponent extends BaseComponent implements OnInit {
   @Input() pokemons!: PokemonLight[];

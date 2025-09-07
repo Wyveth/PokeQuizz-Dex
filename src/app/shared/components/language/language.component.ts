@@ -6,11 +6,10 @@ import { CommonModule } from '@angular/common';
 import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
-  selector: 'app-language',
-  templateUrl: './language.component.html',
-  styleUrls: ['./language.component.scss'],
-  standalone: true,
-  imports: [CommonModule],
+    selector: 'app-language',
+    templateUrl: './language.component.html',
+    styleUrls: ['./language.component.scss'],
+    imports: [CommonModule]
 })
 export class LanguageComponent extends BaseComponent implements OnInit {
   loc!: any;

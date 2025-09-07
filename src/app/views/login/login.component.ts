@@ -14,11 +14,10 @@ import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   form!: FormGroup;
