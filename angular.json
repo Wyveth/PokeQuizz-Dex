@@ -71,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "PokeQuizz-Dex:build:production"
+              "buildTarget": "PokeQuizz-Dex:build:production"
             },
             "development": {
-              "browserTarget": "PokeQuizz-Dex:build:development"
+              "buildTarget": "PokeQuizz-Dex:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "PokeQuizz-Dex:build"
+            "buildTarget": "PokeQuizz-Dex:build"
           }
         },
         "test": {
