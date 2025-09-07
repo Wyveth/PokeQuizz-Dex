@@ -1,9 +1,4 @@
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpParams,
-  HttpUrlEncodingCodec,
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpUrlEncodingCodec } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   Parameter,
