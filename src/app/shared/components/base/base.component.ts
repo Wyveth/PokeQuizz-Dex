@@ -3,10 +3,9 @@ import { AppResource } from 'src/app/app.resource';
 import { Resource } from 'src/app/resources/resource';
 
 @Component({
-    selector: 'app-base',
-    templateUrl: './base.component.html',
-    styleUrls: ['./base.component.scss'],
-    standalone: false
+  selector: 'app-base',
+  templateUrl: './base.component.html',
+  standalone: true,
 })
 export class BaseComponent implements OnInit {
   public resource!: Resource;

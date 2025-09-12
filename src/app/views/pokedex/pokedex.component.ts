@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { DataInfoLight } from 'src/app/api/models/concretes/datainfo';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
 import { PokemonService } from 'src/app/api/services/pokemon.service';
 import { AppConfig } from 'src/app/app.config';
@@ -14,26 +14,27 @@ import { SearchComponent } from '../search/search.component';
 import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
-    selector: 'app-pokedex',
-    templateUrl: './pokedex.component.html',
-    styleUrls: ['./pokedex.component.scss'],
-    imports: [CommonModule, PokemonItemComponent, SearchComponent]
+  selector: 'app-pokedex',
+  templateUrl: './pokedex.component.html',
+  imports: [CommonModule, PokemonItemComponent, SearchComponent]
 })
-export class PokedexComponent
-  extends BaseComponent
-  implements OnInit, OnDestroy
-{
-  pokemons!: PokemonLight[];
-  pokemonSubscription!: Subscription;
+export class PokedexComponent extends BaseComponent implements OnInit, OnDestroy {
+  pokemons: PokemonLight[] = [];
+  displayedPokemons: PokemonLight[] = [];
+  filteredPokemons: PokemonLight[] = [];
+
+  waiting = false;
+  loadingMore = false;
+
+  batchSize = 100;
+  batchIndex = 0;
+
+  imgRoot: string = this.config.getConfig('img_root');
+  formSearch!: FormGroup;
+
   loc!: string;
 
-  // Show a "Please wait..." message while loading
-  waiting = false;
-
-  filteredPokemons!: PokemonLight[];
-  imgRoot: string = this.config.getConfig('img_root');
-
-  formSearch!: FormGroup;
+  private destroy$ = new Subject<void>();
 
   constructor(
     resources: AppResource,
@@ -43,65 +44,73 @@ export class PokedexComponent
     private route: ActivatedRoute
   ) {
     super(resources);
-    this.locService.loc$.subscribe((loc: string) => {
-      this.loc = loc;
-    });
   }
 
   ngOnInit() {
     this.waiting = true;
 
-    const pokedexOK = localStorage.getItem('pokedex');
-    if (!pokedexOK) {
-      this.pokemonSubscription = this.pokemonService
-        .getPokemonsLight(false, 10)
-        .subscribe((pokemons: PokemonLight[]) => {
-          this.filteredPokemons = pokemons;
-
-          pokemons.forEach((pokemon) => {
-            localStorage.setItem(
-              pokemon.Id.toString(),
-              JSON.stringify(
-                new PokemonLight(
-                  pokemon.Id,
-                  pokemon.Number,
-                  new DataInfoLight(pokemon.Id, pokemon.FR.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.EN.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.ES.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.IT.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.DE.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.RU.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.CO.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.CN.Name),
-                  new DataInfoLight(pokemon.Id, pokemon.JP.Name),
-                  pokemon.Types,
-                  pokemon.PathImg
-                )
-              )
-            );
-          });
-        });
-
-      localStorage.setItem('pokedex', 'true');
-
-      this.waiting = false;
-    } else {
-      this.pokemons = [];
-      for (let i = 1; i < 1250; i++) {
-        const pokemon = JSON.parse(localStorage.getItem(i.toString())!);
-        this.pokemons.push(pokemon);
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: Params) => {
+      const newLoc = params['loc'] || 'FR';
+      if (this.loc !== newLoc) {
+        this.loc = newLoc;
+        this.locService.setLoc(this.loc);
+        this.loadPokemons();
       }
-      this.waiting = false;
-    }
+    });
+  }
 
-    this.filteredPokemons = this.pokemons;
+  private loadPokemons() {
+    this.waiting = true;
+    this.pokemonService
+      .getPokemonsLight(true, 1249)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(pokemons => {
+        this.pokemons = pokemons;
+        this.filteredPokemons = pokemons;
+
+        this.displayedPokemons = [];
+        this.batchIndex = 0;
+        this.addNextBatch();
+
+        this.waiting = false;
+      });
+  }
+
+  filterPokemons(event: PokemonLight[]) {
+    this.filteredPokemons = event;
+    this.displayedPokemons = [];
+    this.batchIndex = 0;
+    this.addNextBatch();
+  }
+
+  addNextBatch() {
+    if (this.batchIndex >= this.filteredPokemons.length) return;
+
+    const nextBatch = this.filteredPokemons.slice(
+      this.batchIndex,
+      this.batchIndex + this.batchSize
+    );
+    this.displayedPokemons = [...this.displayedPokemons, ...nextBatch];
+    this.batchIndex += this.batchSize;
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    if (
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+      !this.loadingMore &&
+      this.batchIndex < this.filteredPokemons.length
+    ) {
+      this.loadingMore = true;
+      setTimeout(() => {
+        this.addNextBatch();
+        this.loadingMore = false;
+      }, 100);
+    }
   }
 
   ngOnDestroy(): void {
-    if (this.pokemonSubscription) this.pokemonSubscription.unsubscribe();
-  }
-
-  filterPokemons(event: any) {
-    this.filteredPokemons = event;
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

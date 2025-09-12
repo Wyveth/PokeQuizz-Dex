@@ -11,7 +11,12 @@ export class AuthGuardService {
   canActivate(): boolean | UrlTree {
     let location = 'EN';
     switch (navigator.language.split('-')[0].toLocaleUpperCase()) {
-      case 'FR' || 'EN' || 'ES' || 'IT' || 'DE' || 'RU':
+      case 'FR':
+      case 'EN':
+      case 'ES':
+      case 'IT':
+      case 'DE':
+      case 'RU':
         location = navigator.language.split('-')[0].toLocaleUpperCase();
         break;
       case 'ZH':

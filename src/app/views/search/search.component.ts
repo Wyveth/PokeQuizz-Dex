@@ -1,11 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { debounceTime } from 'rxjs/operators';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
@@ -15,10 +10,9 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './search.component.html',
-    styleUrls: ['./search.component.scss'],
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule]
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule]
 })
 export class SearchComponent extends BaseComponent implements OnInit {
   @Input() pokemons!: PokemonLight[];
@@ -27,7 +21,10 @@ export class SearchComponent extends BaseComponent implements OnInit {
 
   formSearch!: FormGroup;
 
-  constructor(resources: AppResource, private locService: LocService) {
+  constructor(
+    resources: AppResource,
+    private locService: LocService
+  ) {
     super(resources);
 
     this.locService.loc$.subscribe((loc: string) => {
@@ -38,7 +35,7 @@ export class SearchComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formSearch.valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+    this.formSearch.valueChanges.pipe(debounceTime(100)).subscribe(value => {
       const filtered: PokemonLight[] = [];
       const query = value.search;
 
@@ -62,7 +59,7 @@ export class SearchComponent extends BaseComponent implements OnInit {
 
   initForm() {
     this.formSearch = new FormGroup({
-      search: new FormControl(''),
+      search: new FormControl('')
     });
   }
 }

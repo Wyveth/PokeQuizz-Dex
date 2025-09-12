@@ -9,10 +9,9 @@ import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
 
 @Component({
-    selector: 'app-game',
-    templateUrl: './game.component.html',
-    styleUrls: ['./game.component.scss'],
-    imports: [CommonModule]
+  selector: 'app-game',
+  templateUrl: './game.component.html',
+  imports: [CommonModule],
 })
 export class GameComponent extends BaseComponent implements OnInit, OnDestroy {
   games!: Game[];

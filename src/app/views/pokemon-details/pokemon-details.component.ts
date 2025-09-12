@@ -1,7 +1,8 @@
 import { AttackVM } from 'src/app/shared/models/attackVM';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Params } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Attaque, AttaqueResponse } from 'src/app/api/models/concretes/attaque';
 import { DataInfo } from 'src/app/api/models/concretes/datainfo';
 import { Pokemon } from 'src/app/api/models/concretes/pokemon';
@@ -21,27 +22,21 @@ import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.compone
 import { LocService } from 'src/app/api/services/loc.service';
 
 @Component({
-    selector: 'app-pokemon-details',
-    templateUrl: './pokemon-details.component.html',
-    styleUrls: ['./pokemon-details.component.scss'],
-    imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent]
+  selector: 'app-pokemon-details',
+  templateUrl: './pokemon-details.component.html',
+  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent]
 })
-export class PokemonDetailsComponent
-  extends BaseComponent
-  implements OnInit, OnDestroy
-{
+export class PokemonDetailsComponent extends BaseComponent implements OnInit, OnDestroy {
   imgRoot: string = this.config.getConfig('img_root');
 
   pokemon!: Pokemon;
-  firstType!: TypePok;
   pokemonVm: PokemonVM = new PokemonVM();
-
-  pokemonSubscription!: Subscription;
+  typesVm: TypeVM[] = [];
 
   key!: number;
   loc!: string;
 
-  typesVm: TypeVM[] = [];
+  private destroy$ = new Subject<void>();
 
   constructor(
     resources: AppResource,
@@ -69,66 +64,71 @@ export class PokemonDetailsComponent
       { Name: 'Reproduction', ListAttack: [] },
       { Name: 'Maître des Capacités', ListAttack: [] }
     );
-
-    this.locService.loc$.subscribe((loc: string) => {
-      this.loc = loc;
-    });
   }
 
   ngOnInit() {
-    this.key = this.route.snapshot.params['id'];
+    // Écoute les changements de langue et d'ID du Pokémon
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: Params) => {
+      const newLoc = params['loc'] || 'FR';
+      const newKey = +params['id'];
 
-    new Promise<void>((resolve) => {
-      this.pokemonSubscription = this.pokemonService
-        .getPokemon(this.key)
-        .subscribe((pokemon: Pokemon) => {
-          this.pokemon = pokemon;
-          this.getDataByLocalisation(this.pokemonVm, this.loc);
+      // Recharge uniquement si la langue ou le Pokémon change
+      if (this.loc !== newLoc || this.key !== newKey) {
+        this.loc = newLoc;
+        this.key = newKey;
 
-          this.pokemonService
-            .getEvolChain(this.pokemon.FR.Evolutions)
-            .subscribe((pokemons: Pokemon[]) => {
-              pokemons.forEach((pokemon) => {
-                pokemon.Types.forEach((type) => {
-                  this.typesVm.push(
-                    this.createTypeVMByLocation(type, this.loc)
-                  );
-                });
+        // met à jour le service de localisation
+        this.locService.setLoc(this.loc);
 
-                this.populateFormsByName('Evolutions', pokemon, this.typesVm);
+        // recharge le Pokémon
+        this.loadPokemon();
+      }
+    });
+  }
+
+  private loadPokemon() {
+    this.pokemonService
+      .getPokemon(this.key)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(pokemon => {
+        this.pokemon = pokemon;
+        this.pokemonVm = new PokemonVM(); // reset
+        this.typesVm = [];
+
+        this.getDataByLocalisation(this.pokemonVm, this.loc);
+
+        // Evolutions
+        this.pokemonService
+          .getEvolChain(this.pokemon.FR.Evolutions)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((pokemons: Pokemon[]) => {
+            pokemons.forEach(pokemon => {
+              pokemon.Types.forEach(type => {
+                this.typesVm.push(this.createTypeVMByLocation(type, this.loc));
               });
+              this.populateFormsByName('Evolutions', pokemon, this.typesVm);
             });
+          });
 
-          this.pokemonService
-            .getVariants(this.pokemon.Number)
-            .subscribe((pokemons: Pokemon[]) => {
-              this.typesVm = [];
-              pokemons.forEach((pokemon) => {
-                pokemon.Types.forEach((type) => {
-                  this.typesVm.push(
-                    this.createTypeVMByLocation(type, this.loc)
-                  );
-                });
-
-                this.populateFormsByName(
-                  pokemon.TypeEvolution + 'Forms',
-                  pokemon,
-                  this.typesVm
-                );
+        // Variants
+        this.pokemonService
+          .getVariants(this.pokemon.Number)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((pokemons: Pokemon[]) => {
+            this.typesVm = [];
+            pokemons.forEach(pokemon => {
+              pokemon.Types.forEach(type => {
+                this.typesVm.push(this.createTypeVMByLocation(type.typePok, this.loc));
               });
+              this.populateFormsByName(pokemon.TypeEvolution + 'Forms', pokemon, this.typesVm);
             });
-
-          resolve();
-        });
-    })
-      .then(() => {})
-      .catch((error) => {
-        console.log(error);
+          });
       });
   }
 
   ngOnDestroy(): void {
-    this.pokemonSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private getDataByLocalisation(pokemonVm: PokemonVM, location: string): void {
@@ -137,17 +137,15 @@ export class PokemonDetailsComponent
 
     this.getDataInfo(pokemonVm, GenericUtils.getObject(this.pokemon, this.loc));
 
-    this.pokemon.Types.forEach((type) => {
+    this.pokemon.Types.forEach(type => {
       pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
     });
 
-    this.pokemon.Weaknesses.forEach((type) => {
-      pokemonVm.Weakness.push(
-        this.createTypeVMByLocation(type.typePok, location)
-      );
+    this.pokemon.Weaknesses.forEach(type => {
+      pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
     });
 
-    this.pokemon.Talents.forEach((talentResponse) => {
+    this.pokemon.Talents.forEach(talentResponse => {
       pokemonVm.Talents.push(
         new TalentVM(
           talentResponse.talent['Name_' + this.loc],
@@ -157,7 +155,7 @@ export class PokemonDetailsComponent
       );
     });
 
-    this.pokemon.Attaques.forEach((attackResponse) => {
+    this.pokemon.Attaques.forEach(attackResponse => {
       this.populateTypeLearnByName(attackResponse.typeLearn, attackResponse);
     });
 
@@ -170,7 +168,7 @@ export class PokemonDetailsComponent
       this.pokemon.StatDefense,
       this.pokemon.StatAttaqueSpe,
       this.pokemon.StatDefenseSpe,
-      this.pokemon.StatVitesse,
+      this.pokemon.StatVitesse
     ];
     pokemonVm.StatTotal = this.pokemon.StatTotal;
   }
@@ -198,10 +196,7 @@ export class PokemonDetailsComponent
     );
   }
 
-  private createPokemonEvoVMByLocation(
-    pokemon: Pokemon,
-    typesVM: TypeVM[]
-  ): PokemonEvoVM {
+  private createPokemonEvoVMByLocation(pokemon: Pokemon, typesVM: TypeVM[]): PokemonEvoVM {
     return new PokemonEvoVM(
       pokemon.Id,
       pokemon.Number,
@@ -213,14 +208,9 @@ export class PokemonDetailsComponent
     );
   }
 
-  private populateFormsByName(
-    formName: string,
-    pokemon: Pokemon,
-    typesVm: TypeVM[]
-  ) {
-    let form = this.pokemonVm.Forms.find((x) => x.Name == formName);
-    if (form)
-      form.ListForm.push(this.createPokemonEvoVMByLocation(pokemon, typesVm));
+  private populateFormsByName(formName: string, pokemon: Pokemon, typesVm: TypeVM[]) {
+    let form = this.pokemonVm.Forms.find(x => x.Name == formName);
+    if (form) form.ListForm.push(this.createPokemonEvoVMByLocation(pokemon, typesVm));
   }
 
   private createAttackVMByLocation(attack: AttaqueResponse): AttackVM {
@@ -232,11 +222,8 @@ export class PokemonDetailsComponent
     );
   }
 
-  private populateTypeLearnByName(
-    typeLearnName: string,
-    attack: AttaqueResponse
-  ) {
-    let att = this.pokemonVm.Attacks.find((x) => x.Name == typeLearnName);
+  private populateTypeLearnByName(typeLearnName: string, attack: AttaqueResponse) {
+    let att = this.pokemonVm.Attacks.find(x => x.Name == typeLearnName);
     if (att) att.ListAttack.push(this.createAttackVMByLocation(attack));
   }
   //#endregion

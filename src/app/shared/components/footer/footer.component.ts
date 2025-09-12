@@ -4,10 +4,10 @@ import { AppResource } from 'src/app/app.resource';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-footer',
-    templateUrl: './footer.component.html',
-    styleUrls: ['./footer.component.scss'],
-    imports: [CommonModule]
+  selector: 'app-footer',
+  templateUrl: './footer.component.html',
+  standalone: true,
+  imports: [CommonModule],
 })
 export class FooterComponent extends BaseComponent implements OnInit {
   constructor(resources: AppResource) {
