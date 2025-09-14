@@ -17,9 +17,7 @@
     <p class="dark:text-white">{{ pokemonVm.Weight }}</p>
 
     <div *ngFor="let talent of pokemonVm.Talents">
-      <p class="dark:text-white">
-        {{ talent.Name }} <span *ngIf="talent.IsHidden">[Caché]</span>
-      </p>
+      <p class="dark:text-white">{{ talent.Name }} <span *ngIf="talent.IsHidden">[Caché]</span></p>
       <p class="dark:text-white">{{ talent.Description }}</p>
     </div>
 

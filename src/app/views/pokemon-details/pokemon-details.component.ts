@@ -224,7 +224,12 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
   private populateTypeLearnByName(typeLearnName: string, attack: AttaqueResponse) {
     let att = this.pokemonVm.Attacks.find(x => x.Name == typeLearnName);
-    if (att) att.ListAttack.push(this.createAttackVMByLocation(attack));
+    if (!att) {
+      att = { Name: typeLearnName, ListAttack: [] };
+      this.pokemonVm.Attacks.push(att);
+    }
+
+    att.ListAttack.push(this.createAttackVMByLocation(attack));
   }
   //#endregion
 }
