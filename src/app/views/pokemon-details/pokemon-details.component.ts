@@ -210,6 +210,10 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
   private populateFormsByName(formName: string, pokemon: Pokemon, typesVm: TypeVM[]) {
     let form = this.pokemonVm.Forms.find(x => x.Name == formName);
+    if (!form) {
+      form = { Name: formName, ListForm: [] };
+      this.pokemonVm.Forms.push(form);
+    }
     if (form) form.ListForm.push(this.createPokemonEvoVMByLocation(pokemon, typesVm));
   }
 
