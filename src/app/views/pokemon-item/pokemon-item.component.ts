@@ -64,7 +64,6 @@ export class PokemonItemComponent extends BaseComponent implements OnInit, OnDes
   }
 
   private updatePokemonVm(): void {
-    console.log(this.pokemon.FR.Name, this.pokemon.PathImgLegacy);
     if (!this.pokemon) return;
 
     this.pokemonVm.Id = this.pokemon.Id;
