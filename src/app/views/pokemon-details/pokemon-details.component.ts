@@ -159,8 +159,14 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
       this.populateTypeLearnByName(attackResponse.typeLearn, attackResponse);
     });
 
-    pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImg;
-    pokemonVm.PathSprite = this.imgRoot + this.pokemon.PathSprite;
+    pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImgLegacy;
+    pokemonVm.PathImgNormal = this.imgRoot + this.pokemon.PathImgNormal;
+    pokemonVm.PathImgShiny = this.imgRoot + this.pokemon.PathImgShiny;
+    pokemonVm.PathSprite = this.imgRoot + this.pokemon.PathSpriteLegacy;
+    pokemonVm.PathSpriteNormal = this.imgRoot + this.pokemon.PathSpriteNormal;
+    pokemonVm.PathSpriteShiny = this.imgRoot + this.pokemon.PathSpriteShiny;
+    pokemonVm.PathAnimatedNormal = this.imgRoot + this.pokemon.PathAnimatedImg;
+    pokemonVm.PathAnimatedShiny = this.imgRoot + this.pokemon.PathAnimatedImgShiny;
     pokemonVm.PathSound = this.imgRoot + this.pokemon.PathSound;
     pokemonVm.Stats = [
       this.pokemon.StatPv,
@@ -202,8 +208,8 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
       pokemon.Number,
       GenericUtils.getObject(pokemon, this.loc).Name,
       typesVM,
-      this.imgRoot + pokemon.PathImg,
-      this.imgRoot + pokemon.PathSprite,
+      this.imgRoot + pokemon.PathImgLegacy,
+      this.imgRoot + pokemon.PathSpriteLegacy,
       GenericUtils.getObject(pokemon, this.loc).WhenEvolution
     );
   }

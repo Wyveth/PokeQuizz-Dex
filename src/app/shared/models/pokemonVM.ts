@@ -17,7 +17,13 @@ export class PokemonVM {
   Forms: FormVM[] = [];
   WhenEvolution!: string;
   PathImg!: string;
+  PathImgNormal!: string;
+  PathImgShiny!: string;
   PathSprite!: string;
+  PathSpriteNormal!: string;
+  PathSpriteShiny!: string;
+  PathAnimatedNormal!: string;
+  PathAnimatedShiny!: string;
   PathSound!: string;
   Types: TypeVM[] = [];
   Weakness: TypeVM[] = [];

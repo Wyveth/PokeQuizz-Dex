@@ -1,8 +1,19 @@
 <div class="max-w-6xl mx-auto flex">
   <div *ngIf="pokemonVm">
     <p class="dark:text-white">{{ pokemonVm.Number }}</p>
-    <p><img [src]="pokemonVm.PathImg" /></p>
-    <p><img [src]="pokemonVm.PathSprite" /></p>
+    <div class="flex justify-center items-center">
+      <img [src]="pokemonVm.PathImgNormal" />
+      <img [src]="pokemonVm.PathImgShiny" />
+    </div>
+    <div class="flex justify-center items-center">
+      <img [src]="pokemonVm.PathSprite" class="h-[40px] w-[40px]" />
+      <img [src]="pokemonVm.PathSpriteNormal" />
+      <img [src]="pokemonVm.PathSpriteShiny" />
+    </div>
+    <div class="flex justify-center items-center">
+      <img [src]="pokemonVm.PathAnimatedNormal" />
+      <img [src]="pokemonVm.PathAnimatedShiny" />
+    </div>
     <p>
       <audio controls [src]="pokemonVm.PathSound">
         <a [href]="pokemonVm.PathSound"> Download audio </a>

@@ -14,6 +14,11 @@ export class PokemonVM {
   Number!: string;
   Name!: string;
   PathImg!: string;
+  PathImgShiny!: string;
+  PathSprite!: string;
+  PathSpriteShiny!: string;
+  PathAnimatedImg!: string;
+  PathAnimatedImgShiny!: string;
   PathTypes: string[] = [];
 }
 
@@ -59,12 +64,17 @@ export class PokemonItemComponent extends BaseComponent implements OnInit, OnDes
   }
 
   private updatePokemonVm(): void {
+    console.log(this.pokemon.FR.Name, this.pokemon.PathImgLegacy);
     if (!this.pokemon) return;
 
     this.pokemonVm.Id = this.pokemon.Id;
     this.pokemonVm.Number = this.pokemon.Number;
-    this.pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImg;
-
+    this.pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImgNormal;
+    this.pokemonVm.PathImgShiny = this.imgRoot + this.pokemon.PathImgShiny;
+    this.pokemonVm.PathSprite = this.imgRoot + this.pokemon.PathSpriteNormal;
+    this.pokemonVm.PathSpriteShiny = this.imgRoot + this.pokemon.PathSpriteShiny;
+    this.pokemonVm.PathAnimatedImg = this.imgRoot + this.pokemon.PathAnimatedImg;
+    this.pokemonVm.PathAnimatedImgShiny = this.imgRoot + this.pokemon.PathAnimatedImgShiny;
     // Nom traduit selon la langue active
     this.pokemonVm.Name = GenericUtils.getObject(this.pokemon, this.loc).Name;
 

@@ -68,14 +68,23 @@ export interface Pokemon extends Base {
 
   //Picture Url
   UrlImg: string;
-  PathImg: string;
+  PathImgLegacy: string;
+  PathImgNormal: string;
+  PathImgShiny: string;
+
+  PathAnimatedImg: string;
+  PathAnimatedImgShiny: string;
 
   //Sprite Url
-  PathSprite: string;
   UrlSprite: string;
+  PathSpriteLegacy: string;
+  PathSpriteNormal: string;
+  PathSpriteShiny: string;
 
   //Sound Url
   PathSound: string;
+  PathSoundLegacy: string;
+  PathSoundCurrent: string;
 }
 
 export class PokemonLight extends Base {
@@ -104,7 +113,13 @@ export class PokemonLight extends Base {
   //Types
   Types!: TypePokLight[];
 
-  PathImg!: string;
+  PathImgLegacy!: string;
+  PathImgNormal!: string;
+  PathImgShiny!: string;
+
+  PathSpriteLegacy!: string;
+  PathSpriteNormal!: string;
+  PathSpriteShiny!: string;
 
   constructor(
     Id: number,
@@ -119,7 +134,12 @@ export class PokemonLight extends Base {
     CN: DataInfoLight,
     JP: DataInfoLight,
     Types: TypePokLight[],
-    PathImg: string
+    PathImgLegacy: string,
+    PathImgNormal: string,
+    PathImgShiny: string,
+    PathSpriteLegacy: string,
+    PathSpriteNormal: string,
+    PathSpriteShiny: string
   ) {
     super(Id);
     this.Id = Id;
@@ -134,6 +154,11 @@ export class PokemonLight extends Base {
     this.CN = CN;
     this.JP = JP;
     this.Types = Types;
-    this.PathImg = PathImg;
+    this.PathImgLegacy = PathImgLegacy;
+    this.PathImgNormal = PathImgNormal;
+    this.PathImgShiny = PathImgShiny;
+    this.PathSpriteLegacy = PathImgLegacy;
+    this.PathSpriteNormal = PathSpriteNormal;
+    this.PathSpriteShiny = PathSpriteShiny;
   }
 }
