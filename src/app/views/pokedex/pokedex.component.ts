@@ -62,7 +62,7 @@ export class PokedexComponent extends BaseComponent implements OnInit, OnDestroy
   private loadPokemons() {
     this.waiting = true;
     this.pokemonService
-      .getPokemonsLight(true, 1249)
+      .getPokemonsLight(false, 0, null, false)
       .pipe(takeUntil(this.destroy$))
       .subscribe(pokemons => {
         this.pokemons = pokemons;

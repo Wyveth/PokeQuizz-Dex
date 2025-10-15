@@ -4,41 +4,41 @@ import { TalentVM } from './talentVM';
 import { TypeVM } from './typeVM';
 
 export class PokemonVM {
-  Id!: number;
-  Number!: string;
-  Name!: string;
-  DisplayName!: string;
-  DescriptionVx!: string;
-  DescriptionVy!: string;
-  Size!: string;
-  Category!: string;
-  Weight!: string;
-  Talents: TalentVM[] = [];
-  Forms: FormVM[] = [];
-  WhenEvolution!: string;
-  PathImg!: string;
-  PathImgNormal!: string;
-  PathImgShiny!: string;
-  PathSprite!: string;
-  PathSpriteNormal!: string;
-  PathSpriteShiny!: string;
-  PathAnimatedNormal!: string;
-  PathAnimatedShiny!: string;
-  PathSound!: string;
-  Types: TypeVM[] = [];
-  Weakness: TypeVM[] = [];
-  Attacks: TypeLearnAttackVM[] = [];
-  Stats!: number[];
-  StatTotal!: number;
+  id!: number;
+  number!: string;
+  name!: string;
+  displayName!: string;
+  descriptionVx!: string;
+  descriptionVy!: string;
+  size!: string;
+  category!: string;
+  weight!: string;
+  talents: TalentVM[] = [];
+  forms: FormVM[] = [];
+  whenEvolution!: string;
+  pathImg!: string;
+  pathImgNormal!: string;
+  pathImgShiny!: string;
+  pathSprite!: string;
+  pathSpriteNormal!: string;
+  pathSpriteShiny!: string;
+  pathAnimatedNormal!: string;
+  pathAnimatedShiny!: string;
+  pathSound!: string;
+  types: TypeVM[] = [];
+  weakness: TypeVM[] = [];
+  attacks: TypeLearnAttackVM[] = [];
+  stats!: number[];
+  statTotal!: number;
 }
 
 export class FormVM {
   [key: string]: string | PokemonEvoVM[];
-  Name!: string;
-  ListForm: PokemonEvoVM[] = [];
+  name!: string;
+  listForm: PokemonEvoVM[] = [];
 }
 
 export class TypeLearnAttackVM {
-  Name!: string;
-  ListAttack: AttackVM[] = [];
+  name!: string;
+  listAttack: AttackVM[] = [];
 }

@@ -1,164 +1,120 @@
 import { Base } from '../abstracts/base';
-import { AttaqueResponse } from './attaque';
+import { Attaque } from './attaque';
 import { DataInfo, DataInfoLight } from './datainfo';
-import { TalentResponse } from './talent';
+import { Talent } from './talent';
 import { TypePok, TypePokLight } from './typePok';
 
 export interface Pokemon extends Base {
-  //Pokemon Number
-  Number: string;
+  //Pokemon number
+  number: string;
 
   //French
-  FR: DataInfo;
-  //English
-  EN: DataInfo;
-  //Spanish
-  ES: DataInfo;
-  //Italian
-  IT: DataInfo;
-  //German
-  DE: DataInfo;
-  //Russian
-  RU: DataInfo;
-  //Korean
-  CO: DataInfo;
-  //Chinese
-  CN: DataInfo;
-  //Japanese
-  JP: DataInfo;
+  dataInfo: DataInfo;
 
   //Talents
-  Talents: TalentResponse[];
+  talents: Talent[];
 
-  //Types
-  Types: TypePok[];
+  //types
+  types: TypePok[];
 
-  //Weaknesses
-  Weaknesses: TypePok[];
+  //weaknesses
+  weaknesses: TypePok[];
 
   //Attack
-  Attaques: AttaqueResponse[];
+  attaques: Attaque[];
 
   //Type Evolution : Normal, Méga, Gigamax, Alola, Galar, Hisui
-  TypeEvolution: string;
+  typeEvolution: string;
 
   //Stastistic HP
-  StatPv: number;
+  statPv: number;
 
   //Stastistic Attack
-  StatAttaque: number;
+  statAttaque: number;
 
   //Stastistic Defense
-  StatDefense: number;
+  statDefense: number;
 
   //Stastistic Sp. Attack
-  StatAttaqueSpe: number;
+  statAttaqueSpe: number;
 
   //Stastistic Sp. Defense
-  StatDefenseSpe: number;
+  statDefenseSpe: number;
 
   //Stastistic Speed
-  StatVitesse: number;
+  statVitesse: number;
 
   //Stastistic Global
-  StatTotal: number;
+  statTotal: number;
 
-  //Generation Number
-  Generation: number;
+  //Generation number
+  generation: number;
 
   //Picture Url
-  UrlImg: string;
-  PathImgLegacy: string;
-  PathImgNormal: string;
-  PathImgShiny: string;
+  pathImgLegacy: string;
+  pathImgNormal: string;
+  pathImgShiny: string;
 
-  PathAnimatedImg: string;
-  PathAnimatedImgShiny: string;
+  pathAnimatedImg: string;
+  pathAnimatedImgShiny: string;
 
   //Sprite Url
-  UrlSprite: string;
-  PathSpriteLegacy: string;
-  PathSpriteNormal: string;
-  PathSpriteShiny: string;
+  pathSpriteLegacy: string;
+  pathSpriteNormal: string;
+  pathSpriteShiny: string;
 
   //Sound Url
-  PathSound: string;
-  PathSoundLegacy: string;
-  PathSoundCurrent: string;
+  pathSound: string;
+  pathSoundLegacy: string;
+  pathSoundCurrent: string;
 }
 
 export class PokemonLight extends Base {
-  //Pokemon Number
-  Number!: string;
+  //Pokemon number
+  number!: string;
 
-  //French
-  FR!: DataInfoLight;
-  //English
-  EN!: DataInfoLight;
-  //Spanish
-  ES!: DataInfoLight;
-  //Italian
-  IT!: DataInfoLight;
-  //German
-  DE!: DataInfoLight;
-  //Russian
-  RU!: DataInfoLight;
-  //Korean
-  CO!: DataInfoLight;
-  //Chinese
-  CN!: DataInfoLight;
-  //Japanese
-  JP!: DataInfoLight;
+  dataInfo!: DataInfoLight;
 
-  //Types
-  Types!: TypePokLight[];
+  //types
+  typePoks!: TypePokLight[];
 
-  PathImgLegacy!: string;
-  PathImgNormal!: string;
-  PathImgShiny!: string;
+  pathImgLegacy!: string;
+  pathImgNormal!: string;
+  pathImgShiny!: string;
 
-  PathSpriteLegacy!: string;
-  PathSpriteNormal!: string;
-  PathSpriteShiny!: string;
+  pathSpriteLegacy!: string;
+  pathSpriteNormal!: string;
+  pathSpriteShiny!: string;
+
+  pathAnimatedImg!: string;
+  pathAnimatedImgShiny!: string;
 
   constructor(
-    Id: number,
-    Number: string,
-    FR: DataInfoLight,
-    EN: DataInfoLight,
-    ES: DataInfoLight,
-    IT: DataInfoLight,
-    DE: DataInfoLight,
-    RU: DataInfoLight,
-    CO: DataInfoLight,
-    CN: DataInfoLight,
-    JP: DataInfoLight,
-    Types: TypePokLight[],
-    PathImgLegacy: string,
-    PathImgNormal: string,
-    PathImgShiny: string,
-    PathSpriteLegacy: string,
-    PathSpriteNormal: string,
-    PathSpriteShiny: string
+    id: number,
+    number: string,
+    dataInfo: DataInfoLight,
+    typePoks: TypePokLight[],
+    pathImgLegacy: string,
+    pathImgNormal: string,
+    pathImgShiny: string,
+    pathSpriteLegacy: string,
+    pathSpriteNormal: string,
+    pathSpriteShiny: string,
+    pathAnimatedImg: string,
+    pathAnimatedImgShiny: string
   ) {
-    super(Id);
-    this.Id = Id;
-    this.Number = Number;
-    this.FR = FR;
-    this.EN = EN;
-    this.ES = ES;
-    this.IT = IT;
-    this.DE = DE;
-    this.RU = RU;
-    this.CO = CO;
-    this.CN = CN;
-    this.JP = JP;
-    this.Types = Types;
-    this.PathImgLegacy = PathImgLegacy;
-    this.PathImgNormal = PathImgNormal;
-    this.PathImgShiny = PathImgShiny;
-    this.PathSpriteLegacy = PathImgLegacy;
-    this.PathSpriteNormal = PathSpriteNormal;
-    this.PathSpriteShiny = PathSpriteShiny;
+    super(id);
+    this.id = id;
+    this.number = number;
+    this.dataInfo = dataInfo;
+    this.typePoks = typePoks;
+    this.pathImgLegacy = pathImgLegacy;
+    this.pathImgNormal = pathImgNormal;
+    this.pathImgShiny = pathImgShiny;
+    this.pathSpriteLegacy = pathSpriteLegacy;
+    this.pathSpriteNormal = pathSpriteNormal;
+    this.pathSpriteShiny = pathSpriteShiny;
+    this.pathAnimatedImg = pathAnimatedImg;
+    this.pathAnimatedImgShiny = pathAnimatedImgShiny;
   }
 }

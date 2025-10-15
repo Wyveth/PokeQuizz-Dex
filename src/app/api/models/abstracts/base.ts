@@ -1,11 +1,11 @@
 export interface Base {
   [key: string]: any;
-  Id: number;
+  id: number;
 }
 
 export class Base implements Base {
-  Id: number;
-  constructor(Id: number) {
-    this.Id = Id;
+  id: number;
+  constructor(id: number) {
+    this.id = id;
   }
 }

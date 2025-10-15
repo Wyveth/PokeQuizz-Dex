@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Attaque, AttaqueResponse } from 'src/app/api/models/concretes/attaque';
+import { Attaque } from 'src/app/api/models/concretes/attaque';
 import { DataInfo } from 'src/app/api/models/concretes/datainfo';
 import { Pokemon } from 'src/app/api/models/concretes/pokemon';
 import { TypePok } from 'src/app/api/models/concretes/typePok';
@@ -47,22 +47,22 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
   ) {
     super(resources);
 
-    this.pokemonVm.Forms.push(
-      { Name: 'Evolutions', ListForm: [] },
-      { Name: 'MegaForms', ListForm: [] },
-      { Name: 'GigamaxForms', ListForm: [] },
-      { Name: 'AlolaForms', ListForm: [] },
-      { Name: 'GalarForms', ListForm: [] },
-      { Name: 'HisuiForms', ListForm: [] },
-      { Name: 'PaldeaForms', ListForm: [] }
+    this.pokemonVm.forms.push(
+      { name: 'Evolutions', listForm: [] },
+      { name: 'MegaForms', listForm: [] },
+      { name: 'GigamaxForms', listForm: [] },
+      { name: 'AlolaForms', listForm: [] },
+      { name: 'GalarForms', listForm: [] },
+      { name: 'HisuiForms', listForm: [] },
+      { name: 'PaldeaForms', listForm: [] }
     );
 
-    this.pokemonVm.Attacks.push(
-      { Name: 'Niveau', ListAttack: [] },
-      { Name: 'Evolution', ListAttack: [] },
-      { Name: 'CT/CS', ListAttack: [] },
-      { Name: 'Reproduction', ListAttack: [] },
-      { Name: 'Maître des Capacités', ListAttack: [] }
+    this.pokemonVm.attacks.push(
+      { name: 'Niveau', listAttack: [] },
+      { name: 'Evolution', listAttack: [] },
+      { name: 'CT/CS', listAttack: [] },
+      { name: 'Reproduction', listAttack: [] },
+      { name: 'Maître des Capacités', listAttack: [] }
     );
   }
 
@@ -103,7 +103,7 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
           .pipe(takeUntil(this.destroy$))
           .subscribe((pokemons: Pokemon[]) => {
             pokemons.forEach(pokemon => {
-              pokemon.Types.forEach(type => {
+              pokemon.types.forEach(type => {
                 this.typesVm.push(this.createTypeVMByLocation(type, this.loc));
               });
               this.populateFormsByName('Evolutions', pokemon, this.typesVm);
@@ -112,15 +112,15 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
         // Variants
         this.pokemonService
-          .getVariants(this.pokemon.Number)
+          .getVariants(this.pokemon.number)
           .pipe(takeUntil(this.destroy$))
           .subscribe((pokemons: Pokemon[]) => {
             this.typesVm = [];
             pokemons.forEach(pokemon => {
-              pokemon.Types.forEach(type => {
+              pokemon.types.forEach(type => {
                 this.typesVm.push(this.createTypeVMByLocation(type.typePok, this.loc));
               });
-              this.populateFormsByName(pokemon.TypeEvolution + 'Forms', pokemon, this.typesVm);
+              this.populateFormsByName(pokemon.typeEvolution + 'Forms', pokemon, this.typesVm);
             });
           });
       });
@@ -132,114 +132,110 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
   }
 
   private getDataByLocalisation(pokemonVm: PokemonVM, location: string): void {
-    pokemonVm.Id = this.pokemon.Id;
-    pokemonVm.Number = this.pokemon.Number;
+    pokemonVm.id = this.pokemon.id;
+    pokemonVm.number = this.pokemon.number;
 
-    this.getDataInfo(pokemonVm, GenericUtils.getObject(this.pokemon, this.loc));
+    console.log(this.pokemon);
+    this.getDataInfo(pokemonVm, this.pokemon.dataInfo);
 
-    this.pokemon.Types.forEach(type => {
-      pokemonVm.Types.push(this.createTypeVMByLocation(type.typePok, location));
+    this.pokemon.types.forEach(type => {
+      pokemonVm.types.push(this.createTypeVMByLocation(type.typePok, location));
     });
 
-    this.pokemon.Weaknesses.forEach(type => {
-      pokemonVm.Weakness.push(this.createTypeVMByLocation(type.typePok, location));
+    this.pokemon.weaknesses.forEach(type => {
+      pokemonVm.weakness.push(this.createTypeVMByLocation(type.typePok, location));
     });
 
-    this.pokemon.Talents.forEach(talentResponse => {
-      pokemonVm.Talents.push(
-        new TalentVM(
-          talentResponse.talent['Name_' + this.loc],
-          talentResponse.talent['Description_' + this.loc],
-          talentResponse.isHidden
-        )
-      );
+    this.pokemon.talents.forEach(talent => {
+      pokemonVm.talents.push(new TalentVM(talent.name, talent.Description, talent.isHidden));
     });
 
-    this.pokemon.Attaques.forEach(attackResponse => {
+    this.pokemon.attaques.forEach(attackResponse => {
       this.populateTypeLearnByName(attackResponse.typeLearn, attackResponse);
     });
 
-    pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImgLegacy;
-    pokemonVm.PathImgNormal = this.imgRoot + this.pokemon.PathImgNormal;
-    pokemonVm.PathImgShiny = this.imgRoot + this.pokemon.PathImgShiny;
-    pokemonVm.PathSprite = this.imgRoot + this.pokemon.PathSpriteLegacy;
-    pokemonVm.PathSpriteNormal = this.imgRoot + this.pokemon.PathSpriteNormal;
-    pokemonVm.PathSpriteShiny = this.imgRoot + this.pokemon.PathSpriteShiny;
-    pokemonVm.PathAnimatedNormal = this.imgRoot + this.pokemon.PathAnimatedImg;
-    pokemonVm.PathAnimatedShiny = this.imgRoot + this.pokemon.PathAnimatedImgShiny;
-    pokemonVm.PathSound = this.imgRoot + this.pokemon.PathSound;
-    pokemonVm.Stats = [
-      this.pokemon.StatPv,
-      this.pokemon.StatAttaque,
-      this.pokemon.StatDefense,
-      this.pokemon.StatAttaqueSpe,
-      this.pokemon.StatDefenseSpe,
-      this.pokemon.StatVitesse
+    pokemonVm.pathImg = this.imgRoot + this.pokemon.pathImgLegacy;
+    pokemonVm.pathImgNormal = this.imgRoot + this.pokemon.pathImgNormal;
+    pokemonVm.pathImgShiny = this.imgRoot + this.pokemon.pathImgShiny;
+    pokemonVm.pathSprite = this.imgRoot + this.pokemon.pathSpriteLegacy;
+    pokemonVm.pathSpriteNormal = this.imgRoot + this.pokemon.pathSpriteNormal;
+    pokemonVm.pathSpriteShiny = this.imgRoot + this.pokemon.pathSpriteShiny;
+    pokemonVm.pathAnimatedNormal = this.imgRoot + this.pokemon.pathAnimatedImg;
+    pokemonVm.pathAnimatedShiny = this.imgRoot + this.pokemon.pathAnimatedImgShiny;
+    pokemonVm.pathSound = this.imgRoot + this.pokemon.pathSound;
+    pokemonVm.stats = [
+      this.pokemon.statPv,
+      this.pokemon.statAttaque,
+      this.pokemon.statDefense,
+      this.pokemon.statAttaqueSpe,
+      this.pokemon.statDefenseSpe,
+      this.pokemon.statVitesse
     ];
-    pokemonVm.StatTotal = this.pokemon.StatTotal;
+    pokemonVm.statTotal = this.pokemon.statTotal;
   }
 
   //#region Private Methods
   private getDataInfo(pokemonVm: PokemonVM, dataInfo: DataInfo): void {
-    pokemonVm.Name = dataInfo.Name;
-    pokemonVm.DisplayName = dataInfo.DisplayName;
-    pokemonVm.DescriptionVx = dataInfo.DescriptionVx;
-    pokemonVm.DescriptionVy = dataInfo.DescriptionVy;
-    pokemonVm.Size = dataInfo.Size;
-    pokemonVm.Category = dataInfo.Category;
-    pokemonVm.Weight = dataInfo.Weight;
-    pokemonVm.WhenEvolution = dataInfo.WhenEvolution;
+    console.log(dataInfo);
+    pokemonVm.name = dataInfo.name;
+    pokemonVm.displayName = dataInfo.displayName;
+    pokemonVm.descriptionVx = dataInfo.descriptionVx;
+    pokemonVm.descriptionVy = dataInfo.descriptionVy;
+    pokemonVm.size = dataInfo.size;
+    pokemonVm.category = dataInfo.category;
+    pokemonVm.weight = dataInfo.weight;
+    pokemonVm.whenEvolution = dataInfo.whenEvolution;
   }
 
   private createTypeVMByLocation(typePok: TypePok, location: string): TypeVM {
     return new TypeVM(
-      typePok['Name_' + this.loc],
-      this.imgRoot + typePok['UrlMiniHome_' + this.loc],
-      this.imgRoot + typePok.PathFondGo,
-      typePok.ImgColor,
-      typePok.InfoColor,
-      typePok.TypeColor
+      typePok.name,
+      this.imgRoot + typePok.pathMiniHome,
+      this.imgRoot + typePok.pathFondGo,
+      typePok.imgColor,
+      typePok.infoColor,
+      typePok.typeColor
     );
   }
 
   private createPokemonEvoVMByLocation(pokemon: Pokemon, typesVM: TypeVM[]): PokemonEvoVM {
     return new PokemonEvoVM(
-      pokemon.Id,
-      pokemon.Number,
-      GenericUtils.getObject(pokemon, this.loc).Name,
+      pokemon.id,
+      pokemon.number,
+      pokemon.dataInfo.name,
       typesVM,
-      this.imgRoot + pokemon.PathImgLegacy,
-      this.imgRoot + pokemon.PathSpriteLegacy,
-      GenericUtils.getObject(pokemon, this.loc).WhenEvolution
+      this.imgRoot + pokemon.pathImgLegacy,
+      this.imgRoot + pokemon.pathSpriteLegacy,
+      pokemon.dataInfo.whenEvolution
     );
   }
 
   private populateFormsByName(formName: string, pokemon: Pokemon, typesVm: TypeVM[]) {
-    let form = this.pokemonVm.Forms.find(x => x.Name == formName);
+    let form = this.pokemonVm.forms.find(x => x.name == formName);
     if (!form) {
-      form = { Name: formName, ListForm: [] };
-      this.pokemonVm.Forms.push(form);
+      form = { name: formName, listForm: [] };
+      this.pokemonVm.forms.push(form);
     }
-    if (form) form.ListForm.push(this.createPokemonEvoVMByLocation(pokemon, typesVm));
+    if (form) form.listForm.push(this.createPokemonEvoVMByLocation(pokemon, typesVm));
   }
 
-  private createAttackVMByLocation(attack: AttaqueResponse): AttackVM {
+  private createAttackVMByLocation(attack: Attaque): AttackVM {
     return new AttackVM(
-      attack.attaque['Name_' + this.loc],
-      attack.attaque['Description_' + this.loc],
-      this.imgRoot + attack.attaque.TypeAttaque.UrlImg,
-      this.imgRoot + attack.attaque.Types.PathIconHome
+      attack.Name,
+      attack.Description,
+      this.imgRoot + attack.TypeAttaque.PathImg,
+      this.imgRoot + attack.types.PathIconHome
     );
   }
 
-  private populateTypeLearnByName(typeLearnName: string, attack: AttaqueResponse) {
-    let att = this.pokemonVm.Attacks.find(x => x.Name == typeLearnName);
+  private populateTypeLearnByName(typeLearnName: string, attack: Attaque) {
+    let att = this.pokemonVm.attacks.find(x => x.name == typeLearnName);
     if (!att) {
-      att = { Name: typeLearnName, ListAttack: [] };
-      this.pokemonVm.Attacks.push(att);
+      att = { name: typeLearnName, listAttack: [] };
+      this.pokemonVm.attacks.push(att);
     }
 
-    att.ListAttack.push(this.createAttackVMByLocation(attack));
+    att.listAttack.push(this.createAttackVMByLocation(attack));
   }
   //#endregion
 }

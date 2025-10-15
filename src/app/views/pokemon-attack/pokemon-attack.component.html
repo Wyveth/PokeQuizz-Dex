@@ -1,6 +1,6 @@
-<div class="dark:text-white" *ngIf="typeLearnAttackVM.ListAttack.length != 0">
-  <p class="underline underline-offset-8">{{ typeLearnAttackVM.Name }}</p>
-  <div *ngFor="let att of typeLearnAttackVM.ListAttack">
+<div class="dark:text-white" *ngIf="typeLearnAttackVM.listAttack.length != 0">
+  <p class="underline underline-offset-8">{{ typeLearnAttackVM.name }}</p>
+  <div *ngFor="let att of typeLearnAttackVM.listAttack">
     <div class="grid grid-cols-4" *ngIf="att.Name">
       <p>{{ att.Name }}</p>
       <p>{{ att.Description }}</p>

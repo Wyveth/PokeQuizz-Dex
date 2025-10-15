@@ -10,16 +10,16 @@ import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 import { Subscription } from 'rxjs';
 
 export class PokemonVM {
-  Id!: number;
-  Number!: string;
-  Name!: string;
-  PathImg!: string;
-  PathImgShiny!: string;
-  PathSprite!: string;
-  PathSpriteShiny!: string;
-  PathAnimatedImg!: string;
-  PathAnimatedImgShiny!: string;
-  PathTypes: string[] = [];
+  id!: number;
+  number!: string;
+  name!: string;
+  pathImg!: string;
+  pathImgShiny!: string;
+  pathSprite!: string;
+  pathSpriteShiny!: string;
+  pathAnimatedImg!: string;
+  pathAnimatedImgShiny!: string;
+  pathTypes: string[] = [];
 }
 
 @Component({
@@ -49,6 +49,7 @@ export class PokemonItemComponent extends BaseComponent implements OnInit, OnDes
     // écoute la langue en continu
     this.locSub = this.locService.loc$.subscribe((loc: string) => {
       this.loc = loc;
+      console.log(this.pokemon);
       this.updatePokemonVm();
     });
   }
@@ -66,20 +67,22 @@ export class PokemonItemComponent extends BaseComponent implements OnInit, OnDes
   private updatePokemonVm(): void {
     if (!this.pokemon) return;
 
-    this.pokemonVm.Id = this.pokemon.Id;
-    this.pokemonVm.Number = this.pokemon.Number;
-    this.pokemonVm.PathImg = this.imgRoot + this.pokemon.PathImgNormal;
-    this.pokemonVm.PathImgShiny = this.imgRoot + this.pokemon.PathImgShiny;
-    this.pokemonVm.PathSprite = this.imgRoot + this.pokemon.PathSpriteNormal;
-    this.pokemonVm.PathSpriteShiny = this.imgRoot + this.pokemon.PathSpriteShiny;
-    this.pokemonVm.PathAnimatedImg = this.imgRoot + this.pokemon.PathAnimatedImg;
-    this.pokemonVm.PathAnimatedImgShiny = this.imgRoot + this.pokemon.PathAnimatedImgShiny;
-    // Nom traduit selon la langue active
-    this.pokemonVm.Name = GenericUtils.getObject(this.pokemon, this.loc).Name;
+    console.log('Update PokemonVM for ' + this.pokemon);
 
-    this.pokemonVm.PathTypes = [];
-    this.pokemon.Types.forEach(type => {
-      this.pokemonVm.PathTypes.push(this.imgRoot + type.typePok['UrlMiniHome_' + this.loc]);
+    this.pokemonVm.id = this.pokemon.id;
+    this.pokemonVm.number = this.pokemon.number;
+    this.pokemonVm.pathImg = this.imgRoot + this.pokemon.pathImgNormal;
+    this.pokemonVm.pathImgShiny = this.imgRoot + this.pokemon.pathImgShiny;
+    this.pokemonVm.pathSprite = this.imgRoot + this.pokemon.pathSpriteNormal;
+    this.pokemonVm.pathSpriteShiny = this.imgRoot + this.pokemon.pathSpriteShiny;
+    this.pokemonVm.pathAnimatedImg = this.imgRoot + this.pokemon.pathAnimatedImg;
+    this.pokemonVm.pathAnimatedImgShiny = this.imgRoot + this.pokemon.pathAnimatedImgShiny;
+    // Nom traduit selon la langue active
+    this.pokemonVm.name = this.pokemon.dataInfo.name;
+
+    this.pokemonVm.pathTypes = [];
+    this.pokemon.typePoks.forEach(typePok => {
+      this.pokemonVm.pathTypes.push(this.imgRoot + typePok.pathMiniHome);
     });
   }
 }
