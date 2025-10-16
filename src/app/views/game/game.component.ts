@@ -36,7 +36,6 @@ export class GameComponent extends BaseComponent implements OnInit, OnDestroy {
       .getGames()
       .subscribe((games: Game[]) => {
         this.games = games;
-        console.log(this.games);
       });
   }
 

@@ -7,7 +7,7 @@ export interface Attaque extends Base {
   description: string;
 
   typeAttaque: TypeAttaque;
-  types: TypePok;
+  typePok: TypePok;
 
   typeLearn: string;
   level: string;

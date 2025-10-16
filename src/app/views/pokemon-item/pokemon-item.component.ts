@@ -49,7 +49,6 @@ export class PokemonItemComponent extends BaseComponent implements OnInit, OnDes
     // écoute la langue en continu
     this.locSub = this.locService.loc$.subscribe((loc: string) => {
       this.loc = loc;
-      console.log(this.pokemon);
       this.updatePokemonVm();
     });
   }
@@ -66,8 +65,6 @@ export class PokemonItemComponent extends BaseComponent implements OnInit, OnDes
 
   private updatePokemonVm(): void {
     if (!this.pokemon) return;
-
-    console.log('Update PokemonVM for ' + this.pokemon);
 
     this.pokemonVm.id = this.pokemon.id;
     this.pokemonVm.number = this.pokemon.number;

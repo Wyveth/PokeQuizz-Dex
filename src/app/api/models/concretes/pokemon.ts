@@ -15,7 +15,7 @@ export interface Pokemon extends Base {
   talents: Talent[];
 
   //types
-  types: TypePok[];
+  typePoks: TypePok[];
 
   //weaknesses
   weaknesses: TypePok[];

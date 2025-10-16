@@ -15,7 +15,6 @@ import { PokemonEvoVM } from 'src/app/shared/models/pokemonEvoVM';
 import { PokemonVM } from 'src/app/shared/models/pokemonVM';
 import { TalentVM } from 'src/app/shared/models/talentVM';
 import { TypeVM } from 'src/app/shared/models/typeVM';
-import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 import { CommonModule } from '@angular/common';
 import { PokemonEvolutionComponent } from '../pokemon-evolution/pokemon-evolution.component';
 import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.component';
@@ -99,12 +98,12 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
         // Evolutions
         this.pokemonService
-          .getEvolChain(this.pokemon.FR.Evolutions)
+          .getEvolChain(this.pokemon.dataInfo.evolutions)
           .pipe(takeUntil(this.destroy$))
           .subscribe((pokemons: Pokemon[]) => {
             pokemons.forEach(pokemon => {
-              pokemon.types.forEach(type => {
-                this.typesVm.push(this.createTypeVMByLocation(type, this.loc));
+              pokemon.typePoks.forEach(typePok => {
+                this.typesVm.push(this.createTypeVMByLocation(typePok));
               });
               this.populateFormsByName('Evolutions', pokemon, this.typesVm);
             });
@@ -117,8 +116,8 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
           .subscribe((pokemons: Pokemon[]) => {
             this.typesVm = [];
             pokemons.forEach(pokemon => {
-              pokemon.types.forEach(type => {
-                this.typesVm.push(this.createTypeVMByLocation(type.typePok, this.loc));
+              pokemon.typePoks.forEach(typePok => {
+                this.typesVm.push(this.createTypeVMByLocation(typePok));
               });
               this.populateFormsByName(pokemon.typeEvolution + 'Forms', pokemon, this.typesVm);
             });
@@ -135,15 +134,14 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
     pokemonVm.id = this.pokemon.id;
     pokemonVm.number = this.pokemon.number;
 
-    console.log(this.pokemon);
     this.getDataInfo(pokemonVm, this.pokemon.dataInfo);
 
-    this.pokemon.types.forEach(type => {
-      pokemonVm.types.push(this.createTypeVMByLocation(type.typePok, location));
+    this.pokemon.typePoks.forEach(typePok => {
+      pokemonVm.types.push(this.createTypeVMByLocation(typePok));
     });
 
-    this.pokemon.weaknesses.forEach(type => {
-      pokemonVm.weakness.push(this.createTypeVMByLocation(type.typePok, location));
+    this.pokemon.weaknesses.forEach(typePok => {
+      pokemonVm.weakness.push(this.createTypeVMByLocation(typePok));
     });
 
     this.pokemon.talents.forEach(talent => {
@@ -176,7 +174,6 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
   //#region Private Methods
   private getDataInfo(pokemonVm: PokemonVM, dataInfo: DataInfo): void {
-    console.log(dataInfo);
     pokemonVm.name = dataInfo.name;
     pokemonVm.displayName = dataInfo.displayName;
     pokemonVm.descriptionVx = dataInfo.descriptionVx;
@@ -187,7 +184,7 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
     pokemonVm.whenEvolution = dataInfo.whenEvolution;
   }
 
-  private createTypeVMByLocation(typePok: TypePok, location: string): TypeVM {
+  private createTypeVMByLocation(typePok: TypePok): TypeVM {
     return new TypeVM(
       typePok.name,
       this.imgRoot + typePok.pathMiniHome,
@@ -221,10 +218,10 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
   private createAttackVMByLocation(attack: Attaque): AttackVM {
     return new AttackVM(
-      attack.Name,
-      attack.Description,
-      this.imgRoot + attack.TypeAttaque.PathImg,
-      this.imgRoot + attack.types.PathIconHome
+      attack.name,
+      attack.description,
+      this.imgRoot + attack.typeAttaque.pathImg,
+      this.imgRoot + attack.typePok.pathIconHome
     );
   }
 
