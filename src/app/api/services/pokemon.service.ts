@@ -42,28 +42,48 @@ export class PokemonService extends AbstractService {
   }
 
   getPokemonsLight(
-    limit: boolean = false,
-    max: number = 0,
     gen: number | null = null,
-    desc: boolean = false
+    desc: boolean = false,
+    max: number = 0,
+    lang: string = 'FR'
   ): Observable<any> {
-    let params = new HttpParams().set('limit', limit).set('max', max).set('desc', desc);
+    this.parametersRequest = {
+      url: this.api_pokemon,
+      parameters: [
+        { name: 'desc', value: desc },
+        { name: 'max', value: max },
+        { name: 'lang', value: lang }
+      ]
+    };
 
     // On ajoute 'gen' seulement s'il a une valeur
     if (gen !== null) {
-      params = params.set('gen', gen);
+      this.parametersRequest.parameters.push({ name: 'gen', value: gen });
     }
 
-    return this.httpClient.get(`${this.basePath + this.api_pokemon}/Light`, { params });
+    const path = this.basePath + this.parametersRequest.url + '/Light';
+    return ApiRequest.get(
+      this.httpClient,
+      this.defaultHeaders,
+      this.configuration,
+      path,
+      this.parametersRequest,
+      undefined,
+      'body',
+      false
+    );
   }
 
-  getPokemon(id: number): Observable<any> {
+  getPokemon(id: number, lang: string = 'FR'): Observable<any> {
     this.parametersRequest = {
       url: this.api_pokemon,
-      parameters: [{ name: 'id', value: id }]
+      parameters: [
+        { name: 'id', value: id },
+        { name: 'lang', value: lang }
+      ]
     };
 
-    const path = this.basePath + this.parametersRequest.url;
+    const path = `${this.basePath}${this.parametersRequest.url}`;
     return ApiRequest.get(
       this.httpClient,
       this.defaultHeaders,
@@ -76,10 +96,13 @@ export class PokemonService extends AbstractService {
     );
   }
 
-  getEvolChain(family: string): Observable<any> {
+  getEvolChain(family: string, lang: string = 'FR'): Observable<any> {
     this.parametersRequest = {
       url: this.api_pokemon + '/GetEvol',
-      parameters: [{ name: 'family', value: family }]
+      parameters: [
+        { name: 'family', value: family },
+        { name: 'lang', value: lang }
+      ]
     };
 
     const path = this.basePath + this.parametersRequest.url;
@@ -95,10 +118,13 @@ export class PokemonService extends AbstractService {
     );
   }
 
-  getVariants(number: string): Observable<any> {
+  getVariants(number: string, lang: string = 'FR'): Observable<any> {
     this.parametersRequest = {
       url: this.api_pokemon + '/GetVariant',
-      parameters: [{ name: 'number', value: number }]
+      parameters: [
+        { name: 'number', value: number },
+        { name: 'lang', value: lang }
+      ]
     };
 
     const path = this.basePath + this.parametersRequest.url;

@@ -1,9 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams, HttpUrlEncodingCodec } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {
-  Parameter,
-  ParametersRequest,
-} from './models/shared/parametersRequest';
+import { Parameter, ParametersRequest } from './models/shared/parametersRequest';
 import { ApiError } from './error';
 import { catchError } from 'rxjs/operators';
 
@@ -28,7 +25,7 @@ export class ApiRequest {
     }
 
     let queryParameters = new HttpParams({
-      encoder: new HttpUrlEncodingCodec(),
+      encoder: new HttpUrlEncodingCodec()
     });
     parametersRequest?.parameters?.forEach((parameter: Parameter) => {
       if (parameter.value == undefined && parameter.value == null) {
@@ -42,8 +39,19 @@ export class ApiRequest {
       }
 
       if (parameter.value !== undefined && parameter.value !== null) {
-        path = path + '/' + parameter.value;
-        //queryParameters = queryParameters.set(parameter.name, parameter.value.toString());
+        // S’il s’agit d’un path param (comme un ID), on le met dans l’URL
+        if (
+          path.includes(':' + parameter.name) ||
+          parameter.name === 'id' ||
+          parameter.name === 'number' ||
+          parameter.name === 'family'
+        ) {
+          path = path + '/' + parameter.value;
+        }
+        // Sinon, on le met comme query param
+        else {
+          queryParameters = queryParameters.set(parameter.name, parameter.value.toString());
+        }
       }
     });
 
@@ -53,14 +61,12 @@ export class ApiRequest {
       params: queryParameters,
       observe: observe,
       reportProgress: reportProgress,
-      responseType: 'json',
+      responseType: 'json'
     };
 
     return httpClient
       .request<T>('GET', path, requestOptions)
-      .pipe(
-        catchError((error: any) => ApiError.handleApiError(path, error))
-      ) as Observable<T>;
+      .pipe(catchError((error: any) => ApiError.handleApiError(path, error))) as Observable<T>;
   }
 
   static post<T>(
@@ -79,8 +85,7 @@ export class ApiRequest {
     if (httpContentTypeSelected !== undefined) {
       headers = headers.set('Content-Type', httpContentTypeSelected);
       headers = headers.set('Accept', '**');
-      if (token)
-        headers = headers = headers.set('Authorization', `Bearer ${token}`);
+      if (token) headers = headers = headers.set('Authorization', `Bearer ${token}`);
     }
 
     const requestOptions: any = {
@@ -89,13 +94,11 @@ export class ApiRequest {
       body: body,
       observe: observe,
       reportProgress: reportProgress,
-      responseType: 'json',
+      responseType: 'json'
     };
 
     return httpClient
       .request<T>('POST', path, requestOptions)
-      .pipe(
-        catchError((error: any) => ApiError.handleApiError(path, error))
-      ) as Observable<T>;
+      .pipe(catchError((error: any) => ApiError.handleApiError(path, error))) as Observable<T>;
   }
 }

@@ -2,7 +2,7 @@ import { AttackVM } from 'src/app/shared/models/attackVM';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { Attaque } from 'src/app/api/models/concretes/attaque';
 import { DataInfo } from 'src/app/api/models/concretes/datainfo';
 import { Pokemon } from 'src/app/api/models/concretes/pokemon';
@@ -66,28 +66,29 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
   }
 
   ngOnInit() {
-    // Écoute les changements de langue et d'ID du Pokémon
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: Params) => {
-      const newLoc = params['loc'] || 'FR';
-      const newKey = +params['id'];
+    this.route.params
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params: Params) => ({
+          loc: params['loc'] || 'FR',
+          id: +params['id'] || null
+        })),
+        distinctUntilChanged((prev, curr) => prev.loc === curr.loc && prev.id === curr.id)
+      )
+      .subscribe(({ loc, id }) => {
+        if (this.loc !== loc || this.key !== id) {
+          this.loc = loc;
+          if (id !== null) this.key = id;
 
-      // Recharge uniquement si la langue ou le Pokémon change
-      if (this.loc !== newLoc || this.key !== newKey) {
-        this.loc = newLoc;
-        this.key = newKey;
-
-        // met à jour le service de localisation
-        this.locService.setLoc(this.loc);
-
-        // recharge le Pokémon
-        this.loadPokemon();
-      }
-    });
+          // 🔁 Relance la requête API avec la nouvelle localisation
+          this.loadPokemon();
+        }
+      });
   }
 
   private loadPokemon() {
     this.pokemonService
-      .getPokemon(this.key)
+      .getPokemon(this.key, this.loc)
       .pipe(takeUntil(this.destroy$))
       .subscribe(pokemon => {
         this.pokemon = pokemon;
@@ -98,7 +99,7 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
         // Evolutions
         this.pokemonService
-          .getEvolChain(this.pokemon.dataInfo.evolutions)
+          .getEvolChain(this.pokemon.dataInfo.evolutions, this.loc)
           .pipe(takeUntil(this.destroy$))
           .subscribe((pokemons: Pokemon[]) => {
             pokemons.forEach(pokemon => {
@@ -111,7 +112,7 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
         // Variants
         this.pokemonService
-          .getVariants(this.pokemon.number)
+          .getVariants(this.pokemon.number, this.loc)
           .pipe(takeUntil(this.destroy$))
           .subscribe((pokemons: Pokemon[]) => {
             this.typesVm = [];

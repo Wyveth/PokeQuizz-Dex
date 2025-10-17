@@ -3,7 +3,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
 import { PokemonService } from 'src/app/api/services/pokemon.service';
 import { AppConfig } from 'src/app/app.config';
@@ -49,20 +49,25 @@ export class PokedexComponent extends BaseComponent implements OnInit, OnDestroy
   ngOnInit() {
     this.waiting = true;
 
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params: Params) => {
-      const newLoc = params['loc'] || 'FR';
-      if (this.loc !== newLoc) {
+    this.route.params
+      .pipe(
+        takeUntil(this.destroy$),
+        map((params: Params) => params['loc'] || 'FR'),
+        distinctUntilChanged() // évite de recharger inutilement
+      )
+      .subscribe(newLoc => {
         this.loc = newLoc;
-        this.locService.setLoc(this.loc);
+        this.locService.setLoc(newLoc);
+
+        // 🔁 Relance la requête API avec la nouvelle localisation
         this.loadPokemons();
-      }
-    });
+      });
   }
 
   private loadPokemons() {
     this.waiting = true;
     this.pokemonService
-      .getPokemonsLight(false, 0, null, false)
+      .getPokemonsLight(null, false, 0, this.loc)
       .pipe(takeUntil(this.destroy$))
       .subscribe(pokemons => {
         this.pokemons = pokemons;
