@@ -42,11 +42,7 @@ export class SearchComponent extends BaseComponent implements OnInit {
       if (query != '') {
         for (let i = 0; i < this.pokemons.length; i++) {
           const pokemon = this.pokemons[i];
-          if (
-            GenericUtils.getObject(pokemon, this.loc)
-              .Name.toLowerCase()
-              .includes(query.toLowerCase())
-          )
+          if (pokemon.dataInfo.name.toLowerCase().includes(query.toLowerCase()))
             filtered.push(pokemon);
         }
 
