@@ -1,6 +1,6 @@
 <div class="max-w-6xl mx-auto flex">
   <div *ngIf="pokemonVm">
-    <p class="text-black dark:text-white">{{ pokemonVm.number }}</p>
+    <p>{{ pokemonVm.number }}</p>
     <div class="flex justify-center items-center">
       <img [src]="pokemonVm.pathImgNormal" />
       <img [src]="pokemonVm.pathImgShiny" />
@@ -19,33 +19,37 @@
         <a [href]="pokemonVm.pathSound"> Download audio </a>
       </audio>
     </p>
-    <p class="text-black dark:text-white">{{ pokemonVm.name }}</p>
-    <p class="text-black dark:text-white">{{ pokemonVm.displayName }}</p>
-    <p class="text-black dark:text-white">{{ pokemonVm.descriptionVx }}</p>
-    <p class="text-black dark:text-white">{{ pokemonVm.descriptionVy }}</p>
-    <p class="text-black dark:text-white">{{ pokemonVm.size }}</p>
-    <p class="text-black dark:text-white">{{ pokemonVm.category }}</p>
-    <p class="text-black dark:text-white">{{ pokemonVm.weight }}</p>
+    <p>{{ pokemonVm.name }}</p>
+    <p>{{ pokemonVm.displayName }}</p>
+    <p>{{ pokemonVm.descriptionVx }}</p>
+    <p>{{ pokemonVm.descriptionVy }}</p>
+    <p>{{ pokemonVm.size }}</p>
+    <p>{{ pokemonVm.category }}</p>
+    <p>{{ pokemonVm.weight }}</p>
 
     <div *ngFor="let talent of pokemonVm.talents">
-      <p class="text-black dark:text-white">
-        {{ talent.Name }} <span *ngIf="talent.IsHidden">[Caché]</span>
-      </p>
-      <p class="text-black dark:text-white">{{ talent.Description }}</p>
+      <p>{{ talent.name }} <span *ngIf="talent.isHidden">[Caché]</span></p>
+      <p>{{ talent.description }}</p>
     </div>
 
-    <p class="text-black dark:text-white">{{ pokemonVm.whenEvolution }}</p>
+    <p>{{ pokemonVm.whenEvolution }}</p>
 
-    <div *ngFor="let type of pokemonVm.types">
-      <p class="text-black dark:text-white">{{ type.Name }}</p>
-      <p class="text-black dark:text-white"><img [src]="type.PathImg" /></p>
+    <div class="flex justify-center items-center space-x-4">
+      <div *ngFor="let type of pokemonVm.types">
+        <p>{{ type.Name }}</p>
+        <p><img [src]="type.PathImg" /></p>
+      </div>
     </div>
 
-    <img *ngIf="pokemonVm.types[0]" [src]="pokemonVm.types[0].PathFondGo" />
+    <div class="flex justify-center items-center">
+      <img *ngIf="pokemonVm.types[0]" [src]="pokemonVm.types[0].PathFondGo" />
+    </div>
 
-    <div *ngFor="let type of pokemonVm.weakness">
-      <p class="text-black dark:text-white">{{ type.Name }}</p>
-      <p class="text-black dark:text-white"><img [src]="type.PathImg" /></p>
+    <div class="flex justify-center items-center space-x-4">
+      <div *ngFor="let type of pokemonVm.weakness">
+        <p>{{ type.Name }}</p>
+        <p><img [src]="type.PathImg" /></p>
+      </div>
     </div>
 
     <app-pokemon-evolution

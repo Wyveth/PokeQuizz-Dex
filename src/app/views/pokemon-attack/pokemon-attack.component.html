@@ -1,11 +1,11 @@
-<div class="dark:text-white" *ngIf="typeLearnAttackVM.listAttack.length != 0">
+<div *ngIf="typeLearnAttackVM.listAttack.length != 0">
   <p class="underline underline-offset-8">{{ typeLearnAttackVM.name }}</p>
   <div *ngFor="let att of typeLearnAttackVM.listAttack">
-    <div class="grid grid-cols-4" *ngIf="att.Name">
-      <p>{{ att.Name }}</p>
-      <p>{{ att.Description }}</p>
-      <p><img [src]="att.UrlTypeAttack" /></p>
-      <p><img [src]="att.UrlTypePok" /></p>
+    <div class="grid grid-cols-4" *ngIf="att.name">
+      <p>{{ att.name }}</p>
+      <p>{{ att.description }}</p>
+      <p><img [src]="att.pathTypeAttack" /></p>
+      <p><img [src]="att.pathTypePok" /></p>
     </div>
   </div>
 </div>

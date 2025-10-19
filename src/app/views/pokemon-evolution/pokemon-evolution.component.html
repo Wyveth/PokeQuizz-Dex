@@ -1,11 +1,11 @@
-<div *ngIf="formVM.listForm.length > 0" class="dark:text-white">
+<div *ngIf="formVM.listForm.length > 0">
   <p>{{ formVM.name }}</p>
-  <div class="grid place-items-stretch" [class]="getNbColumns(formVM.listForm.length)">
+  <div class="grid gap-4 justify-items-center" [class]="getNbColumns(formVM.listForm.length)">
     <div *ngFor="let pok of formVM.listForm">
       <p>{{ pok.Name }}</p>
       <img [src]="pok.UrlSprite" />
       <a (click)="navigateTo(pok.Id)"><img [src]="pok.UrlImg" /></a>
-      <p class="dark:text-white">{{ pok.WhenEvolution }}</p>
+      <p>{{ pok.WhenEvolution }}</p>
     </div>
   </div>
 </div>

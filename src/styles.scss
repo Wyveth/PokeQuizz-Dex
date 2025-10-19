@@ -24,16 +24,27 @@ body {
   height: 100%;
 }
 
-body.bg-day {
+body.bg {
   background-image: url('/assets/Images/nature-day.jpg');
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
   height: auto;
+
+  p {
+    color: black;
+  }
 }
 
-html.dark body.bg-day,
-body.dark .bg-night {
+html.dark body.bg {
   /* selon ta stratégie dark */
   background-image: url('/assets/Images/nature-night.jpg');
+
+  p {
+    color: white;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
 }

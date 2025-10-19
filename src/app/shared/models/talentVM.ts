@@ -1,11 +1,11 @@
-export class TalentVM{
-    Name!: string;
-    Description!: string;
-    IsHidden!: boolean;
-  
-    constructor(Name: string, Description: string, IsHidden: boolean){
-      this.Name = Name;
-      this.Description = Description;
-      this.IsHidden = IsHidden;
-    }
+export class TalentVM {
+  name!: string;
+  description!: string;
+  isHidden!: boolean;
+
+  constructor(name: string, description: string, isHidden: boolean) {
+    this.name = name;
+    this.description = description;
+    this.isHidden = isHidden;
   }
+}
