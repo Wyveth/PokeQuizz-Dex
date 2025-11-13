@@ -1,65 +1,62 @@
 <div class="max-w-6xl mx-auto flex">
-  <div *ngIf="pokemonVm">
-    <p>{{ pokemonVm.number }}</p>
+  <div *ngIf="pokemon">
+    <p>{{ pokemon.number }}</p>
     <div class="flex justify-center items-center">
-      <img [src]="pokemonVm.pathImgNormal" />
-      <img [src]="pokemonVm.pathImgShiny" />
+      <img [src]="imgRoot + pokemon.pathImgNormal" />
+      <img [src]="imgRoot + pokemon.pathImgShiny" />
     </div>
     <div class="flex justify-center items-center">
-      <img [src]="pokemonVm.pathSprite" class="h-[40px] w-[40px]" />
-      <img [src]="pokemonVm.pathSpriteNormal" />
-      <img [src]="pokemonVm.pathSpriteShiny" />
+      <img [src]="imgRoot + pokemon.pathSpriteLegacy" class="h-[40px] w-[40px]" />
+      <img [src]="imgRoot + pokemon.pathSpriteNormal" />
+      <img [src]="imgRoot + pokemon.pathSpriteShiny" />
     </div>
     <div class="flex justify-center items-center">
-      <img [src]="pokemonVm.pathAnimatedNormal" />
-      <img [src]="pokemonVm.pathAnimatedShiny" />
+      <img [src]="imgRoot + pokemon.pathAnimatedImg" />
+      <img [src]="imgRoot + pokemon.pathAnimatedImgShiny" />
     </div>
     <p>
-      <audio controls [src]="pokemonVm.pathSound">
-        <a [href]="pokemonVm.pathSound"> Download audio </a>
+      <audio controls [src]="imgRoot + pokemon.pathSound">
+        <a [href]="imgRoot + pokemon.pathSound"> Download audio </a>
       </audio>
     </p>
-    <p>{{ pokemonVm.name }}</p>
-    <p>{{ pokemonVm.displayName }}</p>
-    <p>{{ pokemonVm.descriptionVx }}</p>
-    <p>{{ pokemonVm.descriptionVy }}</p>
-    <p>{{ pokemonVm.size }}</p>
-    <p>{{ pokemonVm.category }}</p>
-    <p>{{ pokemonVm.weight }}</p>
+    <p>{{ pokemon.dataInfo.name }}</p>
+    <p>{{ pokemon.dataInfo.displayName }}</p>
+    <p>{{ pokemon.dataInfo.descriptionVx }}</p>
+    <p>{{ pokemon.dataInfo.descriptionVy }}</p>
+    <p>{{ pokemon.dataInfo.size }}</p>
+    <p>{{ pokemon.dataInfo.category }}</p>
+    <p>{{ pokemon.dataInfo.weight }}</p>
 
-    <div *ngFor="let talent of pokemonVm.talents">
-      <p>{{ talent.name }} <span *ngIf="talent.isHidden">[Caché]</span></p>
-      <p>{{ talent.description }}</p>
+    <div *ngFor="let ability of pokemon.abilities">
+      <p>{{ ability.name }} <span *ngIf="ability.isHidden">[Caché]</span></p>
+      <p>{{ ability.description }}</p>
     </div>
 
-    <p>{{ pokemonVm.whenEvolution }}</p>
+    <p>{{ pokemon.whenEvolution }}</p>
 
     <div class="flex justify-center items-center space-x-4">
-      <div *ngFor="let type of pokemonVm.types">
+      <div *ngFor="let type of pokemon.typePoks">
         <p>{{ type.Name }}</p>
-        <p><img [src]="type.PathImg" /></p>
+        <p><img [src]="imgRoot + type.pathMiniHome" /></p>
       </div>
     </div>
 
     <div class="flex justify-center items-center">
-      <img *ngIf="pokemonVm.types[0]" [src]="pokemonVm.types[0].PathFondGo" />
+      <img *ngIf="pokemon.typePoks[0]" [src]="imgRoot + pokemon.typePoks[0].pathFondGo" />
     </div>
 
     <div class="flex justify-center items-center space-x-4">
-      <div *ngFor="let type of pokemonVm.weakness">
+      <div *ngFor="let type of pokemon.weakness">
         <p>{{ type.Name }}</p>
-        <p><img [src]="type.PathImg" /></p>
+        <p><img [src]="imgRoot + type.PathImg" /></p>
       </div>
     </div>
 
-    <app-pokemon-evolution
-      *ngFor="let formVm of pokemonVm.forms"
-      [formVM]="formVm"
-    ></app-pokemon-evolution>
+    <app-pokemon-evolution *ngFor="let formVm of forms" [forms]="formVm"></app-pokemon-evolution>
 
     <app-pokemon-attack
-      *ngFor="let typeLearnAttackVM of pokemonVm.attacks"
-      [typeLearnAttackVM]="typeLearnAttackVM"
+      *ngFor="let typeLearnAttackVM of attacks"
+      [typeLearnAttack]="typeLearnAttackVM"
     ></app-pokemon-attack>
   </div>
 </div>

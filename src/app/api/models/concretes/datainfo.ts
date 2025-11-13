@@ -2,45 +2,29 @@ import { Base } from '../abstracts/base';
 
 export interface DataInfo extends Base {
   //Name
-  name: string;
+  name: string | null;
 
   //DisplayName
-  displayName: string;
+  displayName: string | null;
 
   //Pokemon Description Version X
-  descriptionVx: string;
+  descriptionVx: string | null;
 
   //Pokemon Description Version Y
-  descriptionVy: string;
+  descriptionVy: string | null;
 
   //size
-  size: string;
+  size: string | null;
 
   //category
-  category: string;
+  category: string | null;
 
   //Weight
-  weight: string;
-
-  //Skill
-  talent: string;
-
-  //Skill Description
-  descriptionTalent: string;
+  weight: string | null;
 
   //Pokemon Family/Evolution
-  evolutions: string;
+  evolutions: string | null;
 
   //Know When Where How the pokemon evolves
-  whenEvolution: string;
-}
-
-export class DataInfoLight extends Base {
-  //Name
-  name!: string;
-
-  constructor(id: number, name: string) {
-    super(id);
-    this.name = name;
-  }
+  whenEvolution: string | null;
 }

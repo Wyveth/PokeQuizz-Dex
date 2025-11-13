@@ -4,7 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
+import { PokemonLight } from 'src/app/api/models/concretes/pokemonLight';
 import { PokemonService } from 'src/app/api/services/pokemon.service';
 import { AppConfig } from 'src/app/app.config';
 import { AppResource } from 'src/app/app.resource';

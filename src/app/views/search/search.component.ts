@@ -3,11 +3,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { debounceTime } from 'rxjs/operators';
-import { PokemonLight } from 'src/app/api/models/concretes/pokemon';
+import { PokemonLight } from 'src/app/api/models/concretes/pokemonLight';
 import { LocService } from 'src/app/api/services/loc.service';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
-import { GenericUtils } from 'src/app/shared/utils/genericUtils';
 
 @Component({
   selector: 'app-search',
@@ -42,7 +41,7 @@ export class SearchComponent extends BaseComponent implements OnInit {
       if (query != '') {
         for (let i = 0; i < this.pokemons.length; i++) {
           const pokemon = this.pokemons[i];
-          if (pokemon.dataInfo.name.toLowerCase().includes(query.toLowerCase()))
+          if (pokemon.dataInfo.name?.toLowerCase().includes(query.toLowerCase()))
             filtered.push(pokemon);
         }
 

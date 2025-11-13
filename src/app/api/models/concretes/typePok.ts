@@ -1,26 +1,15 @@
 import { Base } from '../abstracts/base';
 
 export interface TypePok extends Base {
-  name: string;
-  pathMiniHome: string;
+  name: string | null;
+  pathMiniHome: string | null;
 
-  pathMiniGo: string;
-  pathFondGo: string;
-  pathIconHome: string;
-  pathAutoHome: string;
+  pathMiniGo: string | null;
+  pathFondGo: string | null;
+  pathIconHome: string | null;
+  pathAutoHome: string | null;
 
-  imgColor: string;
-  infoColor: string;
-  typeColor: string;
-}
-
-export class TypePokLight extends Base {
-  name!: string;
-  pathMiniHome!: string;
-
-  constructor(id: number, name: string, pathMiniHome: string) {
-    super(id);
-    this.name = name;
-    this.pathMiniHome = pathMiniHome;
-  }
+  imgColor: string | null;
+  infoColor: string | null;
+  typeColor: string | null;
 }

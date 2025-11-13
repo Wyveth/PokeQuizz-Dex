@@ -139,4 +139,31 @@ export class PokemonService extends AbstractService {
       false
     );
   }
+
+  getFamilyAndVariants(
+    evolutionChainId: number,
+    displayName: string,
+    lang: string = 'FR'
+  ): Observable<any> {
+    this.parametersRequest = {
+      url: this.api_pokemon + '/GetFamilyOrVariants',
+      parameters: [
+        { name: 'evolutionChainId', value: evolutionChainId },
+        { name: 'displayName', value: displayName },
+        { name: 'lang', value: lang }
+      ]
+    };
+
+    const path = this.basePath + this.parametersRequest.url;
+    return ApiRequest.get(
+      this.httpClient,
+      this.defaultHeaders,
+      this.configuration,
+      path,
+      this.parametersRequest,
+      undefined,
+      'body',
+      false
+    );
+  }
 }

@@ -1,26 +1,26 @@
-<a (click)="goToPokemonDetails(pokemonVm.id)">
+<a (click)="goToPokemonDetails(pokemon.id)">
   <div class="aspect-square flex justify-center items-center">
-    <!-- <img [src]="pokemonVm.pathImg" class="h-30 w-30" [alt]="pokemonVm.name" />
-    <img [src]="pokemonVm.pathImgShiny" class="h-30 w-30" [alt]="pokemonVm.name" /> -->
-    <img [src]="pokemonVm.pathAnimatedImg" class="absolute" [alt]="pokemonVm.name" />
+    <!-- <img [src]="pokemon.pathImg" class="h-30 w-30" [alt]="pokemon.name" />
+    <img [src]="pokemon.pathImgShiny" class="h-30 w-30" [alt]="pokemon.name" /> -->
+    <img [src]="imgRoot + pokemon.pathAnimatedImg" class="absolute" [alt]="pokemon.name" />
   </div>
   <!-- <div
-    *ngIf="pokemonVm.pathAnimatedImgShiny != undefined"
+    *ngIf="pokemon.pathAnimatedImgShiny != undefined"
     class="aspect-square flex justify-center items-center"
   >
-    <img [src]="pokemonVm.pathSprite" class="h-15 w-15" [alt]="pokemonVm.name" />
-    <img [src]="pokemonVm.pathSpriteShiny" class="h-15 w-15" [alt]="pokemonVm.name" />
-    <img [src]="pokemonVm.pathAnimatedImgShiny" class="absolute" [alt]="pokemonVm.name" />
+    <img [src]="pokemon.pathSprite" class="h-15 w-15" [alt]="pokemon.name" />
+    <img [src]="pokemon.pathSpriteShiny" class="h-15 w-15" [alt]="pokemon.name" />
+    <img [src]="pokemon.pathAnimatedImgShiny" class="absolute" [alt]="pokemon.name" />
   </div> -->
   <div class="pt-5 pb-4 px-5">
-    <p class="text-gray-500">#{{ pokemonVm.number }}</p>
+    <p class="text-gray-500">#{{ pokemon.number }}</p>
     <h2 class="text-xl font-bold">
-      {{ pokemonVm.name }}
+      {{ pokemon.dataInfo.name }}
     </h2>
   </div>
   <div class="flex justify-center space-x-2 mt-4 pt-5">
-    <div *ngFor="let path of pokemonVm.pathTypes">
-      <img class="h-6 w-25" [src]="path" />
+    <div *ngFor="let typePok of pokemon.typePoks">
+      <img class="h-6 w-25" [src]="this.imgRoot + typePok.pathMiniHome" />
     </div>
   </div>
 </a>

@@ -5,7 +5,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
-  Validators,
+  Validators
 } from '@angular/forms';
 import { AuthenticateUser } from 'src/app/api/models/concretes/authenticate-user';
 import { AuthenticateService } from 'src/app/api/services/authenticate.service';
@@ -16,7 +16,7 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   form!: FormGroup;
@@ -36,7 +36,7 @@ export class LoginComponent extends BaseComponent implements OnInit {
   ngOnInit() {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required),
+      password: new FormControl('', Validators.required)
     });
   }
 
@@ -45,10 +45,10 @@ export class LoginComponent extends BaseComponent implements OnInit {
       email: this.form.value.email,
       password: this.form.value.password,
       token: '',
-      userName: '',
+      userName: ''
     } as AuthenticateUser;
-    this.authenticateService.login(body).subscribe((response) => {
-      localStorage.setItem('token', response.token);
+    this.authenticateService.login(body).subscribe(response => {
+      //localStorage.setItem('token', response.token);
     });
   }
 }
