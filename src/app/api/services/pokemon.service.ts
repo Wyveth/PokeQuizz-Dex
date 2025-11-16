@@ -76,7 +76,7 @@ export class PokemonService extends AbstractService {
 
   getPokemon(id: number, lang: string = 'FR'): Observable<any> {
     this.parametersRequest = {
-      url: this.api_pokemon,
+      url: this.api_pokemon + '/GetById',
       parameters: [
         { name: 'id', value: id },
         { name: 'lang', value: lang }

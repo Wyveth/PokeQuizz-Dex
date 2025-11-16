@@ -3,9 +3,8 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { Attack } from 'src/app/api/models/concretes/attack';
-import { DataInfo } from 'src/app/api/models/concretes/datainfo';
 import { Pokemon } from 'src/app/api/models/concretes/pokemon';
-import { TypePok } from 'src/app/api/models/concretes/typePok';
+import { Router } from '@angular/router';
 import { PokemonService } from 'src/app/api/services/pokemon.service';
 import { AppConfig } from 'src/app/app.config';
 import { AppResource } from 'src/app/app.resource';
@@ -15,11 +14,12 @@ import { PokemonEvolutionComponent } from '../pokemon-evolution/pokemon-evolutio
 import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.component';
 import { LocService } from 'src/app/api/services/loc.service';
 import { Family } from 'src/app/api/models/concretes/Family';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
-  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent]
+  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent, Button]
 })
 export class PokemonDetailsComponent extends BaseComponent implements OnInit, OnDestroy {
   imgRoot: string = this.config.getConfig('img_root');
@@ -41,7 +41,8 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
     private route: ActivatedRoute,
     private config: AppConfig,
     private locService: LocService,
-    private pokemonService: PokemonService
+    private pokemonService: PokemonService,
+    private router: Router
   ) {
     super(resources);
 
@@ -113,6 +114,20 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
             });
           });
       });
+  }
+
+  goBack() {
+    const previousId = this.key - 1;
+    if (previousId !== null) {
+      this.router.navigate(['/' + this.loc, 'pokemon', previousId]);
+    }
+  }
+
+  goNext() {
+    const nextId = this.key + 1;
+    if (nextId !== null) {
+      this.router.navigate(['/' + this.loc, 'pokemon', nextId]);
+    }
   }
 
   ngOnDestroy(): void {

@@ -41,6 +41,28 @@
       </div>
     </div>
 
+    <!-- Evolve From -->
+    <div *ngIf="pokemon.evolvesFrom" class="flex justify-center items-center">
+      <p>Evolve From</p>
+      <div *ngFor="let pokemon of pokemon.evolvesFrom">
+        <img [src]="imgRoot + pokemon?.pathImage" />
+        <p>{{ pokemon?.name }}</p>
+        <p>{{ pokemon?.whenEvolution }}</p>
+      </div>
+    </div>
+
+    <!-- Evolve To -->
+    <div *ngIf="pokemon.evolvesTo" class="flex justify-center items-center">
+      <p>Evolve To</p>
+      <div *ngFor="let pokemon of pokemon.evolvesTo">
+        <img [src]="imgRoot + pokemon?.pathImage" />
+        <p>{{ pokemon?.name }}</p>
+        <p>{{ pokemon?.whenEvolution }}</p>
+      </div>
+    </div>
+    <p-button (click)="goBack()">Previous</p-button>
+    <p-button (click)="goNext()">Next</p-button>
+
     <div class="flex justify-center items-center">
       <img *ngIf="pokemon.typePoks[0]" [src]="imgRoot + pokemon.typePoks[0].pathFondGo" />
     </div>

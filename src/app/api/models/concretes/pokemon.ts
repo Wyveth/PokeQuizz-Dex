@@ -27,11 +27,13 @@ export interface Pokemon extends Base {
   //Type Evolution : Normal, Méga, Gigamax, Alola, Galar, Hisui
   typeEvolution: string | null;
 
-  evolvesFrom: EvolvesTo | null;
+  evolvesFrom: EvolvesTo[] | null;
 
   evolvesTo: EvolvesTo[] | null;
 
   evolutionChainId: number;
+
+  evolutionStage: number | null;
 
   //Stastistic HP
   statPv: number;
