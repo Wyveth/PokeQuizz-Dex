@@ -36,6 +36,20 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
     (this.question()?.answers ?? []).some(a => (a.label?.length ?? 0) > 40)
   );
 
+  /** Image plus petite quand beaucoup de réponses ou une description doivent tenir à l'écran (mobile). */
+  imageBoxClass = computed(() => {
+    const q = this.question();
+    if (this.longAnswers()) return 'h-[12dvh] w-[12dvh]';
+    const crowded = (q?.answers.length ?? 0) > 8 || !!q?.subject.description;
+    return crowded ? 'h-[14dvh] w-[14dvh]' : 'h-[24dvh] w-[24dvh]';
+  });
+
+  /** Colonnes de réponses : 1 pour les descriptions, 3 au-delà de 8 réponses, 2 sinon. */
+  answersGridClass = computed(() => {
+    if (this.longAnswers()) return 'grid-cols-1';
+    return (this.question()?.answers.length ?? 0) > 8 ? 'grid-cols-3' : 'grid-cols-2';
+  });
+
   /** Effets de la difficulté sur l'image, retirés une fois la question répondue. */
   imageFilter = computed(() => {
     const q = this.question();

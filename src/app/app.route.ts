@@ -46,6 +46,8 @@ export const routes: Routes = [
       },
       {
         path: ':loc/quiz/:id/:order',
+        // Sur mobile, la question occupe tout l'écran sans défilement
+        data: { immersive: true },
         loadComponent: () =>
           import('src/app/views/quiz/quiz-play/quiz-play.component').then(m => m.QuizPlayComponent)
       },

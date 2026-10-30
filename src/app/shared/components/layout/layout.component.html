@@ -1,8 +1,8 @@
 <div class="min-h-dvh flex flex-col">
-  <app-header></app-header>
-  <app-breadcrumbs></app-breadcrumbs>
+  <app-header [ngClass]="{ 'max-sm:hidden': immersive }"></app-header>
+  <app-breadcrumbs [ngClass]="{ 'max-sm:hidden': immersive }"></app-breadcrumbs>
   <main class="flex-1">
     <router-outlet></router-outlet>
   </main>
-  <app-footer></app-footer>
+  <app-footer [ngClass]="{ 'max-sm:hidden': immersive }"></app-footer>
 </div>
