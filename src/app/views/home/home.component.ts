@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { LocService } from 'src/app/api/services/loc.service';
 import { AppResource } from 'src/app/app.resource';
 import { BaseComponent } from 'src/app/shared/components/base/base.component';
@@ -8,7 +8,7 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
 })
 export class HomeComponent extends BaseComponent implements OnInit {
   loc!: string;

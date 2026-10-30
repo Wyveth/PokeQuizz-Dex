@@ -1,23 +1,28 @@
-<div [formGroup]="form">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input
-      type="email"
-      class="form-control"
-      formControlName="email"
-      id="email"
-      placeholder="Email"
-    />
+<section class="px-3 sm:px-6 pt-12 sm:pt-20">
+  <div class="glass mx-auto max-w-md rounded-3xl p-6 sm:p-8 fade-in">
+    <div class="text-center mb-7">
+      <span class="inline-grid place-items-center size-12 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-white shadow-lg shadow-brand-500/30">
+        <i class="pi pi-user"></i>
+      </span>
+      <h1 class="font-display text-2xl font-bold tracking-tight mt-4">Connexion</h1>
+      <p class="text-sm text-muted mt-1">Retrouvez vos scores et votre progression.</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="login()" class="space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium mb-1.5">Email</label>
+        <input type="email" class="field" formControlName="email" id="email" placeholder="vous@exemple.com" autocomplete="email" />
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium mb-1.5">Mot de passe</label>
+        <input type="password" class="field" formControlName="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary w-full !mt-6">Se connecter</button>
+    </form>
+
+    <p class="text-sm text-center text-muted mt-6">
+      Pas encore de compte ?
+      <a [routerLink]="['/', loc, 'register']" class="font-semibold text-brand-600 dark:text-brand-400 hover:underline">Créer un compte</a>
+    </p>
   </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input
-      type="password"
-      class="form-control"
-      formControlName="password"
-      id="password"
-      placeholder="Password"
-    />
-  </div>
-  <button type="submit" class="btn btn-primary" (click)="login()">Login</button>
-</div>
+</section>

@@ -1,6 +1,11 @@
-<div [formGroup]="formSearch">
-  <span class="p-input-icon-left">
-    <i class="pi pi-search"></i>
-    <input type="text" pInputText formControlName="search" />
-  </span>
+<div [formGroup]="formSearch" class="relative w-full">
+  <i class="pi pi-search absolute z-10 left-4 top-1/2 -translate-y-1/2 text-sm text-muted pointer-events-none"></i>
+  <input
+    type="search"
+    formControlName="search"
+    placeholder="Rechercher un Pokémon…"
+    aria-label="Rechercher un Pokémon"
+    autocomplete="off"
+    class="field glass !h-12 !pl-11 !rounded-2xl"
+  />
 </div>

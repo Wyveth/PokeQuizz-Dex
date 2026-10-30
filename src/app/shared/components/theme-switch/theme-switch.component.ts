@@ -1,20 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
 import { Theme, ThemeService } from 'src/app/api/services/theme.service';
 
 @Component({
   selector: 'app-theme-switch',
   templateUrl: './theme-switch.component.html',
   standalone: true,
-  imports: [CommonModule, ButtonModule]
+  imports: [CommonModule]
 })
 export class ThemeSwitchComponent {
   options: Theme[] = ['light', 'dark', 'auto'];
   icons: Record<Theme, string> = {
-    light: '☀️',
-    dark: '🌙',
-    auto: '🖥️'
+    light: 'pi-sun',
+    dark: 'pi-moon',
+    auto: 'pi-desktop'
+  };
+  labels: Record<Theme, string> = {
+    light: 'Clair',
+    dark: 'Sombre',
+    auto: 'Automatique'
   };
 
   current: Theme;

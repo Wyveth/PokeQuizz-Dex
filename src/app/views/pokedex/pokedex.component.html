@@ -1,16 +1,47 @@
-<div class="max-w-6xl mx-auto center flex">
-  <app-search [pokemons]="pokemons" (filteredPokemons)="filterPokemons($event)"></app-search>
-</div>
-
-<div class="max-w-6xl mx-auto">
-  <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 border-l border-t border-gray-300">
-    <div
-      class="border-b border-r border-gray-300 px-5 scroll-pt-10 pb-10 bg-white/30 dark:bg-gray-800/30"
-      *ngFor="let pokemon of displayedPokemons"
-    >
-      <app-pokemon-item [pokemon]="pokemon"></app-pokemon-item>
+<section class="mx-auto max-w-6xl px-3 sm:px-6 pt-8 sm:pt-12">
+  <div class="flex flex-col md:flex-row md:items-end gap-5 mb-8">
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">
+        Pokédex national
+      </p>
+      <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1">Pokédex</h1>
+      @if (!waiting) {
+        <p class="text-sm text-muted mt-2">
+          {{ filteredPokemons.length }} Pokémon
+          @if (filteredPokemons.length !== pokemons.length) {
+            <span>sur {{ pokemons.length }}</span>
+          }
+        </p>
+      }
+    </div>
+    <div class="md:ml-auto w-full md:w-96">
+      <app-search [pokemons]="pokemons" (filteredPokemons)="filterPokemons($event)"></app-search>
     </div>
   </div>
 
-  <div *ngIf="loadingMore" class="text-center py-4 text-gray-500">Chargement...</div>
-</div>
+  @if (waiting) {
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+      @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
+        <div class="card skeleton h-56"></div>
+      }
+    </div>
+  } @else if (displayedPokemons.length === 0) {
+    <div class="glass panel text-center py-16 fade-in">
+      <i class="pi pi-search text-3xl text-muted"></i>
+      <p class="mt-3 font-display text-lg font-semibold">Aucun Pokémon trouvé</p>
+      <p class="text-sm text-muted mt-1">Essayez un autre nom.</p>
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4">
+      @for (pokemon of displayedPokemons; track pokemon.id) {
+        <app-pokemon-item [pokemon]="pokemon"></app-pokemon-item>
+      }
+    </div>
+  }
+
+  @if (loadingMore) {
+    <div class="flex justify-center py-6 text-muted text-sm gap-2 items-center">
+      <i class="pi pi-spin pi-spinner"></i> Chargement…
+    </div>
+  }
+</section>

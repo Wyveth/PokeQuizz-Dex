@@ -1,15 +1,18 @@
 <button
+  type="button"
   (click)="nextTheme()"
-  class="flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 bg-gray-200 dark:bg-zinc-700 text-xl"
+  class="icon-btn relative overflow-hidden"
+  [title]="labels[current]"
+  [attr.aria-label]="'Thème : ' + labels[current]"
 >
-  <span
-    *ngFor="let opt of options"
-    class="absolute transition-all duration-300 ease-in-out"
-    [class.opacity-0]="current !== opt"
-    [class.translate-x-3]="current !== opt"
-    [class.opacity-100]="current === opt"
-    [class.translate-x-0]="current === opt"
-  >
-    {{ icons[opt] }}
-  </span>
+  @for (opt of options; track opt) {
+    <i
+      class="pi absolute transition-all duration-300 ease-out"
+      [ngClass]="icons[opt]"
+      [class.opacity-0]="current !== opt"
+      [class.scale-50]="current !== opt"
+      [class.-rotate-90]="current !== opt"
+      [class.opacity-100]="current === opt"
+    ></i>
+  }
 </button>

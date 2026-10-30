@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { LocService } from 'src/app/api/services/loc.service';
@@ -7,7 +8,7 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
 })
 export class RegisterComponent extends BaseComponent implements OnInit {
   loc!: string;

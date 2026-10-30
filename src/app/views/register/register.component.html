@@ -1,3 +1,12 @@
-<p>
-  register works!
-</p>
+<section class="px-3 sm:px-6 pt-12 sm:pt-20">
+  <div class="glass mx-auto max-w-md rounded-3xl p-6 sm:p-8 text-center fade-in">
+    <span class="inline-grid place-items-center size-12 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-white shadow-lg shadow-brand-500/30">
+      <i class="pi pi-user-plus"></i>
+    </span>
+    <h1 class="font-display text-2xl font-bold tracking-tight mt-4">Inscription</h1>
+    <p class="text-sm text-muted mt-2">La création de compte arrive bientôt.</p>
+    <a [routerLink]="['/', loc, 'login']" class="btn btn-ghost mt-6">
+      <i class="pi pi-arrow-left text-xs"></i>Retour à la connexion
+    </a>
+  </div>
+</section>
