@@ -1,3 +1,4 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -14,11 +15,14 @@ import { PokemonEvolutionComponent } from '../pokemon-evolution/pokemon-evolutio
 import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.component';
 import { LocService } from 'src/app/api/services/loc.service';
 import { Family } from 'src/app/api/models/concretes/Family';
+import { TranslationKey } from 'src/app/i18n/fr';
+
+type DetailsTab = 'infos' | 'stats' | 'evolutions' | 'capacites';
 
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
-  imports: [CommonModule, RouterModule, PokemonEvolutionComponent, PokemonAttackComponent]
+  imports: [TranslatePipe, CommonModule, RouterModule, PokemonEvolutionComponent, PokemonAttackComponent]
 })
 export class PokemonDetailsComponent extends BaseComponent implements OnInit, OnDestroy {
   imgRoot: string = this.config.getConfig('img_root');
@@ -26,7 +30,17 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
   pokemon!: Pokemon;
 
   stats: number[] = [];
-  statLabels: string[] = ['PV', 'Attaque', 'Défense', 'Att. Spé.', 'Déf. Spé.', 'Vitesse'];
+  statLabels: TranslationKey[] = [
+    'details.stat.hp',
+    'details.stat.attack',
+    'details.stat.defense',
+    'details.stat.spAttack',
+    'details.stat.spDefense',
+    'details.stat.speed'
+  ];
+
+  /** Onglet affiché sur mobile (sur ordinateur, toutes les sections sont visibles). */
+  tab: DetailsTab = 'infos';
 
   /** Affiche l'illustration chromatique (shiny) au lieu de la normale */
   shiny = false;
@@ -96,6 +110,7 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
       .subscribe(pokemon => {
         this.pokemon = pokemon;
         this.shiny = false;
+        this.tab = 'infos';
 
         this.stats = this.getStats(this.pokemon);
 
@@ -118,6 +133,33 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
             });
           });
       });
+  }
+
+  /** Onglets mobiles, sans ceux qui n'ont pas de contenu. */
+  get tabs(): { id: DetailsTab; label: TranslationKey; icon: string }[] {
+    const tabs: { id: DetailsTab; label: TranslationKey; icon: string }[] = [
+      { id: 'infos', label: 'details.tab.infos', icon: 'pi-info-circle' },
+      { id: 'stats', label: 'details.tab.stats', icon: 'pi-chart-bar' }
+    ];
+    if (this.hasForms || this.pokemon?.evolvesFrom?.length || this.pokemon?.evolvesTo?.length)
+      tabs.push({ id: 'evolutions', label: 'details.tab.evolutions', icon: 'pi-sync' });
+    if (this.hasAttacks) tabs.push({ id: 'capacites', label: 'details.tab.moves', icon: 'pi-bolt' });
+    return tabs;
+  }
+
+  /** Classes écrites en entier pour que Tailwind les génère. */
+  get tabsGridClass(): string {
+    return ['grid-cols-2', 'grid-cols-3', 'grid-cols-4'][this.tabs.length - 2] ?? 'grid-cols-4';
+  }
+
+  selectTab(tab: DetailsTab) {
+    this.tab = tab;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /** Masque la section sur mobile quand son onglet n'est pas actif. */
+  mobileTab(tab: DetailsTab): string {
+    return this.tab === tab ? '' : 'max-sm:hidden';
   }
 
   goBack() {

@@ -1,3 +1,4 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { Component, OnInit } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
 import { AppResource } from 'src/app/app.resource';
@@ -12,7 +13,7 @@ import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageComponent, ThemeSwitchComponent]
+  imports: [TranslatePipe, CommonModule, RouterModule, LanguageComponent, ThemeSwitchComponent]
 })
 export class HeaderComponent extends BaseComponent implements OnInit {
   loc!: string;

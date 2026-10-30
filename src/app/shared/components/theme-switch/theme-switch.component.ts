@@ -1,12 +1,14 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Theme, ThemeService } from 'src/app/api/services/theme.service';
+import { TranslationKey } from 'src/app/i18n/fr';
 
 @Component({
   selector: 'app-theme-switch',
   templateUrl: './theme-switch.component.html',
   standalone: true,
-  imports: [CommonModule]
+  imports: [TranslatePipe, CommonModule]
 })
 export class ThemeSwitchComponent {
   options: Theme[] = ['light', 'dark', 'auto'];
@@ -15,10 +17,10 @@ export class ThemeSwitchComponent {
     dark: 'pi-moon',
     auto: 'pi-desktop'
   };
-  labels: Record<Theme, string> = {
-    light: 'Clair',
-    dark: 'Sombre',
-    auto: 'Automatique'
+  labels: Record<Theme, TranslationKey> = {
+    light: 'theme.light',
+    dark: 'theme.dark',
+    auto: 'theme.auto'
   };
 
   current: Theme;

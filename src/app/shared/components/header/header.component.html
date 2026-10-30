@@ -3,7 +3,7 @@
     <a
       [routerLink]="['/', loc, 'pokedex']"
       class="flex items-center gap-2.5 pl-1 pr-2 sm:pr-3 h-11 rounded-xl"
-      aria-label="Accueil PokeQuizz Dex"
+      [attr.aria-label]="'app.homeAria' | t"
     >
       <span
         class="grid place-items-center size-9 rounded-xl bg-gradient-to-br from-brand-400 to-brand-700 text-white font-display font-extrabold text-sm shadow-md shadow-brand-500/30"
@@ -19,17 +19,17 @@
         [routerLink]="['/', loc, 'pokedex']"
         routerLinkActive="is-active"
         class="nav-link"
-        title="Pokédex"
+        [title]="'nav.pokedex' | t"
       >
-        <i class="pi pi-th-large text-sm"></i><span class="hidden md:inline">Pokédex</span>
+        <i class="pi pi-th-large text-sm"></i><span class="hidden md:inline">{{ 'nav.pokedex' | t }}</span>
       </a>
       <a
-        [routerLink]="['/', loc, 'game']"
+        [routerLink]="['/', loc, 'quiz']"
         routerLinkActive="is-active"
         class="nav-link"
-        title="Quiz"
+        [title]="'nav.quiz' | t"
       >
-        <i class="pi pi-question-circle text-sm"></i><span class="hidden md:inline">Quiz</span>
+        <i class="pi pi-question-circle text-sm"></i><span class="hidden md:inline">{{ 'nav.quiz' | t }}</span>
       </a>
     </div>
 
@@ -40,8 +40,8 @@
         [routerLink]="['/', loc, 'login']"
         routerLinkActive="is-active"
         class="icon-btn"
-        title="Connexion"
-        aria-label="Connexion"
+        [title]="'nav.login' | t"
+        [attr.aria-label]="'nav.login' | t"
       >
         <i class="pi pi-user"></i>
       </a>

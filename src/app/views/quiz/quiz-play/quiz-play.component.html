@@ -1,0 +1,141 @@
+<!-- Sur mobile : écran plein hauteur, sans défilement de page (seule la zone des réponses défile en dernier recours) -->
+<section
+  class="mx-auto max-w-3xl px-3 sm:px-6 pt-3 sm:pt-10 sm:pb-16 max-sm:h-dvh max-sm:flex max-sm:flex-col max-sm:pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+>
+  <div class="flex items-center gap-3 mb-3 sm:mb-4 shrink-0">
+    <a [routerLink]="['/', loc, 'quiz']" class="icon-btn" [title]="'play.quitTitle' | t" [attr.aria-label]="'play.quitAria' | t">
+      <i class="pi pi-arrow-left"></i>
+    </a>
+    <div class="flex-1">
+      <div class="flex justify-between text-sm font-semibold mb-1">
+        <span>{{ 'play.question' | t }} {{ question()?.order ?? order }}@if (question()) {<span class="text-muted"> / {{ question()!.total }}</span>}</span>
+        @if (question()?.difficultyCode) {
+          <span class="chip">{{ difficultyKey(question()!.difficultyCode) | t }}</span>
+        }
+      </div>
+      <div class="h-2 rounded-full bg-zinc-900/10 dark:bg-white/10 overflow-hidden" role="progressbar" [attr.aria-valuenow]="progress()" aria-valuemin="0" aria-valuemax="100">
+        <div class="h-full bg-brand-500 transition-all duration-500" [style.width.%]="progress()"></div>
+      </div>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="card skeleton h-[40dvh] sm:h-72 mb-3 sm:mb-4"></div>
+    <div class="grid grid-cols-2 gap-2 sm:gap-3">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="card skeleton h-12 sm:h-14"></div>
+      }
+    </div>
+  } @else {
+  @if (question(); as q) {
+    <div class="card p-3 sm:p-8 mb-3 sm:mb-4 fade-in shrink-0">
+      <h1 class="font-display text-lg leading-tight sm:text-3xl font-bold tracking-tight text-center">{{ q.label }}</h1>
+      @if (q.isMultipleAnswers) {
+        <p class="text-center text-xs sm:text-sm text-muted mt-0.5">{{ 'play.multiple' | t }}</p>
+      }
+
+      <div class="mt-2 sm:mt-6 flex flex-col items-center gap-2 sm:gap-4">
+        @if (q.subject.hasImage) {
+          <div class="grid place-items-center sm:size-64" [ngClass]="imageBoxClass()">
+            <img
+              [src]="imageUrl"
+              [alt]="answered() && q.subject.name ? q.subject.name : ('play.imageAlt' | t)"
+              class="max-h-full max-w-full object-contain transition-[filter] duration-700"
+              [style.filter]="imageFilter()"
+              draggable="false"
+            />
+          </div>
+        }
+
+        @if (q.subject.name || q.subject.hasSound) {
+          <div class="flex items-center gap-2">
+            @if (q.subject.name) {
+              <p class="font-display text-base sm:text-xl font-semibold">{{ q.subject.name }}</p>
+            }
+            @if (q.subject.hasSound) {
+              <button type="button" class="btn btn-ghost h-9 px-3" [title]="'play.listenCry' | t" [attr.aria-label]="'play.listenCry' | t" (click)="playSound()">
+                <i class="pi pi-volume-up"></i><span class="max-sm:hidden">{{ 'play.listenCry' | t }}</span>
+              </button>
+            }
+          </div>
+        }
+
+        @if (q.subject.description) {
+          <blockquote class="max-w-xl text-center text-sm sm:text-lg italic leading-snug sm:leading-relaxed">
+            « {{ q.subject.description }} »
+          </blockquote>
+        }
+      </div>
+    </div>
+
+    <div
+      class="grid gap-2 sm:gap-3 content-start max-sm:flex-1 max-sm:min-h-0 max-sm:overflow-y-auto"
+      [ngClass]="answersGridClass()"
+      role="group"
+      [attr.aria-label]="q.label"
+    >
+      @for (answer of q.answers; track answer.id; let i = $index) {
+        <button
+          type="button"
+          class="card relative text-left min-w-0 px-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3 border-2 transition-colors"
+          [class.py-1]="longAnswers()"
+          [class.py-1.5]="!longAnswers()"
+          [ngClass]="answerClass(answer)"
+          [attr.aria-pressed]="isSelected(answer)"
+          [disabled]="answered() || submitting()"
+          (click)="toggle(answer)"
+        >
+          <kbd class="grid place-items-center size-5 sm:size-7 rounded-md sm:rounded-lg bg-zinc-900/5 dark:bg-white/10 text-[10px] sm:text-xs font-bold font-sans shrink-0">{{ letter(i) }}</kbd>
+          <span
+            class="flex-1 min-w-0"
+            [ngClass]="longAnswers() ? 'text-[11px] sm:text-sm leading-tight sm:leading-snug' : 'text-xs sm:text-base font-semibold truncate'"
+            >{{ answer.label }}</span
+          >
+          <!-- Pastille hors du flux pour ne pas réduire la place du libellé -->
+          @if (answered() && isCorrect(answer)) {
+            <i class="pi pi-check-circle absolute -top-1.5 -right-1.5 text-base text-emerald-600 bg-white dark:bg-zinc-900 rounded-full" [attr.aria-label]="'play.answerCorrect' | t"></i>
+          } @else if (answered() && isSelected(answer)) {
+            <i class="pi pi-times-circle absolute -top-1.5 -right-1.5 text-base text-red-600 bg-white dark:bg-zinc-900 rounded-full" [attr.aria-label]="'play.answerWrong' | t"></i>
+          }
+        </button>
+      }
+    </div>
+
+    @if (error()) {
+      <p class="card p-3 mt-2 sm:mt-4 text-sm text-red-600 dark:text-red-400 shrink-0" role="alert">{{ error() }}</p>
+    }
+
+    <div class="mt-3 sm:mt-6 flex items-center gap-3 shrink-0">
+      @if (result(); as r) {
+        <p class="flex-1 font-display text-base sm:text-lg font-semibold" [class.text-emerald-600]="r.isCorrect" [class.text-red-600]="!r.isCorrect" role="status">
+          @if (r.isCorrect) {
+            <i class="pi pi-check"></i> {{ 'play.correct' | t }}
+          } @else {
+            <i class="pi pi-times"></i> {{ 'play.wrong' | t }}
+          }
+        </p>
+        <button type="button" class="btn btn-primary h-11 sm:h-12 px-5 sm:px-8" (click)="next()">
+          @if (r.quizzDone || r.nextOrder === null) {
+            {{ 'play.results' | t }} <i class="pi pi-flag"></i>
+          } @else {
+            {{ 'play.next' | t }} <i class="pi pi-arrow-right"></i>
+          }
+        </button>
+      } @else {
+        <p class="flex-1 text-sm text-muted max-sm:hidden">{{ 'play.hint' | t }}</p>
+        <button type="button" class="btn btn-primary h-11 sm:h-12 px-8 max-sm:flex-1" [disabled]="selected().length === 0 || submitting()" (click)="submit()">
+          @if (submitting()) {
+            <i class="pi pi-spin pi-spinner"></i>
+          }
+          {{ 'play.validate' | t }}
+        </button>
+      }
+    </div>
+  } @else if (error()) {
+    <div class="card p-6 text-center">
+      <p class="mb-4" role="alert">{{ error() }}</p>
+      <a [routerLink]="['/', loc, 'quiz']" class="btn btn-primary">{{ 'play.backToQuiz' | t }}</a>
+    </div>
+  }
+  }
+</section>

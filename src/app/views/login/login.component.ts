@@ -1,3 +1,4 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -17,7 +18,7 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule]
+  imports: [TranslatePipe, CommonModule, FormsModule, ReactiveFormsModule, RouterModule]
 })
 export class LoginComponent extends BaseComponent implements OnInit {
   form!: FormGroup;
