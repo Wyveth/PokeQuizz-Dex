@@ -33,6 +33,23 @@ export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
 
   ngOnInit() {}
 
+  /** Titre du groupe en français (les noms de groupe sont construits avec typeEvolution + ' Forms'). */
+  get title(): string {
+    const key = (this.forms?.name ?? '').replace(/ ?Forms$/, '').trim();
+    const titles: Record<string, string> = {
+      Normal: 'Évolutions',
+      Evolutions: 'Évolutions',
+      Méga: 'Méga-évolutions',
+      Mega: 'Méga-évolutions',
+      Gigamax: 'Gigamax',
+      Alola: "Formes d'Alola",
+      Galar: 'Formes de Galar',
+      Hisui: 'Formes de Hisui',
+      Paldea: 'Formes de Paldea'
+    };
+    return titles[key] ?? key;
+  }
+
   navigateTo(id: number) {
     this.router.navigate(['/' + this.loc, 'pokemon', id]);
   }

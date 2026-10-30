@@ -15,6 +15,8 @@ import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.compone
 import { LocService } from 'src/app/api/services/loc.service';
 import { Family } from 'src/app/api/models/concretes/Family';
 
+type DetailsTab = 'infos' | 'stats' | 'evolutions' | 'capacites';
+
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
@@ -27,6 +29,9 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
 
   stats: number[] = [];
   statLabels: string[] = ['PV', 'Attaque', 'Défense', 'Att. Spé.', 'Déf. Spé.', 'Vitesse'];
+
+  /** Onglet affiché sur mobile (sur ordinateur, toutes les sections sont visibles). */
+  tab: DetailsTab = 'infos';
 
   /** Affiche l'illustration chromatique (shiny) au lieu de la normale */
   shiny = false;
@@ -96,6 +101,7 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
       .subscribe(pokemon => {
         this.pokemon = pokemon;
         this.shiny = false;
+        this.tab = 'infos';
 
         this.stats = this.getStats(this.pokemon);
 
@@ -118,6 +124,33 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
             });
           });
       });
+  }
+
+  /** Onglets mobiles, sans ceux qui n'ont pas de contenu. */
+  get tabs(): { id: DetailsTab; label: string; icon: string }[] {
+    const tabs: { id: DetailsTab; label: string; icon: string }[] = [
+      { id: 'infos', label: 'Infos', icon: 'pi-info-circle' },
+      { id: 'stats', label: 'Stats', icon: 'pi-chart-bar' }
+    ];
+    if (this.hasForms || this.pokemon?.evolvesFrom?.length || this.pokemon?.evolvesTo?.length)
+      tabs.push({ id: 'evolutions', label: 'Évolutions', icon: 'pi-sync' });
+    if (this.hasAttacks) tabs.push({ id: 'capacites', label: 'Capacités', icon: 'pi-bolt' });
+    return tabs;
+  }
+
+  /** Classes écrites en entier pour que Tailwind les génère. */
+  get tabsGridClass(): string {
+    return ['grid-cols-2', 'grid-cols-3', 'grid-cols-4'][this.tabs.length - 2] ?? 'grid-cols-4';
+  }
+
+  selectTab(tab: DetailsTab) {
+    this.tab = tab;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /** Masque la section sur mobile quand son onglet n'est pas actif. */
+  mobileTab(tab: DetailsTab): string {
+    return this.tab === tab ? '' : 'max-sm:hidden';
   }
 
   goBack() {

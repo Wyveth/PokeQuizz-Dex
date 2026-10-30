@@ -25,6 +25,8 @@ export const routes: Routes = [
       },
       {
         path: ':loc/pokemon/:id',
+        // Sur mobile, menu masqué pour laisser la place à la fiche
+        data: { immersive: true },
         loadComponent: () =>
           import('src/app/views/pokemon-details/pokemon-details.component').then(
             m => m.PokemonDetailsComponent
