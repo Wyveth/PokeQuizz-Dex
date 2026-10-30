@@ -6,7 +6,7 @@ import {
   inject,
 } from '@angular/core';
 import { environment } from './environments/environment';
-import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -57,7 +57,8 @@ bootstrapApplication(AppComponent, {
       },
     }),
     provideAnimations(),
-    provideHttpClient(),
+    // Nécessaire pour que AuthInterceptor (HTTP_INTERCEPTORS) soit appliqué
+    provideHttpClient(withInterceptorsFromDi()),
     provideAnimationsAsync(),
     AppConfig,
     AppResource,

@@ -30,9 +30,24 @@ export const routes: Routes = [
             m => m.PokemonDetailsComponent
           )
       },
+      // Ancienne page "jeux" : le quiz la remplace
+      { path: ':loc/game', redirectTo: ':loc/quiz', pathMatch: 'full' },
       {
-        path: ':loc/game',
-        loadComponent: () => import('src/app/views/game/game.component').then(m => m.GameComponent)
+        path: ':loc/quiz',
+        loadComponent: () =>
+          import('src/app/views/quiz/quiz-setup/quiz-setup.component').then(m => m.QuizSetupComponent)
+      },
+      {
+        path: ':loc/quiz/:id/result',
+        loadComponent: () =>
+          import('src/app/views/quiz/quiz-result/quiz-result.component').then(
+            m => m.QuizResultComponent
+          )
+      },
+      {
+        path: ':loc/quiz/:id/:order',
+        loadComponent: () =>
+          import('src/app/views/quiz/quiz-play/quiz-play.component').then(m => m.QuizPlayComponent)
       },
       {
         path: ':loc/login',
