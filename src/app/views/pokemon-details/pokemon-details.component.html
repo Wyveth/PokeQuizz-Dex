@@ -1,84 +1,264 @@
-<div class="max-w-6xl mx-auto flex">
-  <div *ngIf="pokemon">
-    <p>{{ pokemon.number }}</p>
-    <div class="flex justify-center items-center">
-      <img [src]="imgRoot + pokemon.pathImgNormal" />
-      <img [src]="imgRoot + pokemon.pathImgShiny" />
+<section class="mx-auto max-w-6xl px-3 sm:px-6 pt-6 sm:pt-8">
+  <!-- Barre de navigation -->
+  <div class="flex items-center gap-2 mb-5">
+    <a [routerLink]="['/', loc, 'pokedex']" class="btn btn-ghost !h-10 !px-3.5">
+      <i class="pi pi-arrow-left text-xs"></i><span class="hidden sm:inline">Pokédex</span>
+    </a>
+    <div class="ml-auto flex items-center gap-2">
+      <button type="button" (click)="goBack()" [disabled]="key <= 1" class="btn btn-ghost !h-10 !px-3.5 disabled:opacity-40 disabled:pointer-events-none">
+        <i class="pi pi-chevron-left text-xs"></i><span class="hidden sm:inline">Précédent</span>
+      </button>
+      <button type="button" (click)="goNext()" class="btn btn-ghost !h-10 !px-3.5">
+        <span class="hidden sm:inline">Suivant</span><i class="pi pi-chevron-right text-xs"></i>
+      </button>
     </div>
-    <div class="flex justify-center items-center">
-      <img [src]="imgRoot + pokemon.pathSpriteLegacy" class="h-[40px] w-[40px]" />
-      <img [src]="imgRoot + pokemon.pathSpriteNormal" />
-      <img [src]="imgRoot + pokemon.pathSpriteShiny" />
-    </div>
-    <div class="flex justify-center items-center">
-      <img [src]="imgRoot + pokemon.pathAnimatedImg" />
-      <img [src]="imgRoot + pokemon.pathAnimatedImgShiny" />
-    </div>
-    <p>
-      <audio controls [src]="imgRoot + pokemon.pathSound">
-        <a [href]="imgRoot + pokemon.pathSound"> Download audio </a>
-      </audio>
-    </p>
-    <p>{{ pokemon.dataInfo.name }}</p>
-    <p>{{ pokemon.dataInfo.displayName }}</p>
-    <p>{{ pokemon.dataInfo.descriptionVx }}</p>
-    <p>{{ pokemon.dataInfo.descriptionVy }}</p>
-    <p>{{ pokemon.dataInfo.size }}</p>
-    <p>{{ pokemon.dataInfo.category }}</p>
-    <p>{{ pokemon.dataInfo.weight }}</p>
-
-    <div *ngFor="let ability of pokemon.abilities">
-      <p>{{ ability.name }} <span *ngIf="ability.isHidden">[Caché]</span></p>
-      <p>{{ ability.description }}</p>
-    </div>
-
-    <p>{{ pokemon.whenEvolution }}</p>
-
-    <div class="flex justify-center items-center space-x-4">
-      <div *ngFor="let type of pokemon.typePoks">
-        <p>{{ type.Name }}</p>
-        <p><img [src]="imgRoot + type.pathMiniHome" /></p>
-      </div>
-    </div>
-
-    <!-- Evolve From -->
-    <div *ngIf="pokemon.evolvesFrom" class="flex justify-center items-center">
-      <p>Evolve From</p>
-      <div *ngFor="let pokemon of pokemon.evolvesFrom">
-        <img [src]="imgRoot + pokemon?.pathImage" />
-        <p>{{ pokemon?.name }}</p>
-        <p>{{ pokemon?.whenEvolution }}</p>
-      </div>
-    </div>
-
-    <!-- Evolve To -->
-    <div *ngIf="pokemon.evolvesTo" class="flex justify-center items-center">
-      <p>Evolve To</p>
-      <div *ngFor="let pokemon of pokemon.evolvesTo">
-        <img [src]="imgRoot + pokemon?.pathImage" />
-        <p>{{ pokemon?.name }}</p>
-        <p>{{ pokemon?.whenEvolution }}</p>
-      </div>
-    </div>
-    <p-button (click)="goBack()">Previous</p-button>
-    <p-button (click)="goNext()">Next</p-button>
-
-    <div class="flex justify-center items-center">
-      <img *ngIf="pokemon.typePoks[0]" [src]="imgRoot + pokemon.typePoks[0].pathFondGo" />
-    </div>
-
-    <div class="flex justify-center items-center space-x-4">
-      <div *ngFor="let type of pokemon.weakness">
-        <p>{{ type.Name }}</p>
-        <p><img [src]="imgRoot + type.PathImg" /></p>
-      </div>
-    </div>
-
-    <app-pokemon-evolution *ngFor="let formVm of forms" [forms]="formVm"></app-pokemon-evolution>
-
-    <app-pokemon-attack
-      *ngFor="let typeLearnAttackVM of attacks"
-      [typeLearnAttack]="typeLearnAttackVM"
-    ></app-pokemon-attack>
   </div>
-</div>
+
+  @if (!pokemon) {
+    <div class="glass panel grid md:grid-cols-2 gap-6">
+      <div class="skeleton rounded-2xl aspect-square"></div>
+      <div class="space-y-4 py-4">
+        <div class="skeleton rounded-lg h-4 w-20"></div>
+        <div class="skeleton rounded-lg h-10 w-2/3"></div>
+        <div class="skeleton rounded-lg h-4 w-full"></div>
+        <div class="skeleton rounded-lg h-4 w-5/6"></div>
+      </div>
+    </div>
+  } @else {
+    <div class="fade-in space-y-5" [style.--accent]="accent">
+      <!-- En-tête -->
+      <article class="glass rounded-3xl overflow-hidden grid md:grid-cols-[1.1fr_1fr]">
+        <div
+          class="relative min-h-72 sm:min-h-96 flex items-center justify-center p-6 bg-cover bg-center"
+          [style.background-image]="pokemon.typePoks.length && pokemon.typePoks[0].pathFondGo ? 'url(' + imgRoot + pokemon.typePoks[0].pathFondGo + ')' : null"
+        >
+          <div
+            class="absolute inset-0"
+            style="background: radial-gradient(circle at 50% 55%, color-mix(in srgb, var(--accent, #f0432a) 45%, transparent), transparent 65%)"
+          ></div>
+          <span
+            class="absolute top-4 left-5 font-display font-extrabold text-6xl sm:text-7xl text-white/40 dark:text-white/10 select-none tabular-nums"
+            >#{{ pokemon.number }}</span
+          >
+          <img
+            [src]="imgRoot + (shiny ? pokemon.pathImgShiny : pokemon.pathImgNormal)"
+            [alt]="pokemon.dataInfo.name"
+            class="relative w-full max-w-xs sm:max-w-sm aspect-square object-contain drop-shadow-2xl transition-opacity duration-300"
+          />
+          @if (pokemon.pathImgShiny) {
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 glass rounded-full p-1 flex text-xs font-semibold">
+              <button type="button" (click)="shiny = false" class="px-3 py-1.5 rounded-full transition-colors" [ngClass]="!shiny ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'">Normal</button>
+              <button type="button" (click)="shiny = true" class="px-3 py-1.5 rounded-full transition-colors flex items-center gap-1" [ngClass]="shiny ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'"><i class="pi pi-sparkles text-[0.7rem]"></i>Chromatique</button>
+            </div>
+          }
+        </div>
+
+        <div class="p-6 sm:p-8 flex flex-col gap-5">
+          <div>
+            <p class="text-sm font-semibold tabular-nums text-muted">N° {{ pokemon.number }}</p>
+            <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1">{{ pokemon.dataInfo.name }}</h1>
+            @if (pokemon.dataInfo.category) {
+              <p class="text-muted mt-1">{{ pokemon.dataInfo.category }}</p>
+            }
+            <div class="flex flex-wrap gap-2 mt-4">
+              @for (type of pokemon.typePoks; track $index) {
+                <img class="h-7 w-auto" [src]="imgRoot + type.pathMiniHome" [alt]="type.name" [title]="type.name ?? ''" />
+              }
+            </div>
+          </div>
+
+          @if (pokemon.dataInfo.descriptionVx || pokemon.dataInfo.descriptionVy) {
+            <div class="space-y-2 text-[0.95rem] leading-relaxed">
+              @if (pokemon.dataInfo.descriptionVx) {
+                <p class="border-l-2 pl-4" style="border-color: var(--accent, #f0432a)">{{ pokemon.dataInfo.descriptionVx }}</p>
+              }
+              @if (pokemon.dataInfo.descriptionVy && pokemon.dataInfo.descriptionVy !== pokemon.dataInfo.descriptionVx) {
+                <p class="border-l-2 border-zinc-300 dark:border-zinc-700 pl-4 text-muted">{{ pokemon.dataInfo.descriptionVy }}</p>
+              }
+            </div>
+          }
+
+          <dl class="grid grid-cols-3 gap-2">
+            <div class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3">
+              <dt class="text-xs text-muted flex items-center gap-1.5"><i class="pi pi-arrows-v text-[0.65rem]"></i>Taille</dt>
+              <dd class="font-semibold mt-0.5">{{ pokemon.dataInfo.size || '—' }}</dd>
+            </div>
+            <div class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3">
+              <dt class="text-xs text-muted flex items-center gap-1.5"><i class="pi pi-gauge text-[0.65rem]"></i>Poids</dt>
+              <dd class="font-semibold mt-0.5">{{ pokemon.dataInfo.weight || '—' }}</dd>
+            </div>
+            <div class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3">
+              <dt class="text-xs text-muted flex items-center gap-1.5"><i class="pi pi-flag text-[0.65rem]"></i>Génération</dt>
+              <dd class="font-semibold mt-0.5">{{ pokemon.generation || '—' }}</dd>
+            </div>
+          </dl>
+
+          @if (pokemon.dataInfo.whenEvolution || pokemon['whenEvolution']) {
+            <p class="text-sm flex gap-2 items-start">
+              <i class="pi pi-sync text-xs mt-1 text-muted"></i>
+              <span>{{ pokemon.dataInfo.whenEvolution || pokemon['whenEvolution'] }}</span>
+            </p>
+          }
+
+          @if (pokemon.pathSound) {
+            <div class="mt-auto">
+              <p class="text-xs font-semibold text-muted mb-2 flex items-center gap-1.5"><i class="pi pi-volume-up text-[0.7rem]"></i>Cri</p>
+              <audio controls [src]="imgRoot + pokemon.pathSound" class="w-full h-10"></audio>
+            </div>
+          }
+        </div>
+      </article>
+
+      <div class="grid md:grid-cols-2 gap-5 items-start">
+        <!-- Statistiques -->
+        <section class="glass panel">
+          <h2 class="section-title"><i class="pi pi-chart-bar text-sm text-muted"></i>Statistiques de base</h2>
+          <div class="space-y-3">
+            @for (stat of stats; track $index; let i = $index) {
+              <div class="grid grid-cols-[5.5rem_2.5rem_1fr] items-center gap-3 text-sm">
+                <span class="text-muted">{{ statLabels[i] }}</span>
+                <span class="font-semibold tabular-nums text-right">{{ stat ?? '—' }}</span>
+                <div class="h-2 rounded-full bg-black/[0.06] dark:bg-white/[0.08] overflow-hidden">
+                  <div class="h-full rounded-full transition-all duration-700" [ngClass]="statColor(stat)" [style.width.%]="statWidth(stat)"></div>
+                </div>
+              </div>
+            }
+            <div class="grid grid-cols-[5.5rem_2.5rem_1fr] items-center gap-3 text-sm pt-3 border-t border-black/5 dark:border-white/10">
+              <span class="font-semibold">Total</span>
+              <span class="font-bold tabular-nums text-right">{{ statTotal }}</span>
+              <span></span>
+            </div>
+          </div>
+        </section>
+
+        <div class="space-y-5">
+          <!-- Talents -->
+          @if (pokemon.abilities?.length) {
+            <section class="glass panel">
+              <h2 class="section-title"><i class="pi pi-bolt text-sm text-muted"></i>Talents</h2>
+              <ul class="space-y-3">
+                @for (ability of pokemon.abilities; track $index) {
+                  <li>
+                    <p class="font-semibold flex items-center gap-2">
+                      {{ ability.name }}
+                      @if (ability.isHidden) {
+                        <span class="chip !text-[0.65rem]"><i class="pi pi-eye-slash text-[0.6rem]"></i>Caché</span>
+                      }
+                    </p>
+                    <p class="text-sm text-muted mt-0.5">{{ ability.description }}</p>
+                  </li>
+                }
+              </ul>
+            </section>
+          }
+
+          <!-- Faiblesses -->
+          @if (pokemon.weaknesses?.length) {
+            <section class="glass panel">
+              <h2 class="section-title"><i class="pi pi-shield text-sm text-muted"></i>Faiblesses</h2>
+              <div class="flex flex-wrap gap-2">
+                @for (type of pokemon.weaknesses; track $index) {
+                  <img class="h-6 w-auto" [src]="imgRoot + (type.pathMiniHome || type.pathIconHome)" [alt]="type.name" [title]="type.name ?? ''" />
+                }
+              </div>
+            </section>
+          }
+
+          <!-- Évolution directe -->
+          @if (pokemon.evolvesFrom?.length || pokemon.evolvesTo?.length) {
+            <section class="glass panel">
+              <h2 class="section-title"><i class="pi pi-sitemap text-sm text-muted"></i>Lignée</h2>
+              <div class="grid sm:grid-cols-2 gap-3">
+                @if (pokemon.evolvesFrom?.length) {
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-2">Évolue de</p>
+                    @for (evo of pokemon.evolvesFrom; track $index) {
+                      <div class="flex items-center gap-3 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 mb-2">
+                        <img [src]="imgRoot + evo?.pathImage" [alt]="evo?.name" class="size-12 object-contain" />
+                        <div class="min-w-0">
+                          <p class="font-semibold text-sm truncate">{{ evo?.name }}</p>
+                          <p class="text-xs text-muted">{{ evo?.whenEvolution }}</p>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+                @if (pokemon.evolvesTo?.length) {
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-2">Évolue en</p>
+                    @for (evo of pokemon.evolvesTo; track $index) {
+                      <div class="flex items-center gap-3 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 mb-2">
+                        <img [src]="imgRoot + evo?.pathImage" [alt]="evo?.name" class="size-12 object-contain" />
+                        <div class="min-w-0">
+                          <p class="font-semibold text-sm truncate">{{ evo?.name }}</p>
+                          <p class="text-xs text-muted">{{ evo?.whenEvolution }}</p>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            </section>
+          }
+        </div>
+      </div>
+
+      <!-- Galerie -->
+      <section class="glass panel">
+        <h2 class="section-title"><i class="pi pi-images text-sm text-muted"></i>Sprites</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          @if (pokemon.pathSpriteLegacy) {
+            <figure class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3 flex flex-col items-center gap-2">
+              <img [src]="imgRoot + pokemon.pathSpriteLegacy" alt="Sprite rétro" class="h-16 object-contain [image-rendering:pixelated]" />
+              <figcaption class="text-xs text-muted">Rétro</figcaption>
+            </figure>
+          }
+          @if (pokemon.pathSpriteNormal) {
+            <figure class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3 flex flex-col items-center gap-2">
+              <img [src]="imgRoot + pokemon.pathSpriteNormal" alt="Sprite" class="h-16 object-contain" />
+              <figcaption class="text-xs text-muted">Sprite</figcaption>
+            </figure>
+          }
+          @if (pokemon.pathSpriteShiny) {
+            <figure class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3 flex flex-col items-center gap-2">
+              <img [src]="imgRoot + pokemon.pathSpriteShiny" alt="Sprite chromatique" class="h-16 object-contain" />
+              <figcaption class="text-xs text-muted">Sprite chromatique</figcaption>
+            </figure>
+          }
+          @if (pokemon.pathAnimatedImg) {
+            <figure class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3 flex flex-col items-center gap-2">
+              <img [src]="imgRoot + pokemon.pathAnimatedImg" alt="Animation" class="h-16 object-contain" />
+              <figcaption class="text-xs text-muted">Animé</figcaption>
+            </figure>
+          }
+          @if (pokemon.pathAnimatedImgShiny) {
+            <figure class="rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-3 flex flex-col items-center gap-2">
+              <img [src]="imgRoot + pokemon.pathAnimatedImgShiny" alt="Animation chromatique" class="h-16 object-contain" />
+              <figcaption class="text-xs text-muted">Animé chromatique</figcaption>
+            </figure>
+          }
+        </div>
+      </section>
+
+      <!-- Évolutions et formes -->
+      @if (hasForms) {
+        <section class="glass panel space-y-6">
+          <h2 class="section-title"><i class="pi pi-sync text-sm text-muted"></i>Évolutions et formes</h2>
+          @for (formVm of forms; track formVm.name) {
+            <app-pokemon-evolution class="block" [forms]="formVm"></app-pokemon-evolution>
+          }
+        </section>
+      }
+
+      <!-- Capacités -->
+      @if (hasAttacks) {
+        <section class="glass panel space-y-6">
+          <h2 class="section-title"><i class="pi pi-bolt text-sm text-muted"></i>Capacités</h2>
+          @for (typeLearnAttackVM of attacks; track typeLearnAttackVM.name) {
+            <app-pokemon-attack class="block" [typeLearnAttack]="typeLearnAttackVM"></app-pokemon-attack>
+          }
+        </section>
+      }
+    </div>
+  }
+</section>

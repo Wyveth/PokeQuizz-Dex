@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { Attack } from 'src/app/api/models/concretes/attack';
@@ -14,12 +14,11 @@ import { PokemonEvolutionComponent } from '../pokemon-evolution/pokemon-evolutio
 import { PokemonAttackComponent } from '../pokemon-attack/pokemon-attack.component';
 import { LocService } from 'src/app/api/services/loc.service';
 import { Family } from 'src/app/api/models/concretes/Family';
-import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
-  imports: [CommonModule, PokemonEvolutionComponent, PokemonAttackComponent, Button]
+  imports: [CommonModule, RouterModule, PokemonEvolutionComponent, PokemonAttackComponent]
 })
 export class PokemonDetailsComponent extends BaseComponent implements OnInit, OnDestroy {
   imgRoot: string = this.config.getConfig('img_root');
@@ -27,6 +26,10 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
   pokemon!: Pokemon;
 
   stats: number[] = [];
+  statLabels: string[] = ['PV', 'Attaque', 'Défense', 'Att. Spé.', 'Déf. Spé.', 'Vitesse'];
+
+  /** Affiche l'illustration chromatique (shiny) au lieu de la normale */
+  shiny = false;
 
   forms: { name: string; listForm: Family[] }[] = [];
   attacks: { name: string; listAttack: Attack[] }[] = [];
@@ -92,6 +95,7 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
       .pipe(takeUntil(this.destroy$))
       .subscribe(pokemon => {
         this.pokemon = pokemon;
+        this.shiny = false;
 
         this.stats = this.getStats(this.pokemon);
 
@@ -130,6 +134,37 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
     }
   }
 
+  /** Couleur d'accent issue du premier type (si fournie par l'API) */
+  get accent(): string | null {
+    const color = this.pokemon?.typePoks?.[0]?.typeColor?.trim();
+    if (!color) return null;
+    return /^[0-9a-f]{3,8}$/i.test(color) ? '#' + color : color;
+  }
+
+  get statTotal(): number {
+    return this.pokemon?.statTotal || this.stats.reduce((sum, v) => sum + (v || 0), 0);
+  }
+
+  /** Largeur de la barre (base 255, valeur max d'une statistique de base) */
+  statWidth(value: number): number {
+    return Math.min(100, Math.round(((value || 0) / 255) * 100));
+  }
+
+  statColor(value: number): string {
+    if (value >= 120) return 'bg-emerald-500';
+    if (value >= 90) return 'bg-lime-500';
+    if (value >= 60) return 'bg-amber-400';
+    return 'bg-rose-500';
+  }
+
+  get hasForms(): boolean {
+    return this.forms.some(f => f.listForm.length > 0);
+  }
+
+  get hasAttacks(): boolean {
+    return this.attacks.some(a => a.listAttack.length > 0);
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -138,11 +173,11 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
   private getStats(pokemon: Pokemon): number[] {
     return [
       pokemon.statPv,
-      pokemon.statAttaque,
+      pokemon.statAttack ?? pokemon['statAttaque'],
       pokemon.statDefense,
-      pokemon.statAttaqueSpe,
+      pokemon.statAttackSpe ?? pokemon['statAttaqueSpe'],
       pokemon.statDefenseSpe,
-      pokemon.statVitesse
+      pokemon.statSpeed ?? pokemon['statVitesse']
     ];
   }
 

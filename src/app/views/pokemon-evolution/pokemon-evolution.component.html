@@ -1,11 +1,35 @@
-<div *ngIf="forms.listForm.length > 0">
-  <p>{{ forms.name }}</p>
-  <div class="grid gap-4 justify-items-center" [ngClass]="getNbColumns(forms.listForm.length)">
-    <div *ngFor="let pok of forms.listForm">
-      <p>{{ pok.dataInfo.name }}</p>
-      <img [src]="imgRoot + pok.pathSpriteNormal" />
-      <a (click)="navigateTo(pok.id)"><img [src]="imgRoot + pok.pathImgNormal" /></a>
-      <p>{{ pok.whenEvolution }}</p>
+@if (forms.listForm.length > 0) {
+  <div>
+    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-3">{{ forms.name }}</p>
+    <div class="flex flex-wrap gap-3">
+      @for (pok of forms.listForm; track $index) {
+        <button
+          type="button"
+          (click)="navigateTo(pok.id)"
+          class="card card-interactive w-36 sm:w-40 p-3 flex flex-col items-center text-center"
+        >
+          @if (pok.number) {
+            <span class="self-start text-[0.7rem] font-semibold tabular-nums text-muted">#{{ pok.number }}</span>
+          }
+          <img
+            [src]="imgRoot + pok.pathImgNormal"
+            [alt]="pok.dataInfo.name"
+            loading="lazy"
+            class="size-24 object-contain drop-shadow-md"
+          />
+          <span class="font-display font-semibold mt-2 text-sm">{{ pok.dataInfo.name }}</span>
+          @if (pok.typePoks?.length) {
+            <span class="flex flex-wrap justify-center gap-1 mt-1.5">
+              @for (t of pok.typePoks; track $index) {
+                <img [src]="imgRoot + t.pathMiniHome" [alt]="t.name" class="h-4 w-auto" />
+              }
+            </span>
+          }
+          @if (pok.whenEvolution) {
+            <span class="text-[0.7rem] text-muted mt-1.5 leading-snug">{{ pok.whenEvolution }}</span>
+          }
+        </button>
+      }
     </div>
   </div>
-</div>
+}

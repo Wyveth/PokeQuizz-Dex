@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InputTextModule } from 'primeng/inputtext';
 import { debounceTime } from 'rxjs/operators';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemonLight';
 import { LocService } from 'src/app/api/services/loc.service';
@@ -11,7 +10,7 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, InputTextModule]
+  imports: [CommonModule, FormsModule, ReactiveFormsModule]
 })
 export class SearchComponent extends BaseComponent implements OnInit {
   @Input() pokemons!: PokemonLight[];

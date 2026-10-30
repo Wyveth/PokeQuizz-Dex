@@ -1,11 +1,51 @@
-<div *ngIf="typeLearnAttack.listAttack.length != 0">
-  <p class="underline underline-offset-8">{{ typeLearnAttack.name }}</p>
-  <div *ngFor="let att of typeLearnAttack.listAttack">
-    <div class="grid grid-cols-4" *ngIf="att.name">
-      <p>{{ att.name }}</p>
-      <p>{{ att.description }}</p>
-      <p><img [src]="imgRoot + att.typePok?.pathIconHome" /></p>
-      <p><img [src]="imgRoot + att.typeAttack?.pathImg" /></p>
+@if (typeLearnAttack.listAttack.length !== 0) {
+  <div>
+    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-3 flex items-center gap-2">
+      {{ typeLearnAttack.name }}
+      <span class="chip !py-0.5 !text-[0.65rem]">{{ typeLearnAttack.listAttack.length }}</span>
+    </p>
+    <div class="overflow-x-auto -mx-2">
+      <table class="w-full min-w-[40rem] text-sm">
+        <thead>
+          <tr class="text-left text-[0.7rem] uppercase tracking-wider text-muted">
+            <th class="font-semibold px-2 pb-2 w-14">Niv.</th>
+            <th class="font-semibold px-2 pb-2">Capacité</th>
+            <th class="font-semibold px-2 pb-2 w-24">Type</th>
+            <th class="font-semibold px-2 pb-2 w-16">Cat.</th>
+            <th class="font-semibold px-2 pb-2 w-16 text-right">Puiss.</th>
+            <th class="font-semibold px-2 pb-2 w-16 text-right">Préc.</th>
+            <th class="font-semibold px-2 pb-2 w-12 text-right">PP</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (att of typeLearnAttack.listAttack; track $index) {
+            @if (att.name) {
+              <tr class="border-t border-black/5 dark:border-white/5 hover:bg-black/[0.03] dark:hover:bg-white/[0.04] transition-colors">
+                <td class="px-2 py-2.5 tabular-nums text-muted">{{ att.level || att.ctcs || '—' }}</td>
+                <td class="px-2 py-2.5">
+                  <p class="font-semibold">{{ att.name }}</p>
+                  @if (att.description) {
+                    <p class="text-xs text-muted line-clamp-2 mt-0.5">{{ att.description }}</p>
+                  }
+                </td>
+                <td class="px-2 py-2.5">
+                  @if (att.typePok?.pathIconHome) {
+                    <img [src]="imgRoot + att.typePok?.pathIconHome" [alt]="att.typePok?.name" [title]="att.typePok?.name ?? ''" class="h-6 w-auto" />
+                  }
+                </td>
+                <td class="px-2 py-2.5">
+                  @if (att.typeAttack?.pathImg) {
+                    <img [src]="imgRoot + att.typeAttack?.pathImg" [alt]="att.typeAttack?.name" [title]="att.typeAttack?.name ?? ''" class="h-5 w-auto" />
+                  }
+                </td>
+                <td class="px-2 py-2.5 text-right tabular-nums">{{ att.power || '—' }}</td>
+                <td class="px-2 py-2.5 text-right tabular-nums">{{ att.precision || '—' }}</td>
+                <td class="px-2 py-2.5 text-right tabular-nums">{{ att.pp || '—' }}</td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
     </div>
   </div>
-</div>
+}

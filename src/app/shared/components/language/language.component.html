@@ -1,11 +1,40 @@
-<div class="flex space-x-4 mt-2 mr-2 language-position">
-  <a (click)="navigateTo('FR')"><img width="30" [src]="getHref('FR')" /></a>
-  <a (click)="navigateTo('EN')"><img width="30" [src]="getHref('EN')" /></a>
-  <a (click)="navigateTo('ES')"><img width="30" [src]="getHref('ES')" /></a>
-  <a (click)="navigateTo('IT')"><img width="30" [src]="getHref('IT')" /></a>
-  <a (click)="navigateTo('DE')"><img width="30" [src]="getHref('DE')" /></a>
-  <!-- <a (click)="navigateTo('RU')"><img width="30" [src]="getHref('RU')" /></a>
-  <a (click)="navigateTo('CO')"><img width="30" [src]="getHref('CO')" /></a>
-  <a (click)="navigateTo('CN')"><img width="30" [src]="getHref('CN')" /></a>
-  <a (click)="navigateTo('JP')"><img width="30" [src]="getHref('JP')" /></a> -->
+<div class="relative">
+  <button
+    type="button"
+    class="nav-link !px-2.5"
+    (click)="toggle($event)"
+    [attr.aria-expanded]="open"
+    aria-haspopup="listbox"
+    title="Langue"
+  >
+    <img [src]="getHref(loc)" alt="" class="size-5 rounded-full object-cover ring-1 ring-black/10" />
+    <span class="hidden sm:inline text-xs font-semibold">{{ loc }}</span>
+    <i class="pi pi-chevron-down text-[0.6rem] transition-transform" [class.rotate-180]="open"></i>
+  </button>
+
+  @if (open) {
+    <ul
+      class="glass fade-in absolute right-0 mt-2 w-44 rounded-2xl p-1.5 z-50"
+      role="listbox"
+    >
+      @for (lang of languages; track lang.code) {
+        <li>
+          <button
+            type="button"
+            role="option"
+            [attr.aria-selected]="lang.code === loc"
+            (click)="navigateTo(lang.code)"
+            class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-left transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+            [class.font-semibold]="lang.code === loc"
+          >
+            <img [src]="getHref(lang.code)" alt="" class="size-5 rounded-full object-cover ring-1 ring-black/10" />
+            <span class="flex-1">{{ lang.label }}</span>
+            @if (lang.code === loc) {
+              <i class="pi pi-check text-xs text-brand-500"></i>
+            }
+          </button>
+        </li>
+      }
+    </ul>
+  }
 </div>
