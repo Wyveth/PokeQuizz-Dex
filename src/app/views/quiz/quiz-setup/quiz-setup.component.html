@@ -1,11 +1,11 @@
 <section class="mx-auto max-w-4xl px-3 sm:px-6 pt-8 sm:pt-12 pb-16 fade-in">
-  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Quiz</p>
-  <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1 mb-2">Nouveau quiz</h1>
-  <p class="text-muted mb-8">Choisissez les générations et la difficulté, puis lancez la partie.</p>
+  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">{{ 'quiz.kicker' | t }}</p>
+  <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1 mb-2">{{ 'quiz.newQuiz' | t }}</h1>
+  <p class="text-muted mb-8">{{ 'quiz.intro' | t }}</p>
 
   @if (unfinished().length > 0) {
     <div class="card p-5 sm:p-6 mb-6">
-      <h2 class="font-display font-semibold text-lg mb-3">Reprendre une partie</h2>
+      <h2 class="font-display font-semibold text-lg mb-3">{{ 'quiz.resumeTitle' | t }}</h2>
       <ul class="flex flex-col gap-2">
         @for (quizz of unfinished(); track quizz.id) {
           <li class="flex items-center gap-2">
@@ -20,7 +20,7 @@
               <span class="min-w-0 flex-1">
                 <span class="block font-semibold truncate">{{ generationLabel(quizz) }}</span>
                 <span class="block text-sm text-muted">
-                  {{ difficultyLabel(quizz) }} · {{ quizz.nbAnswered }}/{{ quizz.nbQuestions }} questions ·
+                  {{ difficultyLabel(quizz) }} · {{ 'quiz.progress' | t: quizz.nbAnswered : quizz.nbQuestions }} ·
                   {{ quizz.createdAt | date: 'dd/MM HH:mm' }}
                 </span>
               </span>
@@ -28,8 +28,8 @@
             <button
               type="button"
               class="icon-btn shrink-0"
-              title="Supprimer cette partie"
-              aria-label="Supprimer cette partie"
+              [title]="'quiz.delete' | t"
+              [attr.aria-label]="'quiz.delete' | t"
               (click)="remove(quizz, $event)"
             >
               <i class="pi pi-trash text-sm"></i>
@@ -42,33 +42,33 @@
 
   <div class="card p-5 sm:p-6 mb-6">
     <div class="flex items-center justify-between gap-3 mb-3">
-      <h2 class="font-display font-semibold text-lg">Générations</h2>
+      <h2 class="font-display font-semibold text-lg">{{ 'quiz.generations' | t }}</h2>
       <button type="button" class="text-sm font-semibold text-brand-600 dark:text-brand-400" (click)="selectAllGenerations()">
-        Toutes
+        {{ 'quiz.all' | t }}
       </button>
     </div>
-    <div class="flex flex-wrap gap-2" role="group" aria-label="Générations">
-      @for (gen of generationOptions; track gen.value) {
+    <div class="flex flex-wrap gap-2" role="group" [attr.aria-label]="'quiz.generations' | t">
+      @for (gen of generationOptions; track gen) {
         <button
           type="button"
           class="btn h-10 px-4"
-          [class.btn-primary]="isGenerationSelected(gen.value)"
-          [class.btn-ghost]="!isGenerationSelected(gen.value)"
-          [attr.aria-pressed]="isGenerationSelected(gen.value)"
-          (click)="toggleGeneration(gen.value)"
+          [class.btn-primary]="isGenerationSelected(gen)"
+          [class.btn-ghost]="!isGenerationSelected(gen)"
+          [attr.aria-pressed]="isGenerationSelected(gen)"
+          (click)="toggleGeneration(gen)"
         >
-          {{ gen.label }}
+          {{ generationName(gen) }}
         </button>
       }
     </div>
     @if (generations().length === 0) {
-      <p class="text-sm text-muted mt-3">Aucune sélection : toutes les générations sont incluses.</p>
+      <p class="text-sm text-muted mt-3">{{ 'quiz.allGenerationsHint' | t }}</p>
     }
   </div>
 
   <div class="card p-5 sm:p-6 mb-8">
-    <h2 class="font-display font-semibold text-lg mb-3">Difficulté</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" role="group" aria-label="Difficulté">
+    <h2 class="font-display font-semibold text-lg mb-3">{{ 'quiz.difficulty' | t }}</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" role="group" [attr.aria-label]="'quiz.difficulty' | t">
       @for (difficulty of difficultyOptions; track difficulty.value) {
         <button
           type="button"
@@ -78,13 +78,13 @@
           [attr.aria-pressed]="isDifficultySelected(difficulty.value)"
           (click)="toggleDifficulty(difficulty.value)"
         >
-          <span class="font-display text-base">{{ difficulty.label }}</span>
-          <span class="text-xs opacity-80">{{ difficulty.questions }} questions</span>
+          <span class="font-display text-base">{{ difficulty.label | t }}</span>
+          <span class="text-xs opacity-80">{{ 'quiz.questionsCount' | t: difficulty.questions }}</span>
         </button>
       }
     </div>
     <p class="text-sm text-muted mt-3">
-      Plusieurs difficultés peuvent être mélangées ; la partie compte alors {{ nbQuestions() }} questions.
+      {{ 'quiz.mixHint' | t: nbQuestions() }}
     </p>
   </div>
 
@@ -94,15 +94,15 @@
 
   <button type="button" class="btn btn-primary w-full sm:w-auto h-12 px-8 text-base" [disabled]="starting()" (click)="start()">
     @if (starting()) {
-      <i class="pi pi-spin pi-spinner"></i> Préparation des questions…
+      <i class="pi pi-spin pi-spinner"></i> {{ 'quiz.preparing' | t }}
     } @else {
-      <i class="pi pi-bolt"></i> Lancer le quiz ({{ nbQuestions() }} questions)
+      <i class="pi pi-bolt"></i> {{ 'quiz.start' | t: nbQuestions() }}
     }
   </button>
 
   @if (finished().length > 0) {
     <div class="mt-10">
-      <h2 class="font-display font-semibold text-lg mb-3">Parties terminées</h2>
+      <h2 class="font-display font-semibold text-lg mb-3">{{ 'quiz.finished' | t }}</h2>
       <ul class="flex flex-col gap-2">
         @for (quizz of finished(); track quizz.id) {
           <li>

@@ -4,25 +4,25 @@
       <span class="inline-grid place-items-center size-12 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-white shadow-lg shadow-brand-500/30">
         <i class="pi pi-user"></i>
       </span>
-      <h1 class="font-display text-2xl font-bold tracking-tight mt-4">Connexion</h1>
-      <p class="text-sm text-muted mt-1">Retrouvez vos scores et votre progression.</p>
+      <h1 class="font-display text-2xl font-bold tracking-tight mt-4">{{ 'login.title' | t }}</h1>
+      <p class="text-sm text-muted mt-1">{{ 'login.subtitle' | t }}</p>
     </div>
 
     <form [formGroup]="form" (ngSubmit)="login()" class="space-y-4">
       <div>
-        <label for="email" class="block text-sm font-medium mb-1.5">Email</label>
-        <input type="email" class="field" formControlName="email" id="email" placeholder="vous@exemple.com" autocomplete="email" />
+        <label for="email" class="block text-sm font-medium mb-1.5">{{ 'login.email' | t }}</label>
+        <input type="email" class="field" formControlName="email" id="email" [placeholder]="'login.emailPlaceholder' | t" autocomplete="email" />
       </div>
       <div>
-        <label for="password" class="block text-sm font-medium mb-1.5">Mot de passe</label>
+        <label for="password" class="block text-sm font-medium mb-1.5">{{ 'login.password' | t }}</label>
         <input type="password" class="field" formControlName="password" id="password" placeholder="••••••••" autocomplete="current-password" />
       </div>
-      <button type="submit" class="btn btn-primary w-full !mt-6">Se connecter</button>
+      <button type="submit" class="btn btn-primary w-full !mt-6">{{ 'login.submit' | t }}</button>
     </form>
 
     <p class="text-sm text-center text-muted mt-6">
-      Pas encore de compte ?
-      <a [routerLink]="['/', loc, 'register']" class="font-semibold text-brand-600 dark:text-brand-400 hover:underline">Créer un compte</a>
+      {{ 'login.noAccount' | t }}
+      <a [routerLink]="['/', loc, 'register']" class="font-semibold text-brand-600 dark:text-brand-400 hover:underline">{{ 'login.createAccount' | t }}</a>
     </p>
   </div>
 </section>

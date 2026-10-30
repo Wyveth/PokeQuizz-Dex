@@ -2,8 +2,8 @@
   type="button"
   (click)="nextTheme()"
   class="icon-btn relative overflow-hidden"
-  [title]="labels[current]"
-  [attr.aria-label]="'Thème : ' + labels[current]"
+  [title]="labels[current] | t"
+  [attr.aria-label]="'theme.aria' | t: (labels[current] | t)"
 >
   @for (opt of options; track opt) {
     <i

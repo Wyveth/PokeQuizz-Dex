@@ -1,31 +1,31 @@
 <section class="mx-auto max-w-3xl px-3 sm:px-6 pt-8 sm:pt-12 pb-16">
   @if (result(); as r) {
     <div class="card p-6 sm:p-10 text-center mb-6 fade-in">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">Résultats</p>
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">{{ 'result.kicker' | t }}</p>
       <p class="font-display text-6xl sm:text-7xl font-extrabold tracking-tight mt-2">
         {{ r.summary.nbCorrect }}<span class="text-muted text-4xl sm:text-5xl">/{{ r.summary.nbQuestions }}</span>
       </p>
-      <p class="font-display text-xl font-semibold mt-2">{{ verdict() }}</p>
+      <p class="font-display text-xl font-semibold mt-2">{{ verdict() | t }}</p>
       <p class="text-sm text-muted mt-1">{{ settingsLabel() }}</p>
 
       @if (!r.summary.done) {
-        <p class="text-sm mt-4">Partie en cours : {{ r.summary.nbAnswered }}/{{ r.summary.nbQuestions }} questions répondues.</p>
+        <p class="text-sm mt-4">{{ 'result.inProgress' | t: r.summary.nbAnswered : r.summary.nbQuestions }}</p>
       }
 
       <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
         @if (!r.summary.done) {
-          <button type="button" class="btn btn-primary" (click)="resume()"><i class="pi pi-play"></i> Reprendre</button>
+          <button type="button" class="btn btn-primary" (click)="resume()"><i class="pi pi-play"></i> {{ 'result.resume' | t }}</button>
         } @else {
           <button type="button" class="btn btn-primary" [disabled]="replaying()" (click)="replay()">
             <i class="pi" [class.pi-refresh]="!replaying()" [class.pi-spinner]="replaying()" [class.pi-spin]="replaying()"></i>
-            Rejouer avec ces réglages
+            {{ 'result.replay' | t }}
           </button>
         }
-        <a [routerLink]="['/', loc, 'quiz']" class="btn btn-ghost"><i class="pi pi-sliders-h"></i> Nouveaux réglages</a>
+        <a [routerLink]="['/', loc, 'quiz']" class="btn btn-ghost"><i class="pi pi-sliders-h"></i> {{ 'result.newSettings' | t }}</a>
       </div>
     </div>
 
-    <h2 class="font-display font-semibold text-lg mb-3">Détail des questions</h2>
+    <h2 class="font-display font-semibold text-lg mb-3">{{ 'result.details' | t }}</h2>
     <ol class="flex flex-col gap-2">
       @for (question of r.questions; track question.order) {
         <li class="card px-4 py-3 flex gap-3">
@@ -38,7 +38,7 @@
                   ? 'bg-emerald-500/15 text-emerald-600'
                   : 'bg-red-500/15 text-red-600'
             "
-            [attr.aria-label]="!question.done ? 'Sans réponse' : question.isCorrect ? 'Correct' : 'Incorrect'"
+            [attr.aria-label]="(!question.done ? 'result.ariaUnanswered' : question.isCorrect ? 'result.ariaCorrect' : 'result.ariaIncorrect') | t"
           >
             {{ question.order }}
           </span>
@@ -51,15 +51,15 @@
             </p>
             @if (question.done) {
               <p class="mt-1">
-                <span class="text-muted">Réponse :</span> {{ question.correctAnswers.join(', ') }}
+                <span class="text-muted">{{ 'result.answer' | t }}</span> {{ question.correctAnswers.join(', ') }}
               </p>
               @if (!question.isCorrect) {
                 <p class="text-red-600 dark:text-red-400">
-                  <span class="text-muted">Votre choix :</span> {{ question.selectedAnswers.join(', ') }}
+                  <span class="text-muted">{{ 'result.yourChoice' | t }}</span> {{ question.selectedAnswers.join(', ') }}
                 </p>
               }
             } @else {
-              <p class="text-muted mt-1">Pas encore répondue</p>
+              <p class="text-muted mt-1">{{ 'result.notAnswered' | t }}</p>
             }
           </div>
         </li>
@@ -68,7 +68,7 @@
   } @else if (error()) {
     <div class="card p-6 text-center">
       <p class="mb-4" role="alert">{{ error() }}</p>
-      <a [routerLink]="['/', loc, 'quiz']" class="btn btn-primary">Retour aux quiz</a>
+      <a [routerLink]="['/', loc, 'quiz']" class="btn btn-primary">{{ 'play.backToQuiz' | t }}</a>
     </div>
   } @else {
     <div class="card skeleton h-56 mb-6"></div>

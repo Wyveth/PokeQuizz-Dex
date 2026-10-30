@@ -28,15 +28,15 @@
               }
             </div>
             <p class="flex gap-3 text-xs text-muted mt-1.5 tabular-nums">
-              <span>Puiss. <b class="text-zinc-900 dark:text-zinc-100">{{ att.power || '—' }}</b></span>
-              <span>Préc. <b class="text-zinc-900 dark:text-zinc-100">{{ att.precision || '—' }}</b></span>
-              <span>PP <b class="text-zinc-900 dark:text-zinc-100">{{ att.pp || '—' }}</b></span>
+              <span>{{ 'moves.power' | t }} <b class="text-zinc-900 dark:text-zinc-100">{{ att.power || '—' }}</b></span>
+              <span>{{ 'moves.accuracy' | t }} <b class="text-zinc-900 dark:text-zinc-100">{{ att.precision || '—' }}</b></span>
+              <span>{{ 'moves.pp' | t }} <b class="text-zinc-900 dark:text-zinc-100">{{ att.pp || '—' }}</b></span>
             </p>
             @if (att.description) {
               <p #desc [attr.data-index]="i" class="text-xs text-muted mt-1" [class.line-clamp-2]="!isExpanded(i)">{{ att.description }}</p>
               @if (isLong(i)) {
                 <span class="mt-1 inline-flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400">
-                  {{ isExpanded(i) ? 'Réduire' : 'Lire la suite' }}
+                  {{ (isExpanded(i) ? 'moves.collapse' : 'moves.readMore') | t }}
                   <i class="pi text-[0.6rem]" [ngClass]="isExpanded(i) ? 'pi-chevron-up' : 'pi-chevron-down'"></i>
                 </span>
               }
@@ -50,13 +50,13 @@
       <table class="w-full min-w-[40rem] text-sm">
         <thead>
           <tr class="text-left text-[0.7rem] uppercase tracking-wider text-muted">
-            <th class="font-semibold px-2 pb-2 w-14">Niv.</th>
-            <th class="font-semibold px-2 pb-2">Capacité</th>
-            <th class="font-semibold px-2 pb-2 w-24">Type</th>
-            <th class="font-semibold px-2 pb-2 w-16">Cat.</th>
-            <th class="font-semibold px-2 pb-2 w-16 text-right">Puiss.</th>
-            <th class="font-semibold px-2 pb-2 w-16 text-right">Préc.</th>
-            <th class="font-semibold px-2 pb-2 w-12 text-right">PP</th>
+            <th class="font-semibold px-2 pb-2 w-14">{{ 'moves.level' | t }}</th>
+            <th class="font-semibold px-2 pb-2">{{ 'moves.move' | t }}</th>
+            <th class="font-semibold px-2 pb-2 w-24">{{ 'moves.type' | t }}</th>
+            <th class="font-semibold px-2 pb-2 w-16">{{ 'moves.category' | t }}</th>
+            <th class="font-semibold px-2 pb-2 w-16 text-right">{{ 'moves.power' | t }}</th>
+            <th class="font-semibold px-2 pb-2 w-16 text-right">{{ 'moves.accuracy' | t }}</th>
+            <th class="font-semibold px-2 pb-2 w-12 text-right">{{ 'moves.pp' | t }}</th>
           </tr>
         </thead>
         <tbody>
@@ -74,7 +74,7 @@
                     <p #desc [attr.data-index]="i" class="text-xs text-muted mt-0.5" [class.line-clamp-2]="!isExpanded(i)">{{ att.description }}</p>
                     @if (isLong(i)) {
                       <button type="button" class="mt-0.5 text-xs font-semibold text-brand-600 dark:text-brand-400" [attr.aria-expanded]="isExpanded(i)">
-                        {{ isExpanded(i) ? 'Réduire' : 'Lire la suite' }}
+                        {{ (isExpanded(i) ? 'moves.collapse' : 'moves.readMore') | t }}
                       </button>
                     }
                   }

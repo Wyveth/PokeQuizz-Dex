@@ -1,14 +1,17 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { DIFFICULTIES, GENERATIONS, QuizzResult } from 'src/app/api/models/concretes/quizz';
+import { QuizzResult, settingsLabels } from 'src/app/api/models/concretes/quizz';
+import { I18nService } from 'src/app/i18n/i18n.service';
+import { TranslationKey } from 'src/app/i18n/fr';
 import { LocService } from 'src/app/api/services/loc.service';
 import { QuizzService } from 'src/app/api/services/quizz.service';
 
 @Component({
   selector: 'app-quiz-result',
   templateUrl: './quiz-result.component.html',
-  imports: [CommonModule, RouterModule]
+  imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class QuizResultComponent implements OnInit {
   loc = 'FR';
@@ -25,19 +28,20 @@ export class QuizResultComponent implements OnInit {
       : 0;
   });
 
-  verdict = computed(() => {
+  verdict = computed<TranslationKey>(() => {
     const score = this.score();
-    if (score === 100) return 'Parfait, un vrai Maître Pokémon !';
-    if (score >= 80) return 'Excellent !';
-    if (score >= 50) return 'Pas mal, continuez comme ça.';
-    return 'Il est temps de réviser le Pokédex…';
+    if (score === 100) return 'result.verdict.perfect';
+    if (score >= 80) return 'result.verdict.excellent';
+    if (score >= 50) return 'result.verdict.good';
+    return 'result.verdict.bad';
   });
 
   constructor(
     private quizzService: QuizzService,
     private locService: LocService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private i18n: I18nService
   ) {}
 
   ngOnInit() {
@@ -55,16 +59,8 @@ export class QuizResultComponent implements OnInit {
   settingsLabel(): string {
     const summary = this.result()?.summary;
     if (!summary) return '';
-    const generations =
-      summary.generations.length === 0
-        ? 'Toutes générations'
-        : GENERATIONS.filter(g => summary.generations.includes(g.value))
-            .map(g => g.label)
-            .join(', ');
-    const difficulties = DIFFICULTIES.filter(d => summary.difficulties.includes(d.value))
-      .map(d => d.label)
-      .join(' + ');
-    return `${generations} · ${difficulties}`;
+    const labels = settingsLabels(this.i18n, summary);
+    return `${labels.generations} · ${labels.difficulties}`;
   }
 
   /** Relance une partie avec les mêmes réglages. */

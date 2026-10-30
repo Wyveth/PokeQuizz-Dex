@@ -1,3 +1,4 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -5,15 +6,18 @@ import {
   DIFFICULTIES,
   DifficultyCode,
   GENERATIONS,
-  QuizzSummary
+  QuizzSummary,
+  generationLabel,
+  settingsLabels
 } from 'src/app/api/models/concretes/quizz';
+import { I18nService } from 'src/app/i18n/i18n.service';
 import { LocService } from 'src/app/api/services/loc.service';
 import { QuizzService } from 'src/app/api/services/quizz.service';
 
 @Component({
   selector: 'app-quiz-setup',
   templateUrl: './quiz-setup.component.html',
-  imports: [CommonModule, RouterModule]
+  imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class QuizSetupComponent implements OnInit {
   readonly generationOptions = GENERATIONS;
@@ -40,7 +44,8 @@ export class QuizSetupComponent implements OnInit {
     private quizzService: QuizzService,
     private locService: LocService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private i18n: I18nService
   ) {}
 
   ngOnInit() {
@@ -107,17 +112,16 @@ export class QuizSetupComponent implements OnInit {
     });
   }
 
+  generationName(value: number) {
+    return generationLabel(this.i18n, value);
+  }
+
   generationLabel(quizz: QuizzSummary) {
-    if (quizz.generations.length === 0) return 'Toutes générations';
-    return GENERATIONS.filter(g => quizz.generations.includes(g.value))
-      .map(g => g.label)
-      .join(', ');
+    return settingsLabels(this.i18n, quizz).generations;
   }
 
   difficultyLabel(quizz: QuizzSummary) {
-    return DIFFICULTIES.filter(d => quizz.difficulties.includes(d.value))
-      .map(d => d.label)
-      .join(' + ');
+    return settingsLabels(this.i18n, quizz).difficulties;
   }
 
   private loadList() {

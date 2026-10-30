@@ -1,4 +1,6 @@
 /** Contrat de l'API du jeu (WebApiScrapingData, docs/api-jeu-web.md). */
+import { TranslationKey } from 'src/app/i18n/fr';
+import { I18nService } from 'src/app/i18n/i18n.service';
 
 export type DifficultyCode = 'Easy' | 'Normal' | 'Hard';
 
@@ -84,21 +86,34 @@ export interface QuizzResult {
   questions: QuestionResult[];
 }
 
-export const GENERATIONS: { value: number; label: string }[] = [
-  { value: 1, label: 'Gen 1' },
-  { value: 2, label: 'Gen 2' },
-  { value: 3, label: 'Gen 3' },
-  { value: 4, label: 'Gen 4' },
-  { value: 5, label: 'Gen 5' },
-  { value: 6, label: 'Gen 6' },
-  { value: 7, label: 'Gen 7' },
-  { value: 8, label: 'Gen 8' },
-  { value: 9, label: 'Gen 9' },
-  { value: 0, label: 'Hisui' }
+/** Générations proposées (0 = Hisui). Le libellé se traduit avec generationLabel. */
+export const GENERATIONS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+
+export const DIFFICULTIES: { value: DifficultyCode; label: TranslationKey; questions: number }[] = [
+  { value: 'Easy', label: 'difficulty.easy', questions: 10 },
+  { value: 'Normal', label: 'difficulty.normal', questions: 15 },
+  { value: 'Hard', label: 'difficulty.hard', questions: 20 }
 ];
 
-export const DIFFICULTIES: { value: DifficultyCode; label: string; questions: number }[] = [
-  { value: 'Easy', label: 'Facile', questions: 10 },
-  { value: 'Normal', label: 'Normal', questions: 15 },
-  { value: 'Hard', label: 'Difficile', questions: 20 }
-];
+export function difficultyKey(code: DifficultyCode | string | null | undefined): TranslationKey {
+  return DIFFICULTIES.find(d => d.value === code)?.label ?? 'difficulty.normal';
+}
+
+/** Libellé traduit d'une génération. */
+export function generationLabel(i18n: I18nService, value: number): string {
+  return value === 0 ? i18n.t('generation.hisui') : i18n.t('generation.short', value);
+}
+
+/** Libellé traduit des réglages d'un quiz : générations · difficultés. */
+export function settingsLabels(i18n: I18nService, quizz: QuizzSummary): { generations: string; difficulties: string } {
+  const generations =
+    quizz.generations.length === 0
+      ? i18n.t('generation.all')
+      : GENERATIONS.filter(g => quizz.generations.includes(g))
+          .map(g => generationLabel(i18n, g))
+          .join(', ');
+  const difficulties = DIFFICULTIES.filter(d => quizz.difficulties.includes(d.value))
+    .map(d => i18n.t(d.label))
+    .join(' + ');
+  return { generations, difficulties };
+}

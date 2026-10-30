@@ -1,3 +1,4 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
@@ -21,7 +22,7 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-pokemon-attack',
   templateUrl: './pokemon-attack.component.html',
-  imports: [CommonModule]
+  imports: [TranslatePipe, CommonModule]
 })
 export class PokemonAttackComponent
   extends BaseComponent

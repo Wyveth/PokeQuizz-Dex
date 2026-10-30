@@ -1,15 +1,22 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit, computed, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { AnswerChoice, AnswerResult, Question } from 'src/app/api/models/concretes/quizz';
+import {
+  AnswerChoice,
+  AnswerResult,
+  Question,
+  difficultyKey
+} from 'src/app/api/models/concretes/quizz';
+import { I18nService } from 'src/app/i18n/i18n.service';
 import { LocService } from 'src/app/api/services/loc.service';
 import { QuizzService } from 'src/app/api/services/quizz.service';
 
 @Component({
   selector: 'app-quiz-play',
   templateUrl: './quiz-play.component.html',
-  imports: [CommonModule, RouterModule]
+  imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class QuizPlayComponent implements OnInit, OnDestroy {
   loc = 'FR';
@@ -61,6 +68,8 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
     return filters.length ? filters.join(' ') : 'none';
   });
 
+  readonly difficultyKey = difficultyKey;
+
   private subscription?: Subscription;
   private audio?: HTMLAudioElement;
 
@@ -68,7 +77,8 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
     private quizzService: QuizzService,
     private locService: LocService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private i18n: I18nService
   ) {}
 
   ngOnInit() {
@@ -147,7 +157,7 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
   playSound() {
     this.audio?.pause();
     this.audio = new Audio(this.quizzService.soundUrl(this.quizzId, this.order));
-    this.audio.play().catch(() => this.error.set('Lecture du cri impossible sur ce navigateur.'));
+    this.audio.play().catch(() => this.error.set(this.i18n.t('play.soundError')));
   }
 
   @HostListener('document:keydown', ['$event'])

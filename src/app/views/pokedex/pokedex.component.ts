@@ -1,3 +1,4 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
@@ -16,7 +17,7 @@ import { LocService } from 'src/app/api/services/loc.service';
 @Component({
   selector: 'app-pokedex',
   templateUrl: './pokedex.component.html',
-  imports: [CommonModule, PokemonItemComponent, SearchComponent]
+  imports: [TranslatePipe, CommonModule, PokemonItemComponent, SearchComponent]
 })
 export class PokedexComponent extends BaseComponent implements OnInit, OnDestroy {
   pokemons: PokemonLight[] = [];

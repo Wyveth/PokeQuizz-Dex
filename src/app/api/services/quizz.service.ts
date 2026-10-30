@@ -10,6 +10,7 @@ import {
   QuizzSummary
 } from '../models/concretes/quizz';
 import { AbstractService } from './abstract/abstract.service';
+import { I18nService } from 'src/app/i18n/i18n.service';
 
 /** Quiz joués sans compte : seuls leurs identifiants sont gardés dans le navigateur. */
 const GUEST_STORAGE_KEY = 'pqd.guestQuizz';
@@ -21,7 +22,11 @@ const MAX_GUEST_QUIZZ = 20;
 export class QuizzService extends AbstractService {
   private apiPlay: string;
 
-  constructor(config: AppConfig, httpClient: HttpClient) {
+  constructor(
+    config: AppConfig,
+    httpClient: HttpClient,
+    private i18n: I18nService
+  ) {
     super(config, httpClient);
     this.apiPlay = this.basePath + (config.getConfig('play_api') ?? '/Play');
   }
@@ -140,12 +145,11 @@ export class QuizzService extends AbstractService {
     }
   }
 
-  private handleError(error: HttpErrorResponse) {
+  // Fonction fléchée : passée telle quelle à catchError, elle doit garder `this`
+  private handleError = (error: HttpErrorResponse) => {
     const message =
       error.error?.message ??
-      (error.status === 0
-        ? "Impossible de joindre l'API."
-        : `Erreur ${error.status} lors de l'appel à l'API.`);
+      (error.status === 0 ? this.i18n.t('error.unreachable') : this.i18n.t('error.http', error.status));
     return throwError(() => ({ status: error.status, message }));
-  }
+  };
 }

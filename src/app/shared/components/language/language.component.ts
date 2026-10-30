@@ -1,3 +1,4 @@
+import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,7 +12,7 @@ import { LocService } from 'src/app/api/services/loc.service';
   templateUrl: './language.component.html',
   styleUrls: ['./language.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [TranslatePipe, CommonModule]
 })
 export class LanguageComponent extends BaseComponent implements OnInit, OnDestroy {
   loc = 'FR';
