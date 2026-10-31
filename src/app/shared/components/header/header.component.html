@@ -14,37 +14,108 @@
       </span>
     </a>
 
-    <div class="flex items-center gap-1 ml-1 sm:ml-3">
-      <a
-        [routerLink]="['/', loc, 'pokedex']"
-        routerLinkActive="is-active"
-        class="nav-link"
-        [title]="'nav.pokedex' | t"
-      >
+    <div class="flex items-center gap-0.5 sm:gap-1 sm:ml-3">
+      <!-- Sur mobile, le logo mène déjà au Pokédex : l'icône est masquée pour faire de la place -->
+      <a [routerLink]="['/', loc, 'pokedex']" routerLinkActive="is-active" class="nav-link max-sm:!hidden" [title]="'nav.pokedex' | t">
         <i class="pi pi-th-large text-sm"></i><span class="hidden md:inline">{{ 'nav.pokedex' | t }}</span>
       </a>
-      <a
-        [routerLink]="['/', loc, 'quiz']"
-        routerLinkActive="is-active"
-        class="nav-link"
-        [title]="'nav.quiz' | t"
-      >
+      <a [routerLink]="['/', loc, 'quiz']" routerLinkActive="is-active" class="nav-link max-sm:!px-2" [title]="'nav.quiz' | t">
         <i class="pi pi-question-circle text-sm"></i><span class="hidden md:inline">{{ 'nav.quiz' | t }}</span>
+      </a>
+      <a [routerLink]="['/', loc, 'duel']" routerLinkActive="is-active" class="nav-link max-sm:!px-2 relative" [title]="'nav.duel' | t">
+        <i class="pi pi-trophy text-sm"></i><span class="hidden md:inline">{{ 'nav.duel' | t }}</span>
+      </a>
+      <a [routerLink]="['/', loc, 'hangman']" routerLinkActive="is-active" class="nav-link max-sm:!px-2 relative" [title]="'nav.hangman' | t">
+        <i class="pi pi-pencil text-sm"></i><span class="hidden lg:inline">{{ 'nav.hangman' | t }}</span>
+      </a>
+      <a [routerLink]="['/', loc, 'leaderboard']" routerLinkActive="is-active" class="nav-link max-sm:!px-2" [title]="'nav.leaderboard' | t">
+        <i class="pi pi-chart-bar text-sm"></i><span class="hidden lg:inline">{{ 'nav.leaderboard' | t }}</span>
       </a>
     </div>
 
-    <div class="ml-auto flex items-center gap-1">
+    <div class="ml-auto flex items-center gap-0.5 sm:gap-1">
       <app-language></app-language>
       <app-theme-switch></app-theme-switch>
-      <a
-        [routerLink]="['/', loc, 'login']"
-        routerLinkActive="is-active"
-        class="icon-btn"
-        [title]="'nav.login' | t"
-        [attr.aria-label]="'nav.login' | t"
-      >
-        <i class="pi pi-user"></i>
-      </a>
+
+      @if (auth.user(); as user) {
+        <!-- Invitations reçues (duels et pendu coop) -->
+        <div class="relative">
+          <button
+            type="button"
+            class="icon-btn relative"
+            (click)="toggleBell($event)"
+            [attr.aria-expanded]="bellOpen"
+            aria-haspopup="true"
+            [title]="'notif.title' | t"
+            [attr.aria-label]="'notif.title' | t"
+          >
+            <i class="pi" [ngClass]="center.count() > 0 ? 'pi-bell text-brand-600 dark:text-brand-400' : 'pi-bell'"></i>
+            @if (center.count() > 0) {
+              <span class="absolute top-0.5 right-0.5 grid place-items-center min-w-4 h-4 px-1 rounded-full bg-brand-500 text-white text-[0.6rem] font-bold">{{ center.count() }}</span>
+            }
+          </button>
+          @if (bellOpen) {
+            <div class="fade-in absolute -right-12 sm:right-0 mt-2 w-[min(20rem,calc(100vw-2rem))] rounded-2xl p-2 z-50 bg-white dark:bg-neutral-900 shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+              <p class="px-2 py-1.5 text-sm font-semibold">{{ 'notif.title' | t }}</p>
+              @for (item of center.items(); track item.kind + item.id) {
+                <div class="rounded-xl px-2 py-2 flex flex-col gap-2 hover:bg-black/[0.03] dark:hover:bg-white/[0.04]">
+                  <div class="flex items-start gap-2.5">
+                    <i class="pi text-sm text-brand-500 mt-0.5" [ngClass]="item.kind === 'duel' ? 'pi-trophy' : 'pi-pencil'"></i>
+                    <p class="flex-1 min-w-0 text-sm">
+                      <b class="block">{{ item.titleKey | t: item.from }}</b>
+                      <span class="text-muted text-xs">{{ item.detailKey | t }}</span>
+                    </p>
+                  </div>
+                  <div class="flex gap-2 pl-6">
+                    <button type="button" class="btn btn-primary h-8 px-3 text-xs" (click)="acceptInvitation(item)"><i class="pi pi-check text-xs"></i>{{ 'duel.accept' | t }}</button>
+                    <button type="button" class="btn btn-ghost h-8 px-3 text-xs" (click)="center.decline(item)">{{ 'duel.decline' | t }}</button>
+                  </div>
+                </div>
+              } @empty {
+                <p class="px-2 pb-2 text-sm text-muted">{{ 'notif.empty' | t }}</p>
+              }
+            </div>
+          }
+        </div>
+        <div class="relative">
+          <button
+            type="button"
+            class="icon-btn"
+            (click)="toggleMenu($event)"
+            [attr.aria-expanded]="menuOpen"
+            aria-haspopup="menu"
+            [title]="user.userName ?? ''"
+          >
+            <span class="grid place-items-center size-8 rounded-full bg-brand-500 text-white text-sm font-bold uppercase">{{ (user.userName ?? user.email ?? '?').charAt(0) }}</span>
+          </button>
+          @if (menuOpen) {
+            <div class="glass fade-in absolute right-0 mt-2 w-52 rounded-2xl p-1.5 z-50" role="menu">
+              <p class="px-3 py-2 text-sm font-semibold truncate">{{ user.userName }}</p>
+              <a role="menuitem" [routerLink]="['/', loc, 'duel']" (click)="menuOpen = false" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm hover:bg-black/5 dark:hover:bg-white/10">
+                <i class="pi pi-trophy text-xs"></i>{{ 'nav.duel' | t }}
+              </a>
+              @if (user.isAdmin) {
+                <a role="menuitem" [routerLink]="['/', loc, 'admin']" (click)="menuOpen = false" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm hover:bg-black/5 dark:hover:bg-white/10">
+                  <i class="pi pi-cog text-xs"></i>{{ 'nav.admin' | t }}
+                </a>
+              }
+              <button role="menuitem" type="button" (click)="logout()" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-left hover:bg-black/5 dark:hover:bg-white/10">
+                <i class="pi pi-sign-out text-xs"></i>{{ 'nav.logout' | t }}
+              </button>
+            </div>
+          }
+        </div>
+      } @else {
+        <a
+          [routerLink]="['/', loc, 'login']"
+          routerLinkActive="is-active"
+          class="icon-btn"
+          [title]="'nav.login' | t"
+          [attr.aria-label]="'nav.login' | t"
+        >
+          <i class="pi pi-user"></i>
+        </a>
+      }
     </div>
   </nav>
 </header>

@@ -1,12 +1,56 @@
-<section class="px-3 sm:px-6 pt-12 sm:pt-20">
-  <div class="glass mx-auto max-w-md rounded-3xl p-6 sm:p-8 text-center fade-in">
-    <span class="inline-grid place-items-center size-12 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-white shadow-lg shadow-brand-500/30">
-      <i class="pi pi-user-plus"></i>
-    </span>
-    <h1 class="font-display text-2xl font-bold tracking-tight mt-4">{{ 'register.title' | t }}</h1>
-    <p class="text-sm text-muted mt-2">{{ 'register.soon' | t }}</p>
-    <a [routerLink]="['/', loc, 'login']" class="btn btn-ghost mt-6">
-      <i class="pi pi-arrow-left text-xs"></i>{{ 'register.back' | t }}
-    </a>
+<section class="px-3 sm:px-6 pt-12 sm:pt-20 pb-12">
+  <div class="glass mx-auto max-w-md rounded-3xl p-6 sm:p-8 fade-in">
+    <div class="text-center mb-7">
+      <span class="inline-grid place-items-center size-12 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-700 text-white shadow-lg shadow-brand-500/30">
+        <i class="pi pi-user-plus"></i>
+      </span>
+      <h1 class="font-display text-2xl font-bold tracking-tight mt-4">{{ 'register.title' | t }}</h1>
+      <p class="text-sm text-muted mt-1">{{ 'register.subtitle' | t }}</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="register()" class="space-y-4" novalidate>
+      <div>
+        <label for="userName" class="block text-sm font-medium mb-1.5">{{ 'register.userName' | t }}</label>
+        <input type="text" class="field" formControlName="userName" id="userName" autocomplete="username" maxlength="24" />
+        @if (invalid('userName')) {
+          <p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ 'register.userNameInvalid' | t }}</p>
+        }
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium mb-1.5">{{ 'login.email' | t }}</label>
+        <input type="email" class="field" formControlName="email" id="email" [placeholder]="'login.emailPlaceholder' | t" autocomplete="email" />
+        @if (invalid('email')) {
+          <p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ 'login.emailInvalid' | t }}</p>
+        }
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium mb-1.5">{{ 'login.password' | t }}</label>
+        <input type="password" class="field" formControlName="password" id="password" autocomplete="new-password" />
+        <p class="text-xs mt-1" [ngClass]="invalid('password') ? 'text-red-600 dark:text-red-400' : 'text-muted'">{{ 'register.passwordRules' | t }}</p>
+      </div>
+      <div>
+        <label for="confirm" class="block text-sm font-medium mb-1.5">{{ 'register.confirm' | t }}</label>
+        <input type="password" class="field" formControlName="confirm" id="confirm" autocomplete="new-password" />
+        @if (form.controls.confirm.touched && form.hasError('mismatch')) {
+          <p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ 'register.mismatch' | t }}</p>
+        }
+      </div>
+
+      @if (error()) {
+        <p class="text-sm text-red-600 dark:text-red-400" role="alert">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn btn-primary w-full !mt-6" [disabled]="submitting()">
+        @if (submitting()) {
+          <i class="pi pi-spin pi-spinner"></i>
+        }
+        {{ 'register.submit' | t }}
+      </button>
+    </form>
+
+    <p class="text-sm text-center text-muted mt-6">
+      {{ 'register.haveAccount' | t }}
+      <a [routerLink]="['/', loc, 'login']" queryParamsHandling="preserve" class="font-semibold text-brand-600 dark:text-brand-400 hover:underline">{{ 'register.back' | t }}</a>
+    </p>
   </div>
 </section>

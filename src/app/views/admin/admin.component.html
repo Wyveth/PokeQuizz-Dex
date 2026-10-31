@@ -1,0 +1,57 @@
+<section class="mx-auto max-w-3xl px-3 sm:px-6 pt-8 sm:pt-12 pb-16 fade-in">
+  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">{{ 'admin.kicker' | t }}</p>
+  <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1 mb-8">{{ 'admin.title' | t }}</h1>
+
+  @if (error()) {
+    <p class="card p-4 mb-4 text-sm text-red-600 dark:text-red-400" role="alert">{{ error() }}</p>
+  }
+
+  @if (result(); as r) {
+    <p class="card p-4 mb-4 text-sm text-emerald-700 dark:text-emerald-400" role="status">
+      <i class="pi pi-check-circle text-xs"></i>
+      {{ 'admin.done' | t: r.quizzes : r.questions : r.answers : r.hangmanGames : r.duelQuizzesKept }}
+    </p>
+  }
+
+  <div class="card p-5 sm:p-6">
+    <h2 class="font-display font-semibold text-lg"><i class="pi pi-trash text-muted"></i> {{ 'admin.purgeTitle' | t }}</h2>
+    <p class="text-sm text-muted mt-1 mb-4">{{ 'admin.purgeIntro' | t }}</p>
+
+    @if (loading()) {
+      <div class="grid place-items-center py-8"><i class="pi pi-spin pi-spinner text-2xl text-brand-500"></i></div>
+    } @else if (counts(); as c) {
+      <dl class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+        <div class="rounded-xl bg-black/[0.04] dark:bg-white/[0.06] px-3 py-2">
+          <dt class="text-xs text-muted">{{ 'admin.quizzes' | t }}</dt>
+          <dd class="font-display text-xl font-bold tabular-nums">{{ c.quizzes }}</dd>
+        </div>
+        <div class="rounded-xl bg-black/[0.04] dark:bg-white/[0.06] px-3 py-2">
+          <dt class="text-xs text-muted">{{ 'admin.questions' | t }}</dt>
+          <dd class="font-display text-xl font-bold tabular-nums">{{ c.questions }}</dd>
+        </div>
+        <div class="rounded-xl bg-black/[0.04] dark:bg-white/[0.06] px-3 py-2">
+          <dt class="text-xs text-muted">{{ 'admin.answers' | t }}</dt>
+          <dd class="font-display text-xl font-bold tabular-nums">{{ c.answers }}</dd>
+        </div>
+        <div class="rounded-xl bg-black/[0.04] dark:bg-white/[0.06] px-3 py-2">
+          <dt class="text-xs text-muted">{{ 'admin.hangmanGames' | t }}</dt>
+          <dd class="font-display text-xl font-bold tabular-nums">{{ c.hangmanGames }}</dd>
+        </div>
+      </dl>
+      <p class="text-sm text-muted mb-5"><i class="pi pi-shield text-xs"></i> {{ 'admin.kept' | t: c.duelQuizzesKept }}</p>
+
+      <div class="rounded-xl border border-red-500/40 bg-red-500/5 p-4">
+        <p class="text-sm font-semibold text-red-700 dark:text-red-400 mb-3">
+          <i class="pi pi-exclamation-triangle text-xs"></i> {{ 'admin.warning' | t }}
+        </p>
+        <label for="purgeConfirm" class="text-sm font-medium mb-1.5 block">{{ 'admin.typeToConfirm' | t: confirmationWord }}</label>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input id="purgeConfirm" class="field sm:flex-1 uppercase tracking-widest" [(ngModel)]="confirmText" autocomplete="off" [placeholder]="confirmationWord" (keydown.enter)="purge()" />
+          <button type="button" class="btn h-11 bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed" [disabled]="!canPurge()" (click)="purge()">
+            <i class="pi" [ngClass]="purging() ? 'pi-spin pi-spinner' : 'pi-trash'"></i>{{ 'admin.purge' | t }}
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</section>

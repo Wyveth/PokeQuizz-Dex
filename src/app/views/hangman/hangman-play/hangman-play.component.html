@@ -1,0 +1,200 @@
+<!-- Sur mobile : écran plein hauteur (route immersive), clavier en bas, seuls les indices défilent si besoin -->
+<section
+  class="mx-auto max-w-3xl px-3 sm:px-6 pt-3 sm:pt-10 sm:pb-16 max-sm:h-dvh max-sm:flex max-sm:flex-col max-sm:pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+>
+  <!-- Barre : retour, Pokémon trouvés, vies -->
+  <div class="flex items-center gap-3 mb-3 sm:mb-5 shrink-0">
+    <button type="button" class="icon-btn" [title]="'hangman.back' | t" [attr.aria-label]="'hangman.back' | t" (click)="backHome()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    @if (game(); as g) {
+      <div class="flex-1 min-w-0">
+        <p class="text-xs text-muted truncate">
+          {{ (g.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }}@if (g.partner) { · {{ g.partner }}}
+        </p>
+        <p class="font-display font-bold text-lg tabular-nums leading-tight">{{ 'hangman.foundCount' | t: g.found }}</p>
+      </div>
+      @if (g.status === 'InProgress') {
+        <div class="flex shrink-0 gap-px sm:gap-0.5" role="img" [attr.aria-label]="'hangman.lives' | t: g.lives : g.maxLives">
+          @for (full of hearts(); track $index) {
+            <i class="pi text-xs sm:text-sm" [ngClass]="full ? 'pi-heart-fill text-red-500' : 'pi-heart text-black/20 dark:text-white/20'"></i>
+          }
+        </div>
+      }
+    }
+  </div>
+
+  @if (error()) {
+    <p class="card p-3 mb-3 text-sm text-red-600 dark:text-red-400 shrink-0" role="alert">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <div class="grid place-items-center py-20 max-sm:flex-1"><i class="pi pi-spin pi-spinner text-3xl text-brand-500"></i></div>
+  } @else if (game(); as g) {
+    @switch (g.status) {
+      <!-- Invitation coop en attente -->
+      @case ('Invited') {
+        <div class="card p-6 text-center max-sm:my-auto">
+          @if (g.isInviter) {
+            <i class="pi pi-spin pi-spinner text-3xl text-brand-500"></i>
+            <p class="mt-3 font-semibold">{{ 'hangman.waitingPartner' | t: g.partner }}</p>
+            <button type="button" class="btn btn-ghost mt-4" (click)="quit()">{{ 'duel.cancel' | t }}</button>
+          } @else {
+            <p class="font-semibold">{{ 'hangman.invitedBy' | t: g.partner }}</p>
+            <div class="flex justify-center gap-2 mt-4">
+              <button type="button" class="btn btn-primary" (click)="accept()"><i class="pi pi-check"></i>{{ 'duel.accept' | t }}</button>
+              <button type="button" class="btn btn-ghost" (click)="decline()">{{ 'duel.decline' | t }}</button>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Partie -->
+      @case ('InProgress') {
+        <div class="max-sm:flex-1 max-sm:min-h-0 max-sm:flex max-sm:flex-col">
+          @if (showLast() && g.last; as last) {
+            <div class="card px-3 py-2 mb-3 flex items-center gap-3 shrink-0 fade-in" role="status">
+              @if (last.image) {
+                <img [src]="imgRoot + last.image" alt="" class="size-12 object-contain" draggable="false" />
+              }
+              <p class="text-sm">
+                <i class="pi pi-check-circle text-emerald-600 text-xs"></i>
+                {{ 'hangman.foundIt' | t: last.name }}
+                <span class="block text-xs text-muted">{{ 'hangman.livesBack' | t }}</span>
+              </p>
+            </div>
+          }
+
+          @if (g.mode === 'Coop') {
+            <p class="text-center text-sm font-semibold mb-2 shrink-0" [ngClass]="g.isMyTurn ? 'text-brand-600 dark:text-brand-400' : 'text-muted'" role="status">
+              @if (g.isMyTurn) {
+                <i class="pi pi-arrow-down text-xs"></i> {{ 'hangman.yourTurn' | t }}
+              } @else {
+                <i class="pi pi-hourglass text-xs"></i> {{ 'hangman.partnerTurn' | t: g.turnUserName ?? g.partner }}
+              }
+            </p>
+          }
+
+          <!-- Mot à trouver -->
+          <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 my-3 sm:my-6 shrink-0" [attr.aria-label]="'hangman.word' | t">
+            @for (word of words(); track $index) {
+              <div class="flex gap-1 sm:gap-1.5">
+                @for (cell of word; track $index) {
+                  @if (cell.letter) {
+                    <span
+                      class="grid place-items-center w-7 h-9 sm:w-9 sm:h-11 border-b-[3px] font-display text-xl sm:text-2xl font-bold uppercase"
+                      [ngClass]="cell.hidden ? 'border-black/25 dark:border-white/25' : 'border-brand-500'"
+                    >{{ cell.char }}</span>
+                  } @else {
+                    <span class="grid place-items-center w-3 h-9 sm:h-11 font-display text-xl sm:text-2xl font-bold">{{ cell.char }}</span>
+                  }
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Indices (seulement s'ils sont activés côté serveur : section Hangman, HintsEnabled) -->
+          @if (hasHints() || g.nextHintAt !== null) {
+          <div class="card p-3 sm:p-4 mb-3 sm:mb-5 max-sm:min-h-0 max-sm:overflow-y-auto">
+            <div class="flex items-center gap-2 mb-2">
+              <h2 class="text-sm font-semibold flex-1"><i class="pi pi-lightbulb text-amber-500 text-xs"></i> {{ 'hangman.hints' | t }}</h2>
+              @if (g.nextHintAt !== null) {
+                <span class="text-xs text-muted">{{ 'hangman.nextHint' | t: g.nextHintAt - g.wrongCount }}</span>
+              }
+            </div>
+            @if (hasHints()) {
+              <div class="flex gap-3">
+                <div class="flex-1 min-w-0 flex flex-col gap-2 text-sm">
+                  @if (g.hints.types?.length) {
+                    <div class="flex flex-wrap items-center gap-2">
+                      @for (type of g.hints.types; track $index) {
+                        @if (type.image) {
+                          <img class="h-6 w-auto" [src]="imgRoot + type.image" [alt]="type.name ?? ''" [title]="type.name ?? ''" />
+                        } @else {
+                          <span class="chip">{{ type.name }}</span>
+                        }
+                      }
+                    </div>
+                  }
+                  @if (g.hints.generation !== null) {
+                    <p class="flex gap-1.5"><span class="text-muted">{{ 'hangman.hintGeneration' | t }}</span><b>{{ generationName(g.hints.generation) }}</b></p>
+                  }
+                  @if (g.hints.description) {
+                    <p class="italic text-muted">« {{ g.hints.description }} »</p>
+                  }
+                </div>
+                @if (g.hints.silhouette && silhouetteUrl(); as url) {
+                  <img [src]="url" alt="" class="size-20 sm:size-28 object-contain shrink-0 brightness-0 dark:invert" draggable="false" />
+                }
+              </div>
+            } @else {
+              <p class="text-sm text-muted">{{ 'hangman.noHint' | t }}</p>
+            }
+          </div>
+          }
+
+          <!-- Clavier -->
+          <div class="grid grid-cols-7 sm:grid-cols-9 gap-1.5 shrink-0 max-sm:mt-auto" role="group" [attr.aria-label]="'hangman.keyboard' | t">
+            @for (letter of alphabet; track letter) {
+              @let st = state(letter);
+              <button
+                type="button"
+                class="h-11 sm:h-12 rounded-xl font-display font-bold text-lg transition-colors disabled:cursor-not-allowed"
+                [ngClass]="
+                  st === 'correct'
+                    ? 'bg-emerald-500 text-white'
+                    : st === 'wrong'
+                      ? 'bg-black/10 text-black/30 line-through dark:bg-white/10 dark:text-white/30'
+                      : 'bg-black/[0.05] hover:bg-brand-500 hover:text-white dark:bg-white/[0.08] disabled:hover:bg-black/[0.05] disabled:hover:text-inherit dark:disabled:hover:bg-white/[0.08] disabled:opacity-50'
+                "
+                [disabled]="!canPlay() || st !== 'free'"
+                [attr.aria-label]="letter"
+                (click)="guess(letter)"
+              >
+                {{ letter }}
+              </button>
+            }
+          </div>
+
+          <button type="button" class="btn btn-ghost h-9 text-sm mt-3 mx-auto shrink-0 flex" (click)="quit()">
+            <i class="pi pi-flag text-xs"></i>{{ 'hangman.quit' | t }}
+          </button>
+        </div>
+      }
+
+      <!-- Fin de partie -->
+      @case ('Finished') {
+        <div class="card p-6 sm:p-8 text-center max-sm:my-auto fade-in">
+          @if (g.last; as last) {
+            @if (last.image) {
+              <img [src]="imgRoot + last.image" alt="" class="size-28 sm:size-36 object-contain mx-auto" draggable="false" />
+            }
+            <p class="text-sm text-muted mt-2">{{ (last.found ? 'hangman.foundIt' : 'hangman.itWas') | t: last.name }}</p>
+          }
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400 mt-4">{{ 'hangman.gameOver' | t }}</p>
+          <p class="font-display text-5xl font-bold tabular-nums mt-1">{{ g.found }}</p>
+          <p class="text-muted">{{ 'hangman.pokemonFound' | t }}</p>
+          @if (g.bestScore !== null) {
+            <p class="text-sm font-semibold mt-3">
+              <i class="pi pi-star-fill text-amber-500 text-xs"></i>
+              {{ (g.bestScore <= g.found ? 'hangman.newBest' : 'hangman.best') | t: g.bestScore }}
+            </p>
+          }
+          <div class="flex flex-col sm:flex-row justify-center gap-2 mt-6">
+            <button type="button" class="btn btn-primary" (click)="replay()">
+              <i class="pi pi-refresh"></i>{{ (g.mode === 'Coop' ? 'hangman.newGame' : 'hangman.replay') | t }}
+            </button>
+            <button type="button" class="btn btn-ghost" (click)="backHome()">{{ 'hangman.back' | t }}</button>
+          </div>
+        </div>
+      }
+
+      @default {
+        <div class="card p-6 text-center max-sm:my-auto">
+          <p class="font-semibold">{{ statusKey(g) | t }}</p>
+          <button type="button" class="btn btn-ghost mt-4" (click)="backHome()">{{ 'hangman.back' | t }}</button>
+        </div>
+      }
+    }
+  }
+</section>

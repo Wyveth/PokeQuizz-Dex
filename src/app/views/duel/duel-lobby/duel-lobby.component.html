@@ -1,0 +1,164 @@
+<section class="mx-auto max-w-4xl px-3 sm:px-6 pt-8 sm:pt-12 pb-16 fade-in">
+  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">{{ 'duel.kicker' | t }}</p>
+  <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1 mb-2">{{ 'duel.title' | t }}</h1>
+  <p class="text-muted mb-2">{{ 'duel.intro' | t }}</p>
+  <div class="flex flex-wrap items-center gap-3 mb-8">
+    @if (stats(); as s) {
+      <p class="text-sm font-semibold">{{ 'duel.stats' | t: s.played : s.wins : s.losses : s.draws }}</p>
+    }
+    <a [routerLink]="['/', loc, 'hangman']" class="btn btn-ghost h-9 px-3 text-sm sm:ml-auto"><i class="pi pi-pencil text-xs"></i>{{ 'nav.hangman' | t }}</a>
+    <a [routerLink]="['/', loc, 'leaderboard']" class="btn btn-ghost h-9 px-3 text-sm"><i class="pi pi-chart-bar text-xs"></i>{{ 'nav.leaderboard' | t }}</a>
+  </div>
+
+  @if (error()) {
+    <p class="card p-4 mb-4 text-sm text-red-600 dark:text-red-400" role="alert">{{ error() }}</p>
+  }
+
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
+    <!-- Matchmaking -->
+    <div class="card p-5 sm:p-6 flex flex-col">
+      <h2 class="font-display font-semibold text-lg"><i class="pi pi-search text-muted"></i> {{ 'duel.find' | t }}</h2>
+      <p class="text-sm text-muted mt-1 mb-4">{{ 'duel.findIntro' | t }}</p>
+
+      @if (liveSearch(); as search) {
+        <div class="flex-1 grid place-items-center text-center py-6" role="status">
+          <i class="pi pi-spin pi-spinner text-3xl text-brand-500"></i>
+          <p class="mt-3 font-semibold">{{ 'duel.searching' | t }}</p>
+          <p class="text-sm text-muted">{{ difficultyKey(search.difficulty) | t }} · {{ 'duel.mode.live' | t }}</p>
+          <button type="button" class="btn btn-ghost mt-4" (click)="cancel(search)">{{ 'duel.cancel' | t }}</button>
+        </div>
+      } @else {
+        <div class="grid grid-cols-3 gap-2 mb-4" role="group" [attr.aria-label]="'quiz.difficulty' | t">
+          @for (difficulty of difficultyOptions; track difficulty.value) {
+            <button
+              type="button"
+              class="btn h-10 px-2"
+              [class.btn-primary]="searchDifficulty() === difficulty.value"
+              [class.btn-ghost]="searchDifficulty() !== difficulty.value"
+              [attr.aria-pressed]="searchDifficulty() === difficulty.value"
+              (click)="searchDifficulty.set(difficulty.value)"
+            >
+              {{ difficulty.label | t }}
+            </button>
+          }
+        </div>
+
+        <!-- Mode « à son rythme » désactivé pour l'instant : les duels se jouent en temps réel -->
+        <p class="text-sm text-muted mb-4"><i class="pi pi-clock text-xs"></i> {{ 'duel.liveHint' | t: secondsFor(searchDifficulty()) }}</p>
+
+        <button type="button" class="btn btn-primary mt-auto" [disabled]="searching()" (click)="search()">
+          <i class="pi" [ngClass]="searching() ? 'pi-spin pi-spinner' : 'pi-bolt'"></i>{{ 'duel.search' | t }}
+        </button>
+      }
+    </div>
+
+    <!-- Défi privé -->
+    <div class="card p-5 sm:p-6 flex flex-col">
+      <h2 class="font-display font-semibold text-lg"><i class="pi pi-user-plus text-muted"></i> {{ 'duel.friend' | t }}</h2>
+
+      <div class="mt-3 mb-4 rounded-xl bg-black/[0.04] dark:bg-white/[0.06] px-4 py-3 flex items-center gap-3">
+        <span class="flex-1">
+          <span class="block text-xs text-muted">{{ 'duel.myCode' | t }}</span>
+          <span class="font-display text-xl font-bold tracking-widest tabular-nums">{{ friendCode() ?? '…' }}</span>
+        </span>
+        <button type="button" class="icon-btn" [title]="(copied() ? 'duel.copied' : 'duel.copy') | t" [attr.aria-label]="'duel.copy' | t" (click)="copyCode()">
+          <i class="pi" [ngClass]="copied() ? 'pi-check text-emerald-600' : 'pi-copy'"></i>
+        </button>
+        <button type="button" class="icon-btn" [title]="'duel.regenerate' | t" [attr.aria-label]="'duel.regenerate' | t" (click)="regenerateCode()">
+          <i class="pi pi-refresh"></i>
+        </button>
+      </div>
+
+      <label for="friendCode" class="text-sm font-medium mb-1.5">{{ 'duel.friendCode' | t }}</label>
+      <input
+        id="friendCode"
+        class="field mb-3 uppercase tracking-widest"
+        [(ngModel)]="challengeCode"
+        [placeholder]="'duel.friendCodePlaceholder' | t"
+        maxlength="12"
+        autocomplete="off"
+      />
+
+      <div class="grid grid-cols-3 gap-2 mb-3" role="group" [attr.aria-label]="'quiz.difficulty' | t">
+        @for (difficulty of difficultyOptions; track difficulty.value) {
+          <button
+            type="button"
+            class="btn h-9 px-2 text-xs"
+            [class.btn-primary]="challengeDifficulty() === difficulty.value"
+            [class.btn-ghost]="challengeDifficulty() !== difficulty.value"
+            [attr.aria-pressed]="challengeDifficulty() === difficulty.value"
+            (click)="challengeDifficulty.set(difficulty.value)"
+          >
+            {{ difficulty.label | t }}
+          </button>
+        }
+      </div>
+
+      <details class="mb-3">
+        <summary class="text-sm font-medium cursor-pointer">{{ 'duel.generationsOptional' | t }}</summary>
+        <div class="flex flex-wrap gap-1.5 mt-2">
+          @for (gen of generationOptions; track gen) {
+            <button
+              type="button"
+              class="btn h-8 px-3 text-xs"
+              [class.btn-primary]="challengeGenerations().includes(gen)"
+              [class.btn-ghost]="!challengeGenerations().includes(gen)"
+              (click)="toggleGeneration(gen)"
+            >
+              {{ generationName(gen) }}
+            </button>
+          }
+        </div>
+      </details>
+
+        <!-- Mode « à son rythme » désactivé pour l'instant : les duels se jouent en temps réel -->
+        <p class="text-sm text-muted mb-4"><i class="pi pi-clock text-xs"></i> {{ 'duel.liveHint' | t: secondsFor(challengeDifficulty()) }}</p>
+
+      @if (challengeSent() !== null) {
+        <p class="text-sm text-emerald-600 mb-3" role="status">{{ 'duel.sent' | t: challengeSent() }}</p>
+      }
+
+      <button type="button" class="btn btn-primary mt-auto" [disabled]="!challengeCode.trim() || sending()" (click)="sendChallenge()">
+        <i class="pi" [ngClass]="sending() ? 'pi-spin pi-spinner' : 'pi-send'"></i>{{ 'duel.send' | t }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Duels en cours et terminés -->
+  <h2 class="font-display font-semibold text-lg mb-3">{{ 'duel.history' | t }}</h2>
+  @if (duels() === null) {
+    <div class="card skeleton h-16 mb-2"></div>
+    <div class="card skeleton h-16"></div>
+  } @else if (active().length === 0 && past().length === 0) {
+    <p class="text-muted">{{ 'duel.none' | t }}</p>
+  } @else {
+    <ul class="flex flex-col gap-2">
+      @for (duel of active().concat(past()); track duel.id) {
+        <li class="flex items-center gap-2">
+          <button type="button" class="card card-interactive flex-1 min-w-0 px-4 py-3 flex items-center gap-3 text-left" (click)="open(duel)">
+            <span
+              class="chip shrink-0"
+              [ngClass]="duel.result === 'Win' ? '!bg-emerald-500/15 text-emerald-700 dark:text-emerald-400' : duel.result === 'Loss' ? '!bg-red-500/15 text-red-700 dark:text-red-400' : ''"
+              >{{ statusKey(duel) | t }}</span
+            >
+            <span class="min-w-0 flex-1 text-sm">
+              <span class="block font-semibold truncate">{{ 'duel.vs' | t: opponentName(duel) }}</span>
+              <span class="block text-muted">
+                {{ modeKey(duel) | t }} · {{ difficultyKey(duel.difficulty) | t }} · {{ duel.createdAt | date: 'dd/MM HH:mm' }}
+              </span>
+            </span>
+            @if (duel.opponent) {
+              <span class="font-display font-bold tabular-nums shrink-0">{{ duel.me.score }} – {{ duel.opponent.score }}</span>
+            }
+            <i class="pi pi-chevron-right text-xs text-muted"></i>
+          </button>
+          @if (duel.isChallenger && (duel.status === 'Searching' || duel.status === 'Invited')) {
+            <button type="button" class="icon-btn shrink-0" [title]="'duel.cancel' | t" [attr.aria-label]="'duel.cancel' | t" (click)="cancel(duel, $event)">
+              <i class="pi pi-times text-sm"></i>
+            </button>
+          }
+        </li>
+      }
+    </ul>
+  }
+</section>

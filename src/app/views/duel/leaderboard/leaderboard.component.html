@@ -1,0 +1,110 @@
+<section class="mx-auto max-w-4xl px-3 sm:px-6 pt-8 sm:pt-12 pb-16 fade-in">
+  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">{{ 'lb.kicker' | t }}</p>
+  <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1 mb-2">{{ 'lb.title' | t }}</h1>
+  <p class="text-muted mb-6">{{ 'lb.intro' | t: winPoints()[0] : winPoints()[1] : winPoints()[2] }}</p>
+
+  <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+    <div class="glass rounded-2xl p-1 grid grid-cols-2 gap-1 sm:w-72" role="group" [attr.aria-label]="'lb.period' | t">
+      <button type="button" class="h-10 rounded-xl text-sm font-semibold transition-colors" [ngClass]="period() === 'month' ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'" [attr.aria-pressed]="period() === 'month'" (click)="setPeriod('month')">
+        {{ 'lb.month' | t }}
+      </button>
+      <button type="button" class="h-10 rounded-xl text-sm font-semibold transition-colors" [ngClass]="period() === 'all' ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'" [attr.aria-pressed]="period() === 'all'" (click)="setPeriod('all')">
+        {{ 'lb.all' | t }}
+      </button>
+    </div>
+    <div class="glass rounded-2xl p-1 grid grid-cols-2 gap-1 sm:w-80 sm:ml-auto" role="group" [attr.aria-label]="'lb.sortBy' | t">
+      <button type="button" class="h-10 rounded-xl text-sm font-semibold transition-colors" [ngClass]="sort() === 'wins' ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'" [attr.aria-pressed]="sort() === 'wins'" (click)="setSort('wins')">
+        <i class="pi pi-trophy text-xs"></i> {{ 'lb.sortWins' | t }}
+      </button>
+      <button type="button" class="h-10 rounded-xl text-sm font-semibold transition-colors" [ngClass]="sort() === 'points' ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'" [attr.aria-pressed]="sort() === 'points'" (click)="setSort('points')">
+        <i class="pi pi-star text-xs"></i> {{ 'lb.sortPoints' | t }}
+      </button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <p class="card p-4 mb-4 text-sm text-red-600 dark:text-red-400" role="alert">{{ error() }}</p>
+  }
+
+  @if (loading() && !board()) {
+    @for (i of [1, 2, 3, 4, 5]; track i) {
+      <div class="card skeleton h-14 mb-2"></div>
+    }
+  } @else if (board(); as b) {
+    @if (b.entries.length === 0) {
+      <div class="card p-8 text-center">
+        <i class="pi pi-trophy text-3xl text-muted"></i>
+        <p class="mt-3">{{ 'lb.empty' | t }}</p>
+        <a [routerLink]="['/', loc, 'duel']" class="btn btn-primary mt-5"><i class="pi pi-bolt"></i>{{ 'duel.search' | t }}</a>
+      </div>
+    } @else {
+      <div class="card overflow-hidden" [class.opacity-60]="loading()">
+        <!-- En-têtes (masqués sur mobile, où chaque ligne est autoportante) -->
+        <div class="max-sm:hidden grid grid-cols-[3.5rem_1fr_7rem_7rem_7rem] gap-3 px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-wider text-muted border-b border-black/5 dark:border-white/10">
+          <span>{{ 'lb.rank' | t }}</span>
+          <span>{{ 'lb.player' | t }}</span>
+          <span class="text-right" [class.text-brand-600]="sort() === 'wins'">{{ 'lb.rankingPoints' | t }}</span>
+          <span class="text-right" [class.text-brand-600]="sort() === 'points'">{{ 'lb.duelPoints' | t }}</span>
+          <span class="text-right">{{ 'lb.record' | t }}</span>
+        </div>
+        <ol>
+          @for (entry of b.entries; track $index) {
+            <ng-container *ngTemplateOutlet="row; context: { $implicit: entry }"></ng-container>
+          }
+        </ol>
+        @if (b.me; as me) {
+          <div class="border-t-2 border-dashed border-black/10 dark:border-white/10">
+            <p class="px-4 pt-2 text-[0.7rem] font-semibold uppercase tracking-wider text-muted">{{ 'lb.yourRank' | t }}</p>
+            <ol>
+              <ng-container *ngTemplateOutlet="row; context: { $implicit: me }"></ng-container>
+            </ol>
+          </div>
+        }
+      </div>
+      @if (!auth.isLoggedIn()) {
+        <p class="text-sm text-muted mt-4">
+          <a [routerLink]="['/', loc, 'login']" class="font-semibold text-brand-600 dark:text-brand-400 hover:underline">{{ 'nav.login' | t }}</a>
+          — {{ 'lb.loginHint' | t }}
+        </p>
+      }
+    }
+  }
+</section>
+
+<ng-template #row let-entry>
+  <li
+    class="grid grid-cols-[2.5rem_1fr_auto] sm:grid-cols-[3.5rem_1fr_7rem_7rem_7rem] items-center gap-3 px-4 py-3 border-b last:border-b-0 border-black/5 dark:border-white/5"
+    [ngClass]="entry.isMe ? 'bg-brand-500/10' : ''"
+  >
+    <span
+      class="grid place-items-center size-8 rounded-full font-display font-bold tabular-nums"
+      [ngClass]="medalClass(entry.rank)"
+      >{{ entry.rank }}</span
+    >
+    <span class="min-w-0">
+      <span class="block font-semibold truncate">
+        {{ entry.userName ?? '—' }}
+        @if (entry.isOnline) {
+          <span class="inline-block size-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-zinc-900 align-middle ml-1" [title]="'lb.online' | t" role="img" [attr.aria-label]="'lb.online' | t"></span>
+        }
+        @if (entry.isMe) {
+          <span class="chip !py-0 !text-[0.65rem] ml-1">{{ 'lb.you' | t }}</span>
+        }
+      </span>
+      <!-- Mobile : l'autre critère et le bilan sous le nom -->
+      <span class="sm:hidden block text-xs text-muted tabular-nums">
+        {{ (sort() === 'points' ? 'lb.rankingPointsShort' : 'lb.duelPointsShort') | t: (sort() === 'points' ? entry.rankingPoints : entry.duelPoints) }}
+        · {{ entry.wins }}/{{ entry.losses }}/{{ entry.draws }}
+      </span>
+    </span>
+    <!-- Mobile : valeur du critère de tri -->
+    <span class="sm:hidden text-right">
+      <span class="block font-display font-bold tabular-nums text-lg">{{ sort() === 'points' ? entry.duelPoints : entry.rankingPoints }}</span>
+      <span class="block text-[0.65rem] text-muted">{{ (sort() === 'points' ? 'lb.duelPoints' : 'lb.rankingPoints') | t }}</span>
+    </span>
+    <!-- Ordinateur : colonnes fixes -->
+    <span class="max-sm:hidden text-right tabular-nums" [ngClass]="sort() === 'wins' ? 'font-bold' : 'text-muted'">{{ entry.rankingPoints }}</span>
+    <span class="max-sm:hidden text-right tabular-nums" [ngClass]="sort() === 'points' ? 'font-bold' : 'text-muted'">{{ entry.duelPoints }}</span>
+    <span class="max-sm:hidden text-right tabular-nums text-muted">{{ entry.wins }} / {{ entry.losses }} / {{ entry.draws }}</span>
+  </li>
+</ng-template>

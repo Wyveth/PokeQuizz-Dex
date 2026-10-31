@@ -1,3 +1,5 @@
+import { notInDuelGuard } from './shared/guards/not-in-duel.guard';
+import { loggedInGuard } from './shared/guards/logged-in.guard';
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 import { AuthGuardService } from './shared/guards/auth-guard.service';
@@ -20,11 +22,13 @@ export const routes: Routes = [
       },
       {
         path: ':loc/pokedex',
+        canActivate: [notInDuelGuard],
         loadComponent: () =>
           import('src/app/views/pokedex/pokedex.component').then(m => m.PokedexComponent)
       },
       {
         path: ':loc/pokemon/:id',
+        canActivate: [notInDuelGuard],
         // Sur mobile, menu masqué pour laisser la place à la fiche
         data: { immersive: true },
         loadComponent: () =>
@@ -52,6 +56,42 @@ export const routes: Routes = [
         data: { immersive: true },
         loadComponent: () =>
           import('src/app/views/quiz/quiz-play/quiz-play.component').then(m => m.QuizPlayComponent)
+      },
+      {
+        path: ':loc/leaderboard',
+        loadComponent: () =>
+          import('src/app/views/duel/leaderboard/leaderboard.component').then(m => m.LeaderboardComponent)
+      },
+      {
+        path: ':loc/duel',
+        canActivate: [loggedInGuard],
+        loadComponent: () =>
+          import('src/app/views/duel/duel-lobby/duel-lobby.component').then(m => m.DuelLobbyComponent)
+      },
+      {
+        path: ':loc/duel/:id',
+        canActivate: [loggedInGuard],
+        // Sur mobile, la partie occupe tout l'écran sans défilement
+        data: { immersive: true },
+        loadComponent: () =>
+          import('src/app/views/duel/duel-play/duel-play.component').then(m => m.DuelPlayComponent)
+      },
+      {
+        path: ':loc/hangman',
+        loadComponent: () =>
+          import('src/app/views/hangman/hangman-home/hangman-home.component').then(m => m.HangmanHomeComponent)
+      },
+      {
+        path: ':loc/hangman/:id',
+        // Sur mobile, la partie occupe tout l'écran (clavier en bas)
+        data: { immersive: true },
+        loadComponent: () =>
+          import('src/app/views/hangman/hangman-play/hangman-play.component').then(m => m.HangmanPlayComponent)
+      },
+      {
+        path: ':loc/admin',
+        canActivate: [loggedInGuard],
+        loadComponent: () => import('src/app/views/admin/admin.component').then(m => m.AdminComponent)
       },
       {
         path: ':loc/login',
