@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/api/services/auth.service';
@@ -8,12 +7,16 @@ import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [TranslatePipe, CommonModule, ReactiveFormsModule, RouterModule]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [TranslatePipe, ReactiveFormsModule, RouterModule]
 })
 export class LoginComponent implements OnInit {
   loc = 'FR';
   form = new FormGroup({
-    email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email]
+    }),
     password: new FormControl('', { nonNullable: true, validators: Validators.required })
   });
 

@@ -1,16 +1,13 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { testProviders } from 'src/testing/test-providers';
 import { PokemonService } from './pokemon.service';
 
-describe('Service: Pokemon', () => {
+describe('PokemonService', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [PokemonService],
-    });
+    TestBed.configureTestingModule({ providers: [...testProviders(), PokemonService] });
   });
 
-  it('should ...', inject([PokemonService], (service: PokemonService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', () => {
+    expect(TestBed.inject(PokemonService)).toBeTruthy();
+  });
 });

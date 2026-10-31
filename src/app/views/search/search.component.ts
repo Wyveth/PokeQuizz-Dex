@@ -1,6 +1,13 @@
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
-import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemonLight';
@@ -11,7 +18,8 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  imports: [TranslatePipe, CommonModule, FormsModule, ReactiveFormsModule]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [TranslatePipe, FormsModule, ReactiveFormsModule]
 })
 export class SearchComponent extends BaseComponent implements OnInit {
   @Input() pokemons!: PokemonLight[];

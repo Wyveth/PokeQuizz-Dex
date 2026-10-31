@@ -1,5 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, HostListener, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
@@ -26,6 +36,7 @@ interface Cell {
 @Component({
   selector: 'app-hangman-play',
   templateUrl: './hangman-play.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class HangmanPlayComponent implements OnInit, OnDestroy {
@@ -47,9 +58,15 @@ export class HangmanPlayComponent implements OnInit, OnDestroy {
   words = computed<Cell[][]>(() => {
     const mask = this.game()?.mask;
     if (!mask) return [];
-    return mask.split(' ').map(word =>
-      [...word].map(char => ({ char: char === '_' ? '' : char, hidden: char === '_', letter: char === '_' || /\p{L}/u.test(char) }))
-    );
+    return mask
+      .split(' ')
+      .map(word =>
+        [...word].map(char => ({
+          char: char === '_' ? '' : char,
+          hidden: char === '_',
+          letter: char === '_' || /\p{L}/u.test(char)
+        }))
+      );
   });
 
   guessed = computed(() => new Map((this.game()?.letters ?? []).map(l => [l.letter, l.correct])));
@@ -94,11 +111,9 @@ export class HangmanPlayComponent implements OnInit, OnDestroy {
     });
 
     // Coop : le partenaire a joué (SignalR), avec une relecture régulière en secours
-    this.duels.hangmanUpdated$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(id => {
-        if (id === this.id) this.load();
-      });
+    this.duels.hangmanUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(id => {
+      if (id === this.id) this.load();
+    });
   }
 
   ngOnDestroy() {
@@ -142,17 +157,23 @@ export class HangmanPlayComponent implements OnInit, OnDestroy {
   }
 
   accept() {
-    this.hangman.accept(this.id).subscribe({ next: g => this.apply(g), error: err => this.error.set(err.message) });
+    this.hangman
+      .accept(this.id)
+      .subscribe({ next: g => this.apply(g), error: err => this.error.set(err.message) });
   }
 
   decline() {
-    this.hangman.decline(this.id).subscribe({ next: () => this.backHome(), error: err => this.error.set(err.message) });
+    this.hangman
+      .decline(this.id)
+      .subscribe({ next: () => this.backHome(), error: err => this.error.set(err.message) });
   }
 
   quit() {
     const g = this.game();
     if (g && (g.status === 'InProgress' || g.status === 'Invited')) {
-      this.hangman.quit(this.id).subscribe({ next: game => this.apply(game), error: err => this.error.set(err.message) });
+      this.hangman
+        .quit(this.id)
+        .subscribe({ next: game => this.apply(game), error: err => this.error.set(err.message) });
     } else this.backHome();
   }
 
@@ -199,10 +220,15 @@ export class HangmanPlayComponent implements OnInit, OnDestroy {
     this.game.set(game);
 
     // Un Pokémon vient d'être trouvé (ou la partie vient de se terminer) : on montre qui c'était
-    if (previous && game.last && (game.found !== previous.found || game.status !== previous.status)) {
+    if (
+      previous &&
+      game.last &&
+      (game.found !== previous.found || game.status !== previous.status)
+    ) {
       this.showLast.set(true);
       clearTimeout(this.lastTimer);
-      if (game.status === 'InProgress') this.lastTimer = setTimeout(() => this.showLast.set(false), 4000);
+      if (game.status === 'InProgress')
+        this.lastTimer = setTimeout(() => this.showLast.set(false), 4000);
     } else if (!previous && game.status !== 'InProgress') {
       this.showLast.set(true);
     }
@@ -213,7 +239,8 @@ export class HangmanPlayComponent implements OnInit, OnDestroy {
 
   /** Silhouette : téléchargée une fois par Pokémon, dès que l'indice est débloqué. */
   private updateSilhouette(game: Hangman) {
-    const key = game.hints.silhouette && game.status === 'InProgress' ? `${game.id}:${game.found}` : null;
+    const key =
+      game.hints.silhouette && game.status === 'InProgress' ? `${game.id}:${game.found}` : null;
     if (key === this.silhouetteFor) return;
     this.revokeSilhouette();
     this.silhouetteFor = key;
@@ -235,7 +262,9 @@ export class HangmanPlayComponent implements OnInit, OnDestroy {
 
   /** En coop, on relit l'état toutes les 5 s quand c'est au partenaire (au cas où le temps réel serait coupé). */
   private updatePolling(game: Hangman) {
-    const waiting = game.mode === 'Coop' && (game.status === 'Invited' || (game.status === 'InProgress' && !game.isMyTurn));
+    const waiting =
+      game.mode === 'Coop' &&
+      (game.status === 'Invited' || (game.status === 'InProgress' && !game.isMyTurn));
     if (waiting && !this.poll) this.poll = interval(5000).subscribe(() => this.load());
     else if (!waiting && this.poll) {
       this.poll.unsubscribe();

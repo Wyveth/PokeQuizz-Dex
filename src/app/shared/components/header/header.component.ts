@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, HostListener, OnInit, effect } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  OnInit,
+  effect,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from 'src/app/api/services/auth.service';
 import { DuelService } from 'src/app/api/services/duel.service';
@@ -16,6 +23,7 @@ import { ThemeSwitchComponent } from '../theme-switch/theme-switch.component';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, RouterModule, LanguageComponent, ThemeSwitchComponent]
 })
 export class HeaderComponent extends BaseComponent implements OnInit {
@@ -98,7 +106,8 @@ export class HeaderComponent extends BaseComponent implements OnInit {
     if (!/^\/[A-Za-z]{2}\/(pokedex|pokemon)(\/|$|\?)/.test(this.router.url)) return;
     this.duels.active().subscribe({
       next: duel => {
-        if (duel) this.router.navigate(['/', this.loc, 'duel', duel.id], { queryParams: { locked: 1 } });
+        if (duel)
+          this.router.navigate(['/', this.loc, 'duel', duel.id], { queryParams: { locked: 1 } });
       },
       error: () => undefined
     });

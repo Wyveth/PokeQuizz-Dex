@@ -1,16 +1,13 @@
-/* tslint:disable:no-unused-variable */
-
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { testProviders } from 'src/testing/test-providers';
 import { AuthGuardService } from './auth-guard.service';
 
-describe('Service: AuthGuard', () => {
+describe('AuthGuardService', () => {
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [AuthGuardService],
-    });
+    TestBed.configureTestingModule({ providers: [...testProviders(), AuthGuardService] });
   });
 
-  it('should ...', inject([AuthGuardService], (service: AuthGuardService) => {
-    expect(service).toBeTruthy();
-  }));
+  it('should be created', () => {
+    expect(TestBed.inject(AuthGuardService)).toBeTruthy();
+  });
 });

@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Game } from 'src/app/api/models/concretes/game';
@@ -11,7 +10,8 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
-  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: []
 })
 export class GameComponent extends BaseComponent implements OnInit, OnDestroy {
   games!: Game[];
@@ -32,11 +32,9 @@ export class GameComponent extends BaseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.gameSubscription = this.gameService
-      .getGames()
-      .subscribe((games: Game[]) => {
-        this.games = games;
-      });
+    this.gameSubscription = this.gameService.getGames().subscribe((games: Game[]) => {
+      this.games = games;
+    });
   }
 
   ngOnDestroy(): void {

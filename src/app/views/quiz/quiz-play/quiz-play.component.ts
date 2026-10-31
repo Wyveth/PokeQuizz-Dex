@@ -1,6 +1,14 @@
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnDestroy, OnInit, computed, signal } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  computed,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {
@@ -16,6 +24,7 @@ import { QuizzService } from 'src/app/api/services/quizz.service';
 @Component({
   selector: 'app-quiz-play',
   templateUrl: './quiz-play.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class QuizPlayComponent implements OnInit, OnDestroy {

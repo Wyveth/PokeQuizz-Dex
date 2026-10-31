@@ -1,5 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, effect, inject, signal, untracked } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -17,6 +27,7 @@ import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 @Component({
   selector: 'app-hangman-home',
   templateUrl: './hangman-home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, FormsModule, RouterModule]
 })
 export class HangmanHomeComponent implements OnInit {
@@ -35,7 +46,9 @@ export class HangmanHomeComponent implements OnInit {
   games = signal<Hangman[] | null>(null);
   error = signal<string | null>(null);
 
-  active = computed(() => (this.games() ?? []).filter(g => g.status === 'InProgress' || g.status === 'Invited'));
+  active = computed(() =>
+    (this.games() ?? []).filter(g => g.status === 'InProgress' || g.status === 'Invited')
+  );
   past = computed(() => (this.games() ?? []).filter(g => g.status === 'Finished').slice(0, 10));
   best = computed(() => {
     const scores = (this.games() ?? []).filter(g => g.status === 'Finished').map(g => g.found);
@@ -66,13 +79,19 @@ export class HangmanHomeComponent implements OnInit {
       this.locService.setLoc(this.loc);
     });
 
-    this.duels.hangmanUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.reload());
-    this.duels.invitationsChanged$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.reload());
+    this.duels.hangmanUpdated$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.reload());
+    this.duels.invitationsChanged$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.reload());
   }
 
   toggle(list: 'solo' | 'coop', value: number) {
     const target = list === 'solo' ? this.soloGenerations : this.coopGenerations;
-    target.update(current => (current.includes(value) ? current.filter(g => g !== value) : [...current, value]));
+    target.update(current =>
+      current.includes(value) ? current.filter(g => g !== value) : [...current, value]
+    );
   }
 
   generationName(value: number) {
@@ -80,7 +99,9 @@ export class HangmanHomeComponent implements OnInit {
   }
 
   generationsText(game: Hangman): string {
-    return game.generations.length ? game.generations.map(g => this.generationName(g)).join(', ') : this.i18n.t('hangman.allGenerations');
+    return game.generations.length
+      ? game.generations.map(g => this.generationName(g)).join(', ')
+      : this.i18n.t('hangman.allGenerations');
   }
 
   startSolo() {
@@ -120,12 +141,16 @@ export class HangmanHomeComponent implements OnInit {
   }
 
   statusKey(game: Hangman): TranslationKey {
-    if (game.status === 'Invited') return game.isInviter ? 'hangman.waitingPartner' : 'hangman.status.Invited';
-    if (game.status === 'InProgress' && game.mode === 'Coop') return game.isMyTurn ? 'hangman.yourTurn' : 'hangman.partnerTurn';
+    if (game.status === 'Invited')
+      return game.isInviter ? 'hangman.waitingPartner' : 'hangman.status.Invited';
+    if (game.status === 'InProgress' && game.mode === 'Coop')
+      return game.isMyTurn ? 'hangman.yourTurn' : 'hangman.partnerTurn';
     return `hangman.status.${game.status}` as TranslationKey;
   }
 
   private reload() {
-    this.hangman.mine().subscribe({ next: list => this.games.set(list), error: err => this.error.set(err.message) });
+    this.hangman
+      .mine()
+      .subscribe({ next: list => this.games.set(list), error: err => this.error.set(err.message) });
   }
 }

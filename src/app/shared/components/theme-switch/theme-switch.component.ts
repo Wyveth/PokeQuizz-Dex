@@ -1,6 +1,6 @@
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Theme, ThemeService } from 'src/app/api/services/theme.service';
 import { TranslationKey } from 'src/app/i18n/fr';
 
@@ -8,6 +8,7 @@ import { TranslationKey } from 'src/app/i18n/fr';
   selector: 'app-theme-switch',
   templateUrl: './theme-switch.component.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule]
 })
 export class ThemeSwitchComponent {

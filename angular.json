@@ -22,7 +22,7 @@
             },
             "index": "src/index.html",
             "polyfills": [
-              "src/polyfills.ts"
+              "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -63,6 +63,18 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "assets": [
+                "src/favicon.ico",
+                "src/assets"
+              ],
+              "polyfills": [
+                "zone.js"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -86,23 +98,21 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
+            "reporters": [
+              "default"
             ],
-            "styles": [
-              "src/styles.scss",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/themes/tailwind-light/theme.css",
-              "node_modules/primeng/resources/primeng.min.css"
+            "coverageReporters": [
+              "html",
+              "text-summary"
             ],
-            "scripts": []
+            "buildTarget": ":build:testing",
+            "runner": "vitest",
+            "setupFiles": [
+              "src/test-setup.ts"
+            ]
           }
         }
       }

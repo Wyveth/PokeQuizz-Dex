@@ -1,16 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-
+import { testProviders } from 'src/testing/test-providers';
 import { ThemeService } from './theme.service';
 
 describe('ThemeService', () => {
-  let service: ThemeService;
-
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ThemeService);
+    TestBed.configureTestingModule({ providers: [...testProviders(), ThemeService] });
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(TestBed.inject(ThemeService)).toBeTruthy();
   });
 });

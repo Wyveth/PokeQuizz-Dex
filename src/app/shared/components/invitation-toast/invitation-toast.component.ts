@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, effect } from '@angular/core';
+import { Component, OnDestroy, effect, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
@@ -12,6 +12,7 @@ const TOAST_MS = 15000;
 @Component({
   selector: 'app-invitation-toast',
   templateUrl: './invitation-toast.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [CommonModule, TranslatePipe]
 })
 export class InvitationToastComponent implements OnDestroy {
@@ -27,7 +28,9 @@ export class InvitationToastComponent implements OnDestroy {
   ) {
     const update = () => (this.inDuel = /^\/[A-Za-z]{2}\/duel\/[^/?]+/.test(router.url));
     update();
-    this.subscription = router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(update);
+    this.subscription = router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(update);
 
     effect(() => {
       const toast = this.center.toast();

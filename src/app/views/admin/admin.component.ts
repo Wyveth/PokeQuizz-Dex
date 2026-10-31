@@ -1,9 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { AdminService, GameDataCounts, PURGE_CONFIRMATION } from 'src/app/api/services/admin.service';
+import {
+  AdminService,
+  GameDataCounts,
+  PURGE_CONFIRMATION
+} from 'src/app/api/services/admin.service';
 import { AuthService } from 'src/app/api/services/auth.service';
 import { LocService } from 'src/app/api/services/loc.service';
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
@@ -12,6 +23,7 @@ import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, FormsModule]
 })
 export class AdminComponent implements OnInit {
@@ -34,13 +46,20 @@ export class AdminComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => this.locService.setLoc(params['loc'] || 'FR'));
+    this.route.params
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(params => this.locService.setLoc(params['loc'] || 'FR'));
     this.load();
   }
 
   canPurge(): boolean {
     const c = this.counts();
-    return !this.purging() && this.confirmText.trim().toUpperCase() === PURGE_CONFIRMATION && !!c && c.quizzes + c.hangmanGames > 0;
+    return (
+      !this.purging() &&
+      this.confirmText.trim().toUpperCase() === PURGE_CONFIRMATION &&
+      !!c &&
+      c.quizzes + c.hangmanGames > 0
+    );
   }
 
   purge() {

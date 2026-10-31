@@ -1,5 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, HostListener, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Duel } from 'src/app/api/models/concretes/duel';
@@ -14,6 +24,7 @@ import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 @Component({
   selector: 'app-duel-play',
   templateUrl: './duel-play.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class DuelPlayComponent implements OnInit, OnDestroy {
@@ -72,7 +83,9 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
     return !!d && d.status !== 'Finished' && d.nextOrder === null && !this.question();
   });
 
-  longAnswers = computed(() => (this.question()?.answers ?? []).some(a => (a.label?.length ?? 0) > 40));
+  longAnswers = computed(() =>
+    (this.question()?.answers ?? []).some(a => (a.label?.length ?? 0) > 40)
+  );
 
   imageFilter = computed(() => {
     const q = this.question();
@@ -163,7 +176,9 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
     const q = this.question();
     if (!q || this.answered() || this.submitting() || this.timeUp()) return;
     if (q.isMultipleAnswers)
-      this.selected.update(list => (list.includes(answer.id) ? list.filter(id => id !== answer.id) : [...list, answer.id]));
+      this.selected.update(list =>
+        list.includes(answer.id) ? list.filter(id => id !== answer.id) : [...list, answer.id]
+      );
     else this.selected.set([answer.id]);
   }
 
@@ -174,7 +189,8 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
 
   submit() {
     const q = this.question();
-    if (!q || this.answered() || this.submitting() || this.selected().length === 0 || this.timeUp()) return;
+    if (!q || this.answered() || this.submitting() || this.selected().length === 0 || this.timeUp())
+      return;
     this.submitting.set(true);
     this.error.set(null);
 
@@ -213,15 +229,21 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
   }
 
   accept() {
-    this.duelService.accept(this.duelId).subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
+    this.duelService
+      .accept(this.duelId)
+      .subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
   }
 
   decline() {
-    this.duelService.decline(this.duelId).subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
+    this.duelService
+      .decline(this.duelId)
+      .subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
   }
 
   cancel() {
-    this.duelService.cancel(this.duelId).subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
+    this.duelService
+      .cancel(this.duelId)
+      .subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
   }
 
   forfeit() {
@@ -230,7 +252,9 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
       setTimeout(() => this.confirmForfeit.set(false), 4000);
       return;
     }
-    this.duelService.forfeit(this.duelId).subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
+    this.duelService
+      .forfeit(this.duelId)
+      .subscribe({ next: d => this.applyDuel(d), error: err => this.error.set(err.message) });
   }
 
   backToLobby() {
@@ -280,7 +304,12 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
     this.duel.set(d);
     clearTimeout(this.startTimer);
 
-    if (d.status === 'Finished' || d.status === 'Declined' || d.status === 'Cancelled' || d.status === 'Expired') {
+    if (
+      d.status === 'Finished' ||
+      d.status === 'Declined' ||
+      d.status === 'Cancelled' ||
+      d.status === 'Expired'
+    ) {
       this.resetQuestion();
       return;
     }

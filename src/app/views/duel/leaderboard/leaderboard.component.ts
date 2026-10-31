@@ -1,8 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { DuelSettings, Leaderboard, LeaderboardPeriod, LeaderboardSort } from 'src/app/api/models/concretes/duel';
+import {
+  DuelSettings,
+  Leaderboard,
+  LeaderboardPeriod,
+  LeaderboardSort
+} from 'src/app/api/models/concretes/duel';
 import { AuthService } from 'src/app/api/services/auth.service';
 import { DuelService } from 'src/app/api/services/duel.service';
 import { LocService } from 'src/app/api/services/loc.service';
@@ -12,6 +25,7 @@ import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 @Component({
   selector: 'app-leaderboard',
   templateUrl: './leaderboard.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class LeaderboardComponent implements OnInit {
@@ -44,13 +58,17 @@ export class LeaderboardComponent implements OnInit {
       this.loc = params['loc'] || 'FR';
       this.locService.setLoc(this.loc);
     });
-    this.duelService.settings().subscribe({ next: s => this.settings.set(s), error: () => undefined });
+    this.duelService
+      .settings()
+      .subscribe({ next: s => this.settings.set(s), error: () => undefined });
     this.load();
     // Présence en ligne : relecture toutes les 30 s (sans indicateur de chargement)
     const refresh = setInterval(() => this.load(true), 30000);
     this.destroyRef.onDestroy(() => clearInterval(refresh));
     // Un duel se termine : le classement peut changer
-    this.duelService.duelUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.load());
+    this.duelService.duelUpdated$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.load());
   }
 
   setPeriod(period: LeaderboardPeriod) {

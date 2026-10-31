@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -20,6 +28,7 @@ import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 @Component({
   selector: 'app-duel-lobby',
   templateUrl: './duel-lobby.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, FormsModule, RouterModule]
 })
 export class DuelLobbyComponent implements OnInit {
@@ -51,9 +60,22 @@ export class DuelLobbyComponent implements OnInit {
   error = signal<string | null>(null);
 
   /** Recherche temps réel en cours (on attend un adversaire sur cet écran). */
-  liveSearch = computed(() => (this.duels() ?? []).find(d => d.status === 'Searching' && d.mode === 'Live') ?? null);
-  active = computed(() => (this.duels() ?? []).filter(d => d.status === 'InProgress' || d.status === 'Invited' || (d.status === 'Searching' && d.mode === 'Async')));
-  past = computed(() => (this.duels() ?? []).filter(d => !['InProgress', 'Invited', 'Searching'].includes(d.status)).slice(0, 10));
+  liveSearch = computed(
+    () => (this.duels() ?? []).find(d => d.status === 'Searching' && d.mode === 'Live') ?? null
+  );
+  active = computed(() =>
+    (this.duels() ?? []).filter(
+      d =>
+        d.status === 'InProgress' ||
+        d.status === 'Invited' ||
+        (d.status === 'Searching' && d.mode === 'Async')
+    )
+  );
+  past = computed(() =>
+    (this.duels() ?? [])
+      .filter(d => !['InProgress', 'Invited', 'Searching'].includes(d.status))
+      .slice(0, 10)
+  );
 
   private destroyRef = inject(DestroyRef);
 
@@ -71,13 +93,24 @@ export class DuelLobbyComponent implements OnInit {
       this.locService.setLoc(this.loc);
     });
 
-    this.duelService.friendCode().subscribe({ next: c => this.friendCode.set(c.code), error: err => this.error.set(err.message) });
-    this.duelService.settings().subscribe({ next: s => this.settings.set(s), error: () => undefined });
+    this.duelService
+      .friendCode()
+      .subscribe({
+        next: c => this.friendCode.set(c.code),
+        error: err => this.error.set(err.message)
+      });
+    this.duelService
+      .settings()
+      .subscribe({ next: s => this.settings.set(s), error: () => undefined });
     this.reload();
 
-    this.duelService.duelUpdated$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(id => this.onDuelUpdated(id));
+    this.duelService.duelUpdated$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(id => this.onDuelUpdated(id));
     // Défi reçu, accepté ou refusé (via la cloche) : la liste des duels change
-    this.duelService.invitationsChanged$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.reload());
+    this.duelService.invitationsChanged$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.reload());
   }
 
   // ---------- Matchmaking ----------
@@ -85,23 +118,27 @@ export class DuelLobbyComponent implements OnInit {
     if (this.searching()) return;
     this.searching.set(true);
     this.error.set(null);
-    this.duelService.search(this.searchLive() ? 'Live' : 'Async', this.searchDifficulty()).subscribe({
-      next: duel => {
-        this.searching.set(false);
-        // Adversaire trouvé, ou mode asynchrone (on peut jouer tout de suite) : direction la partie
-        if (duel.status === 'InProgress' || duel.mode === 'Async') this.open(duel);
-        else this.reload();
-      },
-      error: err => {
-        this.error.set(err.message);
-        this.searching.set(false);
-      }
-    });
+    this.duelService
+      .search(this.searchLive() ? 'Live' : 'Async', this.searchDifficulty())
+      .subscribe({
+        next: duel => {
+          this.searching.set(false);
+          // Adversaire trouvé, ou mode asynchrone (on peut jouer tout de suite) : direction la partie
+          if (duel.status === 'InProgress' || duel.mode === 'Async') this.open(duel);
+          else this.reload();
+        },
+        error: err => {
+          this.error.set(err.message);
+          this.searching.set(false);
+        }
+      });
   }
 
   cancel(duel: Duel, event?: Event) {
     event?.stopPropagation();
-    this.duelService.cancel(duel.id).subscribe({ next: () => this.reload(), error: err => this.error.set(err.message) });
+    this.duelService
+      .cancel(duel.id)
+      .subscribe({ next: () => this.reload(), error: err => this.error.set(err.message) });
   }
 
   /** Secondes par question pour cette difficulté (réglage serveur ; 20 s en attendant la réponse). */
@@ -123,11 +160,18 @@ export class DuelLobbyComponent implements OnInit {
   }
 
   regenerateCode() {
-    this.duelService.regenerateFriendCode().subscribe({ next: c => this.friendCode.set(c.code), error: err => this.error.set(err.message) });
+    this.duelService
+      .regenerateFriendCode()
+      .subscribe({
+        next: c => this.friendCode.set(c.code),
+        error: err => this.error.set(err.message)
+      });
   }
 
   toggleGeneration(value: number) {
-    this.challengeGenerations.update(list => (list.includes(value) ? list.filter(g => g !== value) : [...list, value]));
+    this.challengeGenerations.update(list =>
+      list.includes(value) ? list.filter(g => g !== value) : [...list, value]
+    );
   }
 
   generationName(value: number) {
@@ -166,7 +210,8 @@ export class DuelLobbyComponent implements OnInit {
 
   // ---------- Libellés ----------
   statusKey(duel: Duel): TranslationKey {
-    if (duel.status === 'Finished' && duel.result) return `duel.result.${duel.result}` as TranslationKey;
+    if (duel.status === 'Finished' && duel.result)
+      return `duel.result.${duel.result}` as TranslationKey;
     return `duel.status.${duel.status}` as TranslationKey;
   }
 
@@ -182,7 +227,8 @@ export class DuelLobbyComponent implements OnInit {
     const search = this.liveSearch();
     this.reload(list => {
       // Notre recherche temps réel vient de trouver un adversaire : on lance la partie
-      const found = search && list.find(d => d.id === id && d.id === search.id && d.status === 'InProgress');
+      const found =
+        search && list.find(d => d.id === id && d.id === search.id && d.status === 'InProgress');
       if (found) this.open(found);
     });
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -24,6 +24,7 @@ function sameAsPassword(group: AbstractControl): ValidationErrors | null {
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, ReactiveFormsModule, RouterModule]
 })
 export class RegisterComponent implements OnInit {
@@ -32,10 +33,21 @@ export class RegisterComponent implements OnInit {
     {
       userName: new FormControl('', {
         nonNullable: true,
-        validators: [Validators.required, Validators.minLength(3), Validators.maxLength(24), Validators.pattern(/^[A-Za-z0-9._-]+$/)]
+        validators: [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(24),
+          Validators.pattern(/^[A-Za-z0-9._-]+$/)
+        ]
       }),
-      email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
-      password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.pattern(PASSWORD_PATTERN)] }),
+      email: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.email]
+      }),
+      password: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.pattern(PASSWORD_PATTERN)]
+      }),
       confirm: new FormControl('', { nonNullable: true, validators: Validators.required })
     },
     { validators: sameAsPassword }

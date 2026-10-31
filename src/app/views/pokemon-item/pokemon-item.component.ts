@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonLight } from 'src/app/api/models/concretes/pokemonLight';
 import { LocService } from 'src/app/api/services/loc.service';
@@ -24,7 +23,8 @@ export class PokemonVM {
 @Component({
   selector: 'app-pokemon-item',
   templateUrl: './pokemon-item.component.html',
-  imports: [CommonModule]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: []
 })
 export class PokemonItemComponent extends BaseComponent implements OnInit, OnDestroy {
   @Input() pokemon!: PokemonLight;
