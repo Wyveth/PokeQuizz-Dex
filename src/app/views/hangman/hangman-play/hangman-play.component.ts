@@ -15,7 +15,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
 import { AppConfig } from 'src/app/app.config';
 import { Hangman } from 'src/app/api/models/concretes/hangman';
-import { generationLabel } from 'src/app/api/models/concretes/quizz';
+import { difficultyKey, generationLabel } from 'src/app/api/models/concretes/quizz';
 import { DuelService } from 'src/app/api/services/duel.service';
 import { HangmanService } from 'src/app/api/services/hangman.service';
 import { LocService } from 'src/app/api/services/loc.service';
@@ -41,6 +41,7 @@ interface Cell {
 })
 export class HangmanPlayComponent implements OnInit, OnDestroy {
   readonly alphabet = ALPHABET;
+  readonly difficultyKey = difficultyKey;
   readonly imgRoot: string = this.config.getConfig('img_root');
 
   loc = 'FR';
@@ -184,7 +185,7 @@ export class HangmanPlayComponent implements OnInit, OnDestroy {
       this.backHome();
       return;
     }
-    this.hangman.createSolo(g.generations, this.loc).subscribe({
+    this.hangman.createSolo(g.generations, this.loc, g.difficulty).subscribe({
       next: game => this.router.navigate(['/', this.loc, 'hangman', game.id]),
       error: err => this.error.set(err.message)
     });

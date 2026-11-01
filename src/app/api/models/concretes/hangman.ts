@@ -1,6 +1,8 @@
 /** Contrat de l'API du pendu (WebApiScrapingData, docs/api-jeu-web.md). */
 
 export type HangmanMode = 'Solo' | 'Coop';
+/** Facile : indices progressifs ; Normal : aucun indice. */
+export type HangmanDifficulty = 'Easy' | 'Normal';
 export type HangmanStatus = 'Invited' | 'InProgress' | 'Finished' | 'Declined' | 'Cancelled';
 
 export interface HangmanLetter {
@@ -24,6 +26,7 @@ export interface HangmanReveal {
 export interface Hangman {
   id: string;
   mode: HangmanMode;
+  difficulty: HangmanDifficulty;
   status: HangmanStatus;
   lang: string;
   generations: number[];

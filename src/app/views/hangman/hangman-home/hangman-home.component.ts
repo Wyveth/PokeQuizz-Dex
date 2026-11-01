@@ -13,8 +13,8 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Hangman } from 'src/app/api/models/concretes/hangman';
-import { GENERATIONS, generationLabel } from 'src/app/api/models/concretes/quizz';
+import { Hangman, HangmanDifficulty } from 'src/app/api/models/concretes/hangman';
+import { GENERATIONS, difficultyKey, generationLabel } from 'src/app/api/models/concretes/quizz';
 import { AuthService } from 'src/app/api/services/auth.service';
 import { DuelService } from 'src/app/api/services/duel.service';
 import { HangmanService } from 'src/app/api/services/hangman.service';
@@ -35,6 +35,12 @@ export class HangmanHomeComponent implements OnInit {
 
   loc = 'FR';
 
+  readonly difficultyKey = difficultyKey;
+  readonly difficultyOptions: HangmanDifficulty[] = ['Easy', 'Normal'];
+
+  /** Difficulté des nouvelles parties (solo et coop) : Facile = indices, Normal = sans indice. */
+  difficulty = signal<HangmanDifficulty>('Normal');
+
   soloGenerations = signal<number[]>([]);
   starting = signal(false);
 
@@ -51,7 +57,10 @@ export class HangmanHomeComponent implements OnInit {
   );
   past = computed(() => (this.games() ?? []).filter(g => g.status === 'Finished').slice(0, 10));
   best = computed(() => {
-    const scores = (this.games() ?? []).filter(g => g.status === 'Finished').map(g => g.found);
+    // Record de la difficulté choisie
+    const scores = (this.games() ?? [])
+      .filter(g => g.status === 'Finished' && g.difficulty === this.difficulty())
+      .map(g => g.found);
     return scores.length ? Math.max(...scores) : null;
   });
 
@@ -108,7 +117,7 @@ export class HangmanHomeComponent implements OnInit {
     if (this.starting()) return;
     this.starting.set(true);
     this.error.set(null);
-    this.hangman.createSolo(this.soloGenerations(), this.loc).subscribe({
+    this.hangman.createSolo(this.soloGenerations(), this.loc, this.difficulty()).subscribe({
       next: game => this.open(game),
       error: err => {
         this.error.set(err.message);
@@ -122,7 +131,7 @@ export class HangmanHomeComponent implements OnInit {
     this.sending.set(true);
     this.error.set(null);
     this.inviteSent.set(null);
-    this.hangman.invite(this.friendCode, this.coopGenerations(), this.loc).subscribe({
+    this.hangman.invite(this.friendCode, this.coopGenerations(), this.loc, this.difficulty()).subscribe({
       next: game => {
         this.sending.set(false);
         this.friendCode = '';

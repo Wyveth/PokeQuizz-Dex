@@ -10,7 +10,7 @@
     @if (game(); as g) {
       <div class="flex-1 min-w-0">
         <p class="text-xs text-muted truncate">
-          {{ (g.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }}@if (g.partner) { · {{ g.partner }}}
+          {{ (g.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }} · {{ difficultyKey(g.difficulty) | t }}@if (g.partner) { · {{ g.partner }}}
         </p>
         <p class="font-display font-bold text-lg tabular-nums leading-tight">{{ 'hangman.foundCount' | t: g.found }}</p>
       </div>

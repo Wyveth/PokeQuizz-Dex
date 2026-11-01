@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Observable, catchError, forkJoin, map, of, tap, throwError } from 'rxjs';
 import { AppConfig } from 'src/app/app.config';
 import { I18nService } from 'src/app/i18n/i18n.service';
-import { Hangman } from '../models/concretes/hangman';
+import { Hangman, HangmanDifficulty } from '../models/concretes/hangman';
 import { AuthService } from './auth.service';
 
 /** Parties solo jouées sans compte : leurs identifiants sont gardés dans le navigateur pour les reprendre. */
@@ -24,8 +24,8 @@ export class HangmanService {
     return this.config.getConfig('api_root') + (this.config.getConfig('hangman_api') ?? '/Hangman');
   }
 
-  createSolo(generations: number[], lang: string): Observable<Hangman> {
-    return this.http.post<Hangman>(this.api, { generations, lang }).pipe(
+  createSolo(generations: number[], lang: string, difficulty: HangmanDifficulty): Observable<Hangman> {
+    return this.http.post<Hangman>(this.api, { generations, lang, difficulty }).pipe(
       tap(game => {
         if (!this.hasToken()) this.rememberGuest(game.id);
       }),
@@ -33,8 +33,10 @@ export class HangmanService {
     );
   }
 
-  invite(friendCode: string, generations: number[], lang: string): Observable<Hangman> {
-    return this.http.post<Hangman>(`${this.api}/coop`, { friendCode, generations, lang }).pipe(catchError(this.handleError));
+  invite(friendCode: string, generations: number[], lang: string, difficulty: HangmanDifficulty): Observable<Hangman> {
+    return this.http
+      .post<Hangman>(`${this.api}/coop`, { friendCode, generations, lang, difficulty })
+      .pipe(catchError(this.handleError));
   }
 
   get(id: string): Observable<Hangman> {

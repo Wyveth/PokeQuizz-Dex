@@ -319,7 +319,9 @@ export const FR = {
   'admin.warning': 'Action définitive : les parties en cours des joueurs seront perdues.',
   'admin.typeToConfirm': 'Tapez {0} pour confirmer',
   'admin.purge': 'Vider',
-  'admin.done': 'Purge terminée : {0} quiz, {1} questions, {2} réponses et {3} parties de pendu supprimés. {4} quiz de duel conservés.'
+  'admin.done': 'Purge terminée : {0} quiz, {1} questions, {2} réponses et {3} parties de pendu supprimés. {4} quiz de duel conservés.',
+  'hangman.easyHint': 'Des indices apparaissent au fil des erreurs : types, génération, description puis silhouette.',
+  'hangman.normalHint': 'Aucun indice : seulement vos lettres.'
 };
 
 export type TranslationKey = keyof typeof FR;

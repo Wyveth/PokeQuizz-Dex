@@ -317,5 +317,7 @@ export const DE: Translations = {
   'admin.warning': 'Endgültig: Laufende Spiele der Spieler gehen verloren.',
   'admin.typeToConfirm': 'Gib {0} zur Bestätigung ein',
   'admin.purge': 'Leeren',
-  'admin.done': 'Erledigt: {0} Quiz, {1} Fragen, {2} Antworten und {3} Galgenmännchen-Spiele gelöscht. {4} Duell-Quiz bleiben erhalten.'
+  'admin.done': 'Erledigt: {0} Quiz, {1} Fragen, {2} Antworten und {3} Galgenmännchen-Spiele gelöscht. {4} Duell-Quiz bleiben erhalten.',
+  'hangman.easyHint': 'Hinweise erscheinen mit deinen Fehlern: Typen, Generation, Beschreibung, dann Silhouette.',
+  'hangman.normalHint': 'Keine Hinweise: nur deine Buchstaben.'
 };

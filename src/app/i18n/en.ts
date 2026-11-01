@@ -317,5 +317,7 @@ export const EN: Translations = {
   'admin.warning': 'This cannot be undone: ongoing player games will be lost.',
   'admin.typeToConfirm': 'Type {0} to confirm',
   'admin.purge': 'Clear',
-  'admin.done': 'Done: {0} quizzes, {1} questions, {2} answers and {3} hangman games deleted. {4} duel quizzes kept.'
+  'admin.done': 'Done: {0} quizzes, {1} questions, {2} answers and {3} hangman games deleted. {4} duel quizzes kept.',
+  'hangman.easyHint': 'Hints appear as you make mistakes: types, generation, description, then silhouette.',
+  'hangman.normalHint': 'No hints: just your letters.'
 };

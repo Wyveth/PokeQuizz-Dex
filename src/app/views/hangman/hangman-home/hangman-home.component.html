@@ -12,6 +12,29 @@
     <p class="card p-4 mb-4 text-sm text-red-600 dark:text-red-400" role="alert">{{ error() }}</p>
   }
 
+  <!-- Difficulté des nouvelles parties (solo et coop) -->
+  <div class="card p-4 sm:p-5 mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
+    <span class="text-sm font-semibold">{{ 'quiz.difficulty' | t }}</span>
+    <div class="grid grid-cols-2 gap-2 sm:w-64" role="group" [attr.aria-label]="'quiz.difficulty' | t">
+      @for (level of difficultyOptions; track level) {
+        <button
+          type="button"
+          class="btn h-10 px-3"
+          [class.btn-primary]="difficulty() === level"
+          [class.btn-ghost]="difficulty() !== level"
+          [attr.aria-pressed]="difficulty() === level"
+          (click)="difficulty.set(level)"
+        >
+          {{ difficultyKey(level) | t }}
+        </button>
+      }
+    </div>
+    <p class="text-sm text-muted sm:flex-1">
+      <i class="pi text-xs" [ngClass]="difficulty() === 'Easy' ? 'pi-lightbulb text-amber-500' : 'pi-eye-slash'"></i>
+      {{ (difficulty() === 'Easy' ? 'hangman.easyHint' : 'hangman.normalHint') | t }}
+    </p>
+  </div>
+
   <div class="grid md:grid-cols-2 gap-6 mb-8">
     <!-- Solo -->
     <div class="card p-5 sm:p-6 flex flex-col">
@@ -103,7 +126,7 @@
             </span>
             <span class="min-w-0 flex-1">
               <span class="block font-semibold truncate">
-                {{ (game.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }}@if (game.partner) { · {{ game.partner }}}
+                {{ (game.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }} · {{ difficultyKey(game.difficulty) | t }}@if (game.partner) { · {{ game.partner }}}
               </span>
               <span class="block text-sm text-muted truncate">{{ statusKey(game) | t: game.partner }} · {{ 'hangman.foundCount' | t: game.found }}</span>
             </span>
@@ -122,7 +145,7 @@
         <li class="px-4 py-3 flex items-center gap-3 text-sm">
           <i class="pi text-muted" [ngClass]="game.mode === 'Coop' ? 'pi-users' : 'pi-user'"></i>
           <span class="flex-1 min-w-0 truncate">
-            {{ (game.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }}@if (game.partner) { · {{ game.partner }}}
+            {{ (game.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }} · {{ difficultyKey(game.difficulty) | t }}@if (game.partner) { · {{ game.partner }}}
             <span class="text-muted"> · {{ game.finishedAt ?? game.createdAt | date: 'dd/MM HH:mm' }}</span>
           </span>
           <span class="font-display font-bold tabular-nums">{{ 'hangman.foundCount' | t: game.found }}</span>

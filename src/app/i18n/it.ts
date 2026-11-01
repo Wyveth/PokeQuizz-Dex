@@ -317,5 +317,7 @@ export const IT: Translations = {
   'admin.warning': 'Azione definitiva: le partite in corso dei giocatori andranno perse.',
   'admin.typeToConfirm': 'Digita {0} per confermare',
   'admin.purge': 'Svuota',
-  'admin.done': 'Fatto: {0} quiz, {1} domande, {2} risposte e {3} partite di impiccato eliminati. {4} quiz di duello conservati.'
+  'admin.done': 'Fatto: {0} quiz, {1} domande, {2} risposte e {3} partite di impiccato eliminati. {4} quiz di duello conservati.',
+  'hangman.easyHint': 'Gli indizi arrivano con gli errori: tipi, generazione, descrizione e sagoma.',
+  'hangman.normalHint': 'Nessun indizio: solo le tue lettere.'
 };
