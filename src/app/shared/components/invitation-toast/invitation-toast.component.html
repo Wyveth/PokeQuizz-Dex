@@ -1,0 +1,28 @@
+@if (center.toast(); as item) {
+  @if (!inDuel) {
+    <div
+      class="fixed z-[60] bottom-4 right-4 left-4 sm:left-auto sm:w-96 pb-[env(safe-area-inset-bottom)] fade-in"
+      role="alert"
+      aria-live="assertive"
+    >
+      <div class="rounded-2xl p-4 shadow-2xl bg-white dark:bg-neutral-900 border border-brand-500/30">
+        <div class="flex items-start gap-3">
+          <span class="grid place-items-center size-10 rounded-xl bg-brand-500 text-white shrink-0">
+            <i class="pi" [ngClass]="item.kind === 'duel' ? 'pi-trophy' : 'pi-pencil'"></i>
+          </span>
+          <p class="flex-1 min-w-0 text-sm">
+            <b class="block">{{ item.titleKey | t: item.from }}</b>
+            <span class="text-muted">{{ item.detailKey | t }}</span>
+          </p>
+          <button type="button" class="icon-btn -mr-1 -mt-1 shrink-0" [title]="'notif.close' | t" [attr.aria-label]="'notif.close' | t" (click)="center.dismissToast()">
+            <i class="pi pi-times text-xs"></i>
+          </button>
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button type="button" class="btn btn-primary h-10 flex-1" (click)="center.accept(item)"><i class="pi pi-check"></i>{{ 'duel.accept' | t }}</button>
+          <button type="button" class="btn btn-ghost h-10 flex-1" (click)="center.decline(item)">{{ 'duel.decline' | t }}</button>
+        </div>
+      </div>
+    </div>
+  }
+}

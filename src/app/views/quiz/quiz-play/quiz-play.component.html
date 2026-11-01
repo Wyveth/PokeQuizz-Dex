@@ -45,6 +45,17 @@
               draggable="false"
             />
           </div>
+        } @else {
+          <!-- Sans image (cri, talents, descriptions) : Détective Pikachu mène l'enquête -->
+          <div class="grid place-items-center sm:size-56" [ngClass]="imageBoxClass()">
+            <img src="assets/Images/detective-pikachu.png" alt="" class="max-h-full max-w-full object-contain" draggable="false" />
+          </div>
+        }
+
+        @if (q.code === 'PokCry' && !answered()) {
+          <button type="button" class="btn btn-primary h-12 px-6" (click)="playSound()">
+            <i class="pi pi-volume-up"></i>{{ 'play.listenCry' | t }}
+          </button>
         }
 
         @if (q.subject.name || q.subject.hasSound) {
@@ -52,7 +63,7 @@
             @if (q.subject.name) {
               <p class="font-display text-base sm:text-xl font-semibold">{{ q.subject.name }}</p>
             }
-            @if (q.subject.hasSound) {
+            @if (q.subject.hasSound && !(q.code === 'PokCry' && !answered())) {
               <button type="button" class="btn btn-ghost h-9 px-3" [title]="'play.listenCry' | t" [attr.aria-label]="'play.listenCry' | t" (click)="playSound()">
                 <i class="pi pi-volume-up"></i><span class="max-sm:hidden">{{ 'play.listenCry' | t }}</span>
               </button>

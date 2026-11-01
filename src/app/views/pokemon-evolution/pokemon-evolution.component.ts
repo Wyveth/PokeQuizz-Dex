@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Family } from 'src/app/api/models/concretes/Family';
 import { LocService } from 'src/app/api/services/loc.service';
@@ -12,7 +11,8 @@ import { TranslationKey } from 'src/app/i18n/fr';
 @Component({
   selector: 'app-pokemon-evolution',
   templateUrl: './pokemon-evolution.component.html',
-  imports: [CommonModule]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: []
 })
 export class PokemonEvolutionComponent extends BaseComponent implements OnInit {
   @Input() forms!: { name: string; listForm: Family[] };

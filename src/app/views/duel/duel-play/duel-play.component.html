@@ -1,0 +1,237 @@
+<!-- Sur mobile : écran plein hauteur (route immersive), seule la zone des réponses défile en dernier recours -->
+<section
+  class="mx-auto max-w-3xl px-3 sm:px-6 pt-3 sm:pt-10 sm:pb-16 max-sm:h-dvh max-sm:flex max-sm:flex-col max-sm:pb-[max(0.75rem,env(safe-area-inset-bottom))]"
+>
+  <!-- Barre du duel : scores et progression -->
+  <div class="flex items-center gap-3 mb-3 sm:mb-4 shrink-0">
+    <button type="button" class="icon-btn" [title]="'duel.back' | t" [attr.aria-label]="'duel.back' | t" (click)="backToLobby()">
+      <i class="pi pi-arrow-left"></i>
+    </button>
+    @if (duel(); as d) {
+      <div class="flex-1 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm">
+        <div class="min-w-0">
+          <p class="text-xs text-muted">{{ 'duel.you' | t }}</p>
+          <p class="font-display font-bold text-lg tabular-nums">{{ d.me.score }}</p>
+        </div>
+        <div class="text-center">
+          <span class="chip">{{ (d.mode === 'Live' ? 'duel.mode.live' : 'duel.mode.async') | t }} · {{ difficultyKey(d.difficulty) | t }}</span>
+          @if (d.status === 'InProgress') {
+            <p class="text-xs text-muted mt-1 tabular-nums">
+              {{ 'play.question' | t }} {{ isLive() ? d.currentOrder : (question()?.order ?? d.nextOrder ?? d.total) }} / {{ d.total }}
+            </p>
+          }
+        </div>
+        <div class="min-w-0 text-right">
+          <p class="text-xs text-muted truncate">{{ opponentName() }}</p>
+          <p class="font-display font-bold text-lg tabular-nums">
+            @if (isLive() && d.status === 'InProgress' && opponentAnswered()) {
+              <i class="pi pi-check-circle text-xs text-emerald-600" [title]="'duel.opponentAnswered' | t: opponentName()" [attr.aria-label]="'duel.opponentAnswered' | t: opponentName()"></i>
+            }
+            {{ d.opponent?.score ?? '–' }}
+          </p>
+        </div>
+      </div>
+      <!-- Chrono de la question, en haut à droite -->
+      @if (isLive() && d.status === 'InProgress' && question() && untilStart() === 0) {
+        <span
+          class="grid place-items-center size-11 shrink-0 rounded-full border-2 font-display text-lg font-bold tabular-nums transition-colors"
+          [ngClass]="remaining() <= 5 ? 'border-red-500 text-red-600 bg-red-500/10' : 'border-brand-500 text-brand-600 dark:text-brand-400 bg-white/70 dark:bg-white/10'"
+          role="timer"
+          [attr.aria-label]="remaining() + ' s'"
+          >{{ remaining() }}</span
+        >
+      }
+    }
+  </div>
+
+  @if (pokedexLocked()) {
+    <p class="card p-3 mb-3 text-sm shrink-0 border-2 border-amber-400" role="status"><i class="pi pi-lock text-xs"></i> {{ 'duel.pokedexLocked' | t }}</p>
+  }
+  @if (error()) {
+    <p class="card p-3 mb-3 text-sm text-red-600 dark:text-red-400 shrink-0" role="alert">{{ error() }}</p>
+  }
+
+  @if (!duel()) {
+    <div class="card skeleton h-[40dvh] sm:h-72"></div>
+  } @else {
+    @let d = duel()!;
+
+    <!-- ===== États sans question ===== -->
+    @if (d.status === 'Finished') {
+      <div class="card p-6 sm:p-10 text-center fade-in">
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">{{ 'duel.finalScore' | t }}</p>
+        <p
+          class="font-display text-5xl sm:text-6xl font-extrabold tracking-tight mt-2"
+          [ngClass]="d.result === 'Win' ? 'text-emerald-600' : d.result === 'Loss' ? 'text-red-600' : ''"
+        >
+          {{ resultKey() ? (resultKey()! | t) : '' }}
+        </p>
+        <p class="font-display text-3xl font-bold tabular-nums mt-4">{{ d.me.score }} – {{ d.opponent?.score ?? 0 }}</p>
+        <p class="text-sm text-muted mt-1">{{ 'duel.vs' | t: opponentName() }}</p>
+        @if (d.forfeit) {
+          <p class="text-sm mt-3">{{ (d.result === 'Win' ? 'duel.forfeited' : 'duel.youForfeited') | t }}</p>
+        }
+        <div class="mt-6 flex flex-col sm:flex-row justify-center gap-3">
+          <button type="button" class="btn btn-primary" (click)="backToLobby()"><i class="pi pi-bolt"></i>{{ 'duel.rematch' | t }}</button>
+        </div>
+      </div>
+    } @else if (d.status === 'Declined' || d.status === 'Cancelled' || d.status === 'Expired') {
+      <div class="card p-6 text-center">
+        <p class="mb-4">{{ (d.status === 'Declined' ? 'duel.declinedInfo' : d.status === 'Cancelled' ? 'duel.cancelledInfo' : 'duel.expiredInfo') | t }}</p>
+        <button type="button" class="btn btn-primary" (click)="backToLobby()">{{ 'duel.back' | t }}</button>
+      </div>
+    } @else if (d.status === 'Invited' && !d.isChallenger) {
+      <div class="card p-6 text-center">
+        <p class="font-display text-xl font-semibold mb-1">{{ 'duel.invitedBy' | t: opponentName() }}</p>
+        <p class="text-muted mb-5">{{ (d.mode === 'Live' ? 'duel.mode.live' : 'duel.mode.async') | t }} · {{ difficultyKey(d.difficulty) | t }}</p>
+        <div class="flex justify-center gap-3">
+          <button type="button" class="btn btn-primary" (click)="accept()"><i class="pi pi-check"></i>{{ 'duel.accept' | t }}</button>
+          <button type="button" class="btn btn-ghost" (click)="decline()">{{ 'duel.decline' | t }}</button>
+        </div>
+      </div>
+    } @else if (isLive() && d.status !== 'InProgress') {
+      <div class="card p-6 text-center" role="status">
+        <i class="pi pi-spin pi-spinner text-3xl text-brand-500"></i>
+        <p class="mt-3 font-semibold">{{ d.status === 'Searching' ? ('duel.searching' | t) : ('duel.waitingAccept' | t: opponentName()) }}</p>
+        <button type="button" class="btn btn-ghost mt-4" (click)="cancel()">{{ 'duel.cancel' | t }}</button>
+      </div>
+    } @else if (isLive() && !question() && untilStart() > 0) {
+      <div class="card p-8 text-center fade-in" role="timer">
+        <p class="text-muted">{{ (d.currentOrder <= 1 ? 'duel.startsIn' : 'duel.countdown') | t: (untilStart() / 1000 | number: '1.0-0') }}</p>
+        <p class="font-display text-6xl font-extrabold tabular-nums mt-2">{{ untilStart() / 1000 | number: '1.0-0' }}</p>
+      </div>
+    } @else if (waitingForOpponent()) {
+      <div class="card p-6 text-center" role="status">
+        <i class="pi pi-hourglass text-3xl text-brand-500"></i>
+        <p class="mt-3 font-semibold">{{ (d.opponent ? 'duel.waitingFinish' : 'duel.waitingOpponent') | t: opponentName() }}</p>
+        @if (d.isChallenger && (d.status === 'Searching' || d.status === 'Invited')) {
+          <button type="button" class="btn btn-ghost mt-4" (click)="cancel()">{{ 'duel.cancel' | t }}</button>
+        }
+      </div>
+    }
+
+    <!-- ===== Question ===== -->
+    @if (question(); as q) {
+      @if (!isLive() && d.status !== 'InProgress' && d.isChallenger) {
+        <p class="text-xs text-center text-muted mb-2 shrink-0">{{ 'duel.playNow' | t }}</p>
+      }
+
+      @if (isLive()) {
+        <div class="h-1.5 rounded-full bg-zinc-900/10 dark:bg-white/10 overflow-hidden mb-3 shrink-0" role="progressbar" [attr.aria-valuenow]="remaining()" aria-valuemin="0" [attr.aria-valuemax]="d.questionSeconds">
+          <div class="h-full transition-[width] duration-200 ease-linear" [ngClass]="remaining() <= 5 ? 'bg-red-500' : 'bg-brand-500'" [style.width.%]="remainingPercent()"></div>
+        </div>
+      }
+
+      <div class="card p-3 sm:p-8 mb-3 sm:mb-4 fade-in shrink-0">
+        <h1 class="font-display text-lg leading-tight sm:text-3xl font-bold tracking-tight text-center">{{ q.label }}</h1>
+        @if (q.isMultipleAnswers) {
+          <p class="text-center text-xs sm:text-sm text-muted mt-0.5">{{ 'play.multiple' | t }}</p>
+        }
+        <div class="mt-2 sm:mt-6 flex flex-col items-center gap-2 sm:gap-4">
+          @if (q.subject.hasImage) {
+            <div class="grid place-items-center sm:size-56" [ngClass]="(q.answers.length > 8 || longAnswers() || q.subject.description) ? 'h-[13dvh] w-[13dvh]' : 'h-[22dvh] w-[22dvh]'">
+              @if (imageUrl(); as src) {
+                <img
+                  [src]="src"
+                  [alt]="answered() && q.subject.name ? q.subject.name : ('play.imageAlt' | t)"
+                  class="max-h-full max-w-full object-contain transition-[filter] duration-700"
+                  [style.filter]="imageFilter()"
+                  draggable="false"
+                />
+              } @else {
+                <div class="skeleton size-full rounded-2xl"></div>
+              }
+            </div>
+          } @else {
+            <!-- Sans image (cri, talents, descriptions) : Détective Pikachu mène l'enquête -->
+            <div class="grid place-items-center sm:size-56" [ngClass]="(q.answers.length > 8 || longAnswers() || q.subject.description) ? 'h-[13dvh] w-[13dvh]' : 'h-[22dvh] w-[22dvh]'">
+              <img src="assets/Images/detective-pikachu.png" alt="" class="max-h-full max-w-full object-contain" draggable="false" />
+            </div>
+          }
+          @if (q.code === 'PokCry' && !answered()) {
+            <button type="button" class="btn btn-primary h-12 px-6" (click)="playSound()">
+              <i class="pi pi-volume-up"></i>{{ 'play.listenCry' | t }}
+            </button>
+          }
+          @if (q.subject.name || q.subject.hasSound) {
+            <div class="flex items-center gap-2">
+              @if (q.subject.name) {
+                <p class="font-display text-base sm:text-xl font-semibold">{{ q.subject.name }}</p>
+              }
+              @if (q.subject.hasSound && !(q.code === 'PokCry' && !answered())) {
+                <button type="button" class="btn btn-ghost h-9 px-3" [title]="'play.listenCry' | t" [attr.aria-label]="'play.listenCry' | t" (click)="playSound()">
+                  <i class="pi pi-volume-up"></i>
+                </button>
+              }
+            </div>
+          }
+          @if (q.subject.description) {
+            <blockquote class="max-w-xl text-center text-sm sm:text-lg italic leading-snug sm:leading-relaxed">« {{ q.subject.description }} »</blockquote>
+          }
+        </div>
+      </div>
+
+      <div class="grid gap-2 sm:gap-3 content-start max-sm:flex-1 max-sm:min-h-0 max-sm:overflow-y-auto" [ngClass]="answersGridClass()" role="group" [attr.aria-label]="q.label">
+        @for (answer of q.answers; track answer.id; let i = $index) {
+          <button
+            type="button"
+            class="card relative text-left min-w-0 px-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3 border-2 transition-colors"
+            [ngClass]="answerClass(answer) + (longAnswers() ? ' py-1' : ' py-1.5')"
+            [attr.aria-pressed]="isSelected(answer)"
+            [disabled]="answered() || submitting() || timeUp()"
+            (click)="toggle(answer)"
+          >
+            <kbd class="grid place-items-center size-5 sm:size-7 rounded-md sm:rounded-lg bg-zinc-900/5 dark:bg-white/10 text-[10px] sm:text-xs font-bold font-sans shrink-0">{{ letter(i) }}</kbd>
+            <span class="flex-1 min-w-0" [ngClass]="longAnswers() ? 'text-[11px] sm:text-sm leading-tight sm:leading-snug' : 'text-xs sm:text-base font-semibold truncate'">{{ answer.label }}</span>
+            @if (answered() && isCorrect(answer)) {
+              <i class="pi pi-check-circle absolute -top-1.5 -right-1.5 text-base text-emerald-600 bg-white dark:bg-zinc-900 rounded-full" [attr.aria-label]="'play.answerCorrect' | t"></i>
+            } @else if (answered() && isSelected(answer)) {
+              <i class="pi pi-times-circle absolute -top-1.5 -right-1.5 text-base text-red-600 bg-white dark:bg-zinc-900 rounded-full" [attr.aria-label]="'play.answerWrong' | t"></i>
+            }
+          </button>
+        }
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-3 sm:mt-6 flex items-center gap-3 shrink-0">
+        @if (result(); as r) {
+          <p class="flex-1 font-display text-base sm:text-lg font-semibold" [class.text-emerald-600]="r.isCorrect" [class.text-red-600]="!r.isCorrect" role="status">
+            {{ (r.isCorrect ? 'play.correct' : 'play.wrong') | t }}
+          </p>
+          @if (isLive()) {
+            <p class="text-sm text-muted text-right">
+              {{ opponentAnswered() ? ('duel.opponentAnswered' | t: opponentName()) : ('duel.waitingAnswer' | t: opponentName()) }}
+            </p>
+          } @else {
+            <button type="button" class="btn btn-primary h-11 sm:h-12 px-5 sm:px-8" (click)="next()">
+              {{ (d.nextOrder ? 'play.next' : 'play.results') | t }} <i class="pi pi-arrow-right"></i>
+            </button>
+          }
+        } @else if (timeUp()) {
+          <p class="flex-1 font-display text-base sm:text-lg font-semibold text-red-600" role="status">{{ 'duel.timeUp' | t }}</p>
+        } @else {
+          @if (isLive() && opponentAnswered()) {
+            <p class="flex-1 text-xs sm:text-sm text-muted max-sm:hidden">{{ 'duel.opponentAnswered' | t: opponentName() }}</p>
+          } @else {
+            <span class="flex-1 max-sm:hidden"></span>
+          }
+          <!-- Mobile : bouton sur toute la largeur -->
+          <button type="button" class="btn btn-primary h-11 sm:h-12 px-8 max-sm:w-full" [disabled]="selected().length === 0 || submitting()" (click)="submit()">
+            @if (submitting()) {
+              <i class="pi pi-spin pi-spinner"></i>
+            }
+            {{ 'play.validate' | t }}
+          </button>
+        }
+      </div>
+    }
+
+    @if (d.status === 'InProgress') {
+      <div class="mt-3 text-center shrink-0">
+        <button type="button" class="text-xs font-semibold text-muted hover:text-red-600" (click)="forfeit()">
+          {{ (confirmForfeit() ? 'duel.forfeitSure' : 'duel.forfeit') | t }}
+        </button>
+      </div>
+    }
+  }
+</section>

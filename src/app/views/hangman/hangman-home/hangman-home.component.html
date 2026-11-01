@@ -1,0 +1,156 @@
+<section class="mx-auto max-w-4xl px-3 sm:px-6 pt-8 sm:pt-12 pb-16 fade-in">
+  <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400">{{ 'hangman.kicker' | t }}</p>
+  <h1 class="font-display text-4xl sm:text-5xl font-bold tracking-tight mt-1 mb-2">{{ 'hangman.title' | t }}</h1>
+  <p class="text-muted mb-2">{{ 'hangman.intro' | t }}</p>
+  @if (best() !== null) {
+    <p class="text-sm font-semibold mb-8"><i class="pi pi-star-fill text-amber-500 text-xs"></i> {{ 'hangman.best' | t: best() }}</p>
+  } @else {
+    <div class="mb-8"></div>
+  }
+
+  @if (error()) {
+    <p class="card p-4 mb-4 text-sm text-red-600 dark:text-red-400" role="alert">{{ error() }}</p>
+  }
+
+  <!-- Difficulté des nouvelles parties (solo et coop) -->
+  <div class="card p-4 sm:p-5 mb-6 flex flex-col sm:flex-row sm:items-center gap-3">
+    <span class="text-sm font-semibold">{{ 'quiz.difficulty' | t }}</span>
+    <div class="grid grid-cols-2 gap-2 sm:w-64" role="group" [attr.aria-label]="'quiz.difficulty' | t">
+      @for (level of difficultyOptions; track level) {
+        <button
+          type="button"
+          class="btn h-10 px-3"
+          [class.btn-primary]="difficulty() === level"
+          [class.btn-ghost]="difficulty() !== level"
+          [attr.aria-pressed]="difficulty() === level"
+          (click)="difficulty.set(level)"
+        >
+          {{ difficultyKey(level) | t }}
+        </button>
+      }
+    </div>
+    <p class="text-sm text-muted sm:flex-1">
+      <i class="pi text-xs" [ngClass]="difficulty() === 'Easy' ? 'pi-lightbulb text-amber-500' : 'pi-eye-slash'"></i>
+      {{ (difficulty() === 'Easy' ? 'hangman.easyHint' : 'hangman.normalHint') | t }}
+    </p>
+  </div>
+
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
+    <!-- Solo -->
+    <div class="card p-5 sm:p-6 flex flex-col">
+      <h2 class="font-display font-semibold text-lg"><i class="pi pi-user text-muted"></i> {{ 'hangman.solo' | t }}</h2>
+      <p class="text-sm text-muted mt-1 mb-4">{{ 'hangman.soloIntro' | t }}</p>
+
+      <p class="text-sm font-medium mb-2">{{ 'hangman.generations' | t }}</p>
+      <div class="flex flex-wrap gap-1.5 mb-5">
+        @for (gen of generationOptions; track gen) {
+          <button
+            type="button"
+            class="btn h-8 px-3 text-xs"
+            [class.btn-primary]="soloGenerations().includes(gen)"
+            [class.btn-ghost]="!soloGenerations().includes(gen)"
+            [attr.aria-pressed]="soloGenerations().includes(gen)"
+            (click)="toggle('solo', gen)"
+          >
+            {{ generationName(gen) }}
+          </button>
+        }
+      </div>
+
+      <button type="button" class="btn btn-primary mt-auto" [disabled]="starting()" (click)="startSolo()">
+        <i class="pi" [ngClass]="starting() ? 'pi-spin pi-spinner' : 'pi-play'"></i>{{ 'hangman.start' | t }}
+      </button>
+    </div>
+
+    <!-- Coop -->
+    <div class="card p-5 sm:p-6 flex flex-col">
+      <h2 class="font-display font-semibold text-lg"><i class="pi pi-users text-muted"></i> {{ 'hangman.coop' | t }}</h2>
+      <p class="text-sm text-muted mt-1 mb-4">{{ 'hangman.coopIntro' | t }}</p>
+
+      @if (auth.isLoggedIn()) {
+        <label for="hangmanFriendCode" class="text-sm font-medium mb-1.5">{{ 'duel.friendCode' | t }}</label>
+        <input
+          id="hangmanFriendCode"
+          class="field mb-3 uppercase tracking-widest"
+          [(ngModel)]="friendCode"
+          [placeholder]="'duel.friendCodePlaceholder' | t"
+          maxlength="12"
+          autocomplete="off"
+          (keydown.enter)="invite()"
+        />
+
+        <details class="mb-4">
+          <summary class="text-sm font-medium cursor-pointer">{{ 'duel.generationsOptional' | t }}</summary>
+          <div class="flex flex-wrap gap-1.5 mt-2">
+            @for (gen of generationOptions; track gen) {
+              <button
+                type="button"
+                class="btn h-8 px-3 text-xs"
+                [class.btn-primary]="coopGenerations().includes(gen)"
+                [class.btn-ghost]="!coopGenerations().includes(gen)"
+                [attr.aria-pressed]="coopGenerations().includes(gen)"
+                (click)="toggle('coop', gen)"
+              >
+                {{ generationName(gen) }}
+              </button>
+            }
+          </div>
+        </details>
+
+        @if (inviteSent() !== null) {
+          <p class="text-sm text-emerald-700 dark:text-emerald-400 mb-3" role="status"><i class="pi pi-check text-xs"></i> {{ 'hangman.inviteSent' | t: inviteSent() }}</p>
+        }
+
+        <button type="button" class="btn btn-primary mt-auto" [disabled]="sending() || !friendCode.trim()" (click)="invite()">
+          <i class="pi" [ngClass]="sending() ? 'pi-spin pi-spinner' : 'pi-send'"></i>{{ 'hangman.invite' | t }}
+        </button>
+        <a [routerLink]="['/', loc, 'duel']" class="text-xs text-muted mt-3 text-center hover:underline">{{ 'hangman.myCodeHint' | t }}</a>
+      } @else {
+        <div class="flex-1 grid place-items-center text-center py-4">
+          <p class="text-sm text-muted mb-4">{{ 'hangman.loginRequired' | t }}</p>
+          <a [routerLink]="['/', loc, 'login']" class="btn btn-ghost"><i class="pi pi-sign-in"></i>{{ 'nav.login' | t }}</a>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Parties en cours -->
+  @if (active().length > 0) {
+    <h2 class="font-display font-semibold text-lg mb-3">{{ 'hangman.ongoing' | t }}</h2>
+    <ul class="flex flex-col gap-2 mb-8">
+      @for (game of active(); track game.id) {
+        <li>
+          <button type="button" class="card-interactive w-full rounded-xl px-4 py-3 flex items-center gap-3 text-left" (click)="open(game)">
+            <span class="grid place-items-center size-10 rounded-xl bg-brand-50 text-brand-600 dark:bg-brand-500/15 dark:text-brand-400 shrink-0">
+              <i class="pi" [ngClass]="game.mode === 'Coop' ? 'pi-users' : 'pi-play'"></i>
+            </span>
+            <span class="min-w-0 flex-1">
+              <span class="block font-semibold truncate">
+                {{ (game.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }} · {{ difficultyKey(game.difficulty) | t }}@if (game.partner) { · {{ game.partner }}}
+              </span>
+              <span class="block text-sm text-muted truncate">{{ statusKey(game) | t: game.partner }} · {{ 'hangman.foundCount' | t: game.found }}</span>
+            </span>
+            <i class="pi pi-chevron-right text-muted"></i>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+
+  <!-- Parties terminées -->
+  @if (past().length > 0) {
+    <h2 class="font-display font-semibold text-lg mb-3">{{ 'hangman.history' | t }}</h2>
+    <ul class="card divide-y divide-black/5 dark:divide-white/10">
+      @for (game of past(); track game.id) {
+        <li class="px-4 py-3 flex items-center gap-3 text-sm">
+          <i class="pi text-muted" [ngClass]="game.mode === 'Coop' ? 'pi-users' : 'pi-user'"></i>
+          <span class="flex-1 min-w-0 truncate">
+            {{ (game.mode === 'Coop' ? 'hangman.coop' : 'hangman.solo') | t }} · {{ difficultyKey(game.difficulty) | t }}@if (game.partner) { · {{ game.partner }}}
+            <span class="text-muted"> · {{ game.finishedAt ?? game.createdAt | date: 'dd/MM HH:mm' }}</span>
+          </span>
+          <span class="font-display font-bold tabular-nums">{{ 'hangman.foundCount' | t: game.found }}</span>
+        </li>
+      }
+    </ul>
+  }
+</section>

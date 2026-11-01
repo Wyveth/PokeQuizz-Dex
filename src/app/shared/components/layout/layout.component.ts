@@ -1,16 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { HeaderComponent } from '../header/header.component';
 import { BreadcrumbsComponent } from '../breadcrumbs/breadcrumbs.component';
 import { FooterComponent } from '../footer/footer.component';
+import { InvitationToastComponent } from '../invitation-toast/invitation-toast.component';
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
-  imports: [CommonModule, RouterModule, HeaderComponent, BreadcrumbsComponent, FooterComponent]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    CommonModule,
+    RouterModule,
+    HeaderComponent,
+    BreadcrumbsComponent,
+    FooterComponent,
+    InvitationToastComponent
+  ]
 })
 export class LayoutComponent implements OnInit, OnDestroy {
   /** Écran plein (route avec data.immersive) : en-tête et pied de page masqués sur mobile. */

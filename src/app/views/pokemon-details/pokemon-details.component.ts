@@ -1,5 +1,5 @@
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Params, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
@@ -22,7 +22,14 @@ type DetailsTab = 'infos' | 'stats' | 'evolutions' | 'capacites';
 @Component({
   selector: 'app-pokemon-details',
   templateUrl: './pokemon-details.component.html',
-  imports: [TranslatePipe, CommonModule, RouterModule, PokemonEvolutionComponent, PokemonAttackComponent]
+  changeDetection: ChangeDetectionStrategy.Eager,
+  imports: [
+    TranslatePipe,
+    CommonModule,
+    RouterModule,
+    PokemonEvolutionComponent,
+    PokemonAttackComponent
+  ]
 })
 export class PokemonDetailsComponent extends BaseComponent implements OnInit, OnDestroy {
   imgRoot: string = this.config.getConfig('img_root');
@@ -143,7 +150,8 @@ export class PokemonDetailsComponent extends BaseComponent implements OnInit, On
     ];
     if (this.hasForms || this.pokemon?.evolvesFrom?.length || this.pokemon?.evolvesTo?.length)
       tabs.push({ id: 'evolutions', label: 'details.tab.evolutions', icon: 'pi-sync' });
-    if (this.hasAttacks) tabs.push({ id: 'capacites', label: 'details.tab.moves', icon: 'pi-bolt' });
+    if (this.hasAttacks)
+      tabs.push({ id: 'capacites', label: 'details.tab.moves', icon: 'pi-bolt' });
     return tabs;
   }
 

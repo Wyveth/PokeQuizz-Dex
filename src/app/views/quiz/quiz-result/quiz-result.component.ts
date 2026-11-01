@@ -1,6 +1,6 @@
 import { TranslatePipe } from 'src/app/i18n/translate.pipe';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { QuizzResult, settingsLabels } from 'src/app/api/models/concretes/quizz';
 import { I18nService } from 'src/app/i18n/i18n.service';
@@ -11,6 +11,7 @@ import { QuizzService } from 'src/app/api/services/quizz.service';
 @Component({
   selector: 'app-quiz-result',
   templateUrl: './quiz-result.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule, RouterModule]
 })
 export class QuizResultComponent implements OnInit {
@@ -71,7 +72,8 @@ export class QuizResultComponent implements OnInit {
     this.quizzService
       .create({ generations: summary.generations, difficulties: summary.difficulties })
       .subscribe({
-        next: created => this.router.navigate(['/', this.loc, 'quiz', created.id, created.nextOrder ?? 1]),
+        next: created =>
+          this.router.navigate(['/', this.loc, 'quiz', created.id, created.nextOrder ?? 1]),
         error: err => {
           this.error.set(err.message);
           this.replaying.set(false);

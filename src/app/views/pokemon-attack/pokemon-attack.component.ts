@@ -11,7 +11,8 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChildren
+  ViewChildren,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Attack } from 'src/app/api/models/concretes/attack';
@@ -22,6 +23,7 @@ import { BaseComponent } from 'src/app/shared/components/base/base.component';
 @Component({
   selector: 'app-pokemon-attack',
   templateUrl: './pokemon-attack.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [TranslatePipe, CommonModule]
 })
 export class PokemonAttackComponent
@@ -102,7 +104,8 @@ export class PokemonAttackComponent
         return;
       }
       // Élément masqué (version mobile ou ordinateur non affichée) : hauteur nulle, rien à mesurer
-      if (element.clientHeight > 0 && element.scrollHeight > element.clientHeight + 1) next.add(index);
+      if (element.clientHeight > 0 && element.scrollHeight > element.clientHeight + 1)
+        next.add(index);
     });
 
     const changed =

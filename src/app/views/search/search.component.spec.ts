@@ -1,27 +1,19 @@
-/* tslint:disable:no-unused-variable */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+import { testProviders } from 'src/testing/test-providers';
 import { SearchComponent } from './search.component';
 
 describe('SearchComponent', () => {
-  let component: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [SearchComponent],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SearchComponent],
+      providers: testProviders()
     }).compileComponents();
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(SearchComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

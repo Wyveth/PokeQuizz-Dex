@@ -2,23 +2,22 @@ import {
   APP_INITIALIZER,
   enableProdMode,
   ENVIRONMENT_INITIALIZER,
-  importProvidersFrom,
   inject,
+  provideZoneChangeDetection
 } from '@angular/core';
 import { environment } from './environments/environment';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptorsFromDi,
+  withXhr
+} from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { MessageService, ConfirmationService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
 import { routes } from './app/app.route';
 import { AppComponent } from './app/app.component';
 import { AppConfig } from './app/app.config';
 import { AppResource } from './app/app.resource';
-import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeng/themes/aura';
 import { AuthInterceptor } from './app/shared/interceptor/AuthInterceptor';
 
 if (environment.production) {
@@ -35,49 +34,34 @@ export function loadConfig(config: AppConfig) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    importProvidersFrom(ToastModule),
-    MessageService,
-    ConfirmationService,
+    provideZoneChangeDetection(),
     provideRouter(
       routes,
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
-        anchorScrolling: 'enabled',
+        anchorScrolling: 'enabled'
       })
     ),
-    providePrimeNG({
-      theme: {
-        preset: Aura,
-        options: {
-          cssLayer: {
-            name: 'primeng',
-            order: 'theme, base, primeng',
-          },
-        },
-      },
-    }),
-    provideAnimations(),
     // Nécessaire pour que AuthInterceptor (HTTP_INTERCEPTORS) soit appliqué
-    provideHttpClient(withInterceptorsFromDi()),
-    provideAnimationsAsync(),
+    provideHttpClient(withXhr(), withInterceptorsFromDi()),
     AppConfig,
     AppResource,
     {
       provide: APP_INITIALIZER,
       useFactory: loadResources,
       deps: [AppResource],
-      multi: true,
+      multi: true
     },
     {
       provide: APP_INITIALIZER,
       useFactory: loadConfig,
       deps: [AppConfig],
-      multi: true,
+      multi: true
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 });

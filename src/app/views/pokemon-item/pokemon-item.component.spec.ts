@@ -1,27 +1,19 @@
-/* tslint:disable:no-unused-variable */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
-
+import { testProviders } from 'src/testing/test-providers';
 import { PokemonItemComponent } from './pokemon-item.component';
 
 describe('PokemonItemComponent', () => {
-  let component: PokemonItemComponent;
   let fixture: ComponentFixture<PokemonItemComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [PokemonItemComponent],
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [PokemonItemComponent],
+      providers: testProviders()
     }).compileComponents();
-  });
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(PokemonItemComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

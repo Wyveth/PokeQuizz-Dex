@@ -2,14 +2,22 @@
   <!-- Barre de navigation -->
   <div class="flex items-center gap-2 mb-3 sm:mb-5">
     <a [routerLink]="['/', loc, 'pokedex']" class="btn btn-ghost !h-10 !px-3.5">
-      <i class="pi pi-arrow-left text-xs"></i><span class="hidden sm:inline">{{ 'nav.pokedex' | t }}</span>
+      <i class="pi pi-arrow-left text-xs"></i
+      ><span class="hidden sm:inline">{{ 'nav.pokedex' | t }}</span>
     </a>
     <div class="ml-auto flex items-center gap-2">
-      <button type="button" (click)="goBack()" [disabled]="key <= 1" class="btn btn-ghost !h-10 !px-3.5 disabled:opacity-40 disabled:pointer-events-none">
-        <i class="pi pi-chevron-left text-xs"></i><span class="hidden sm:inline">{{ 'details.previous' | t }}</span>
+      <button
+        type="button"
+        (click)="goBack()"
+        [disabled]="key <= 1"
+        class="btn btn-ghost !h-10 !px-3.5 disabled:opacity-40 disabled:pointer-events-none"
+      >
+        <i class="pi pi-chevron-left text-xs"></i
+        ><span class="hidden sm:inline">{{ 'details.previous' | t }}</span>
       </button>
       <button type="button" (click)="goNext()" class="btn btn-ghost !h-10 !px-3.5">
-        <span class="hidden sm:inline">{{ 'details.next' | t }}</span><i class="pi pi-chevron-right text-xs"></i>
+        <span class="hidden sm:inline">{{ 'details.next' | t }}</span
+        ><i class="pi pi-chevron-right text-xs"></i>
       </button>
     </div>
   </div>
@@ -26,7 +34,11 @@
     </div>
   } @else {
     <!-- Mobile : onglets en haut de la fiche, non flottants pour ne pas masquer le contenu (sur ordinateur, tout reste affiché) -->
-    <nav class="sm:hidden mb-4 glass rounded-2xl p-1 grid gap-1" [ngClass]="tabsGridClass" [attr.aria-label]="'details.sectionsAria' | t">
+    <nav
+      class="sm:hidden mb-4 glass rounded-2xl p-1 grid gap-1"
+      [ngClass]="tabsGridClass"
+      [attr.aria-label]="'details.sectionsAria' | t"
+    >
       @for (t of tabs; track t.id) {
         <button
           type="button"
@@ -42,14 +54,27 @@
 
     <div class="fade-in space-y-5" [style.--accent]="accent">
       <!-- En-tête -->
-      <article class="glass rounded-3xl overflow-hidden grid md:grid-cols-[1.1fr_1fr]" [ngClass]="mobileTab('infos')">
+      <article
+        class="glass rounded-3xl overflow-hidden grid md:grid-cols-[1.1fr_1fr]"
+        [ngClass]="mobileTab('infos')"
+      >
         <div
           class="relative sm:min-h-96 flex max-sm:flex-col items-center justify-center p-4 pt-8 sm:p-6 bg-cover bg-center"
-          [style.background-image]="pokemon.typePoks.length && pokemon.typePoks[0].pathFondGo ? 'url(' + imgRoot + pokemon.typePoks[0].pathFondGo + ')' : null"
+          [style.background-image]="
+            pokemon.typePoks.length && pokemon.typePoks[0].pathFondGo
+              ? 'url(' + imgRoot + pokemon.typePoks[0].pathFondGo + ')'
+              : null
+          "
         >
           <div
             class="absolute inset-0"
-            style="background: radial-gradient(circle at 50% 55%, color-mix(in srgb, var(--accent, #f0432a) 45%, transparent), transparent 65%)"
+            style="
+              background: radial-gradient(
+                circle at 50% 55%,
+                color-mix(in srgb, var(--accent, #f0432a) 45%, transparent),
+                transparent 65%
+              );
+            "
           ></div>
           <span
             class="absolute top-2 left-4 sm:top-4 sm:left-5 font-display font-extrabold text-4xl sm:text-7xl text-white/40 dark:text-white/10 select-none tabular-nums"
@@ -62,9 +87,25 @@
           />
           @if (pokemon.pathImgShiny) {
             <!-- Mobile : sous l'image pour ne pas la recouvrir -->
-            <div class="relative mt-3 sm:mt-0 sm:absolute sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 glass rounded-full p-1 flex text-xs font-semibold">
-              <button type="button" (click)="shiny = false" class="px-3 py-1.5 rounded-full transition-colors" [ngClass]="!shiny ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'">{{ 'details.normal' | t }}</button>
-              <button type="button" (click)="shiny = true" class="px-3 py-1.5 rounded-full transition-colors flex items-center gap-1" [ngClass]="shiny ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'"><i class="pi pi-sparkles text-[0.7rem]"></i>{{ 'details.shiny' | t }}</button>
+            <div
+              class="relative mt-3 sm:mt-0 sm:absolute sm:bottom-4 sm:left-1/2 sm:-translate-x-1/2 glass rounded-full p-1 flex text-xs font-semibold"
+            >
+              <button
+                type="button"
+                (click)="shiny = false"
+                class="px-3 py-1.5 rounded-full transition-colors"
+                [ngClass]="!shiny ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'"
+              >
+                {{ 'details.normal' | t }}
+              </button>
+              <button
+                type="button"
+                (click)="shiny = true"
+                class="px-3 py-1.5 rounded-full transition-colors flex items-center gap-1"
+                [ngClass]="shiny ? 'bg-white text-zinc-900 shadow dark:bg-white/90' : 'text-muted'"
+              >
+                <i class="pi pi-sparkles text-[0.7rem]"></i>{{ 'details.shiny' | t }}
+              </button>
             </div>
           }
         </div>
@@ -72,14 +113,23 @@
         <div class="p-4 sm:p-8 flex flex-col gap-4 sm:gap-5">
           <div>
             <!-- Le numéro est déjà en filigrane sur l'image en mobile -->
-            <p class="text-sm font-semibold tabular-nums text-muted max-sm:hidden">N° {{ pokemon.number }}</p>
-            <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-tight sm:mt-1">{{ pokemon.dataInfo.name }}</h1>
+            <p class="text-sm font-semibold tabular-nums text-muted max-sm:hidden">
+              N° {{ pokemon.number }}
+            </p>
+            <h1 class="font-display text-3xl sm:text-5xl font-bold tracking-tight sm:mt-1">
+              {{ pokemon.dataInfo.name }}
+            </h1>
             @if (pokemon.dataInfo.category) {
               <p class="text-muted mt-1">{{ pokemon.dataInfo.category }}</p>
             }
             <div class="flex flex-wrap gap-2 mt-3 sm:mt-4">
               @for (type of pokemon.typePoks; track $index) {
-                <img class="h-7 w-auto" [src]="imgRoot + type.pathMiniHome" [alt]="type.name" [title]="type.name ?? ''" />
+                <img
+                  class="h-7 w-auto"
+                  [src]="imgRoot + type.pathMiniHome"
+                  [alt]="type.name"
+                  [title]="type.name ?? ''"
+                />
               }
             </div>
           </div>
@@ -87,28 +137,47 @@
           @if (pokemon.dataInfo.descriptionVx || pokemon.dataInfo.descriptionVy) {
             <div class="space-y-2 text-[0.95rem] leading-relaxed">
               @if (pokemon.dataInfo.descriptionVx) {
-                <p class="border-l-2 pl-4" style="border-color: var(--accent, #f0432a)">{{ pokemon.dataInfo.descriptionVx }}</p>
+                <p class="border-l-2 pl-4" style="border-color: var(--accent, #f0432a)">
+                  {{ pokemon.dataInfo.descriptionVx }}
+                </p>
               }
-              @if (pokemon.dataInfo.descriptionVy && pokemon.dataInfo.descriptionVy !== pokemon.dataInfo.descriptionVx) {
-                <p class="border-l-2 border-zinc-300 dark:border-zinc-700 pl-4 text-muted">{{ pokemon.dataInfo.descriptionVy }}</p>
+              @if (
+                pokemon.dataInfo.descriptionVy &&
+                pokemon.dataInfo.descriptionVy !== pokemon.dataInfo.descriptionVx
+              ) {
+                <p class="border-l-2 border-zinc-300 dark:border-zinc-700 pl-4 text-muted">
+                  {{ pokemon.dataInfo.descriptionVy }}
+                </p>
               }
             </div>
           }
 
           <dl class="grid grid-cols-3 gap-2">
             <div class="min-w-0 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2.5 sm:p-3">
-              <dt class="text-[0.7rem] sm:text-xs text-muted flex items-center gap-1.5"><i class="pi pi-arrows-v text-[0.65rem]"></i>{{ 'details.size' | t }}</dt>
-              <dd class="text-sm sm:text-base font-semibold mt-0.5 truncate">{{ pokemon.dataInfo.size || '—' }}</dd>
-            </div>
-            <div class="min-w-0 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2.5 sm:p-3">
-              <dt class="text-[0.7rem] sm:text-xs text-muted flex items-center gap-1.5"><i class="pi pi-gauge text-[0.65rem]"></i>{{ 'details.weight' | t }}</dt>
-              <dd class="text-sm sm:text-base font-semibold mt-0.5 truncate">{{ pokemon.dataInfo.weight || '—' }}</dd>
+              <dt class="text-[0.7rem] sm:text-xs text-muted flex items-center gap-1.5">
+                <i class="pi pi-arrows-v text-[0.65rem]"></i>{{ 'details.size' | t }}
+              </dt>
+              <dd class="text-sm sm:text-base font-semibold mt-0.5 truncate">
+                {{ pokemon.dataInfo.size || '—' }}
+              </dd>
             </div>
             <div class="min-w-0 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2.5 sm:p-3">
               <dt class="text-[0.7rem] sm:text-xs text-muted flex items-center gap-1.5">
-                <i class="pi pi-flag text-[0.65rem]"></i><span class="sm:hidden">{{ 'details.genShort' | t }}</span><span class="max-sm:hidden">{{ 'details.generation' | t }}</span>
+                <i class="pi pi-gauge text-[0.65rem]"></i>{{ 'details.weight' | t }}
               </dt>
-              <dd class="text-sm sm:text-base font-semibold mt-0.5 truncate">{{ pokemon.generation || '—' }}</dd>
+              <dd class="text-sm sm:text-base font-semibold mt-0.5 truncate">
+                {{ pokemon.dataInfo.weight || '—' }}
+              </dd>
+            </div>
+            <div class="min-w-0 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2.5 sm:p-3">
+              <dt class="text-[0.7rem] sm:text-xs text-muted flex items-center gap-1.5">
+                <i class="pi pi-flag text-[0.65rem]"></i
+                ><span class="sm:hidden">{{ 'details.genShort' | t }}</span
+                ><span class="max-sm:hidden">{{ 'details.generation' | t }}</span>
+              </dt>
+              <dd class="text-sm sm:text-base font-semibold mt-0.5 truncate">
+                {{ pokemon.generation || '—' }}
+              </dd>
             </div>
           </dl>
 
@@ -121,28 +190,41 @@
 
           @if (pokemon.pathSound) {
             <div class="mt-auto">
-              <p class="text-xs font-semibold text-muted mb-2 flex items-center gap-1.5"><i class="pi pi-volume-up text-[0.7rem]"></i>{{ 'details.cry' | t }}</p>
+              <p class="text-xs font-semibold text-muted mb-2 flex items-center gap-1.5">
+                <i class="pi pi-volume-up text-[0.7rem]"></i>{{ 'details.cry' | t }}
+              </p>
               <audio controls [src]="imgRoot + pokemon.pathSound" class="w-full h-10"></audio>
             </div>
           }
         </div>
       </article>
 
-      <div class="grid md:grid-cols-2 gap-5 items-start" [ngClass]="tab === 'stats' || tab === 'evolutions' ? '' : 'max-sm:hidden'">
+      <div
+        class="grid md:grid-cols-2 gap-5 items-start"
+        [ngClass]="tab === 'stats' || tab === 'evolutions' ? '' : 'max-sm:hidden'"
+      >
         <!-- Statistiques -->
         <section class="glass panel" [ngClass]="mobileTab('stats')">
-          <h2 class="section-title"><i class="pi pi-chart-bar text-sm text-muted"></i>{{ 'details.baseStats' | t }}</h2>
+          <h2 class="section-title">
+            <i class="pi pi-chart-bar text-sm text-muted"></i>{{ 'details.baseStats' | t }}
+          </h2>
           <div class="space-y-3">
             @for (stat of stats; track $index; let i = $index) {
               <div class="grid grid-cols-[5.5rem_2.5rem_1fr] items-center gap-3 text-sm">
                 <span class="text-muted">{{ statLabels[i] | t }}</span>
                 <span class="font-semibold tabular-nums text-right">{{ stat ?? '—' }}</span>
                 <div class="h-2 rounded-full bg-black/[0.06] dark:bg-white/[0.08] overflow-hidden">
-                  <div class="h-full rounded-full transition-all duration-700" [ngClass]="statColor(stat)" [style.width.%]="statWidth(stat)"></div>
+                  <div
+                    class="h-full rounded-full transition-all duration-700"
+                    [ngClass]="statColor(stat)"
+                    [style.width.%]="statWidth(stat)"
+                  ></div>
                 </div>
               </div>
             }
-            <div class="grid grid-cols-[5.5rem_2.5rem_1fr] items-center gap-3 text-sm pt-3 border-t border-black/5 dark:border-white/10">
+            <div
+              class="grid grid-cols-[5.5rem_2.5rem_1fr] items-center gap-3 text-sm pt-3 border-t border-black/5 dark:border-white/10"
+            >
               <span class="font-semibold">{{ 'common.total' | t }}</span>
               <span class="font-bold tabular-nums text-right">{{ statTotal }}</span>
               <span></span>
@@ -154,14 +236,19 @@
           <!-- Talents -->
           @if (pokemon.abilities?.length) {
             <section class="glass panel" [ngClass]="mobileTab('stats')">
-              <h2 class="section-title"><i class="pi pi-bolt text-sm text-muted"></i>{{ 'details.abilities' | t }}</h2>
+              <h2 class="section-title">
+                <i class="pi pi-bolt text-sm text-muted"></i>{{ 'details.abilities' | t }}
+              </h2>
               <ul class="space-y-3">
                 @for (ability of pokemon.abilities; track $index) {
                   <li>
                     <p class="font-semibold flex items-center gap-2">
                       {{ ability.name }}
                       @if (ability.isHidden) {
-                        <span class="chip !text-[0.65rem]"><i class="pi pi-eye-slash text-[0.6rem]"></i>{{ 'details.hidden' | t }}</span>
+                        <span class="chip !text-[0.65rem]"
+                          ><i class="pi pi-eye-slash text-[0.6rem]"></i
+                          >{{ 'details.hidden' | t }}</span
+                        >
                       }
                     </p>
                     <p class="text-sm text-muted mt-0.5">{{ ability.description }}</p>
@@ -174,10 +261,17 @@
           <!-- Faiblesses -->
           @if (pokemon.weaknesses?.length) {
             <section class="glass panel" [ngClass]="mobileTab('stats')">
-              <h2 class="section-title"><i class="pi pi-shield text-sm text-muted"></i>{{ 'details.weaknesses' | t }}</h2>
+              <h2 class="section-title">
+                <i class="pi pi-shield text-sm text-muted"></i>{{ 'details.weaknesses' | t }}
+              </h2>
               <div class="flex flex-wrap gap-2">
                 @for (type of pokemon.weaknesses; track $index) {
-                  <img class="h-6 w-auto" [src]="imgRoot + (type.pathMiniHome || type.pathIconHome)" [alt]="type.name" [title]="type.name ?? ''" />
+                  <img
+                    class="h-6 w-auto"
+                    [src]="imgRoot + (type.pathMiniHome || type.pathIconHome)"
+                    [alt]="type.name"
+                    [title]="type.name ?? ''"
+                  />
                 }
               </div>
             </section>
@@ -186,14 +280,24 @@
           <!-- Évolution directe -->
           @if (pokemon.evolvesFrom?.length || pokemon.evolvesTo?.length) {
             <section class="glass panel" [ngClass]="mobileTab('evolutions')">
-              <h2 class="section-title"><i class="pi pi-sitemap text-sm text-muted"></i>{{ 'details.lineage' | t }}</h2>
+              <h2 class="section-title">
+                <i class="pi pi-sitemap text-sm text-muted"></i>{{ 'details.lineage' | t }}
+              </h2>
               <div class="grid sm:grid-cols-2 gap-3">
                 @if (pokemon.evolvesFrom?.length) {
                   <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-2">{{ 'details.evolvesFrom' | t }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
+                      {{ 'details.evolvesFrom' | t }}
+                    </p>
                     @for (evo of pokemon.evolvesFrom; track $index) {
-                      <div class="flex items-center gap-3 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 mb-2">
-                        <img [src]="imgRoot + evo?.pathImage" [alt]="evo?.name" class="size-12 object-contain" />
+                      <div
+                        class="flex items-center gap-3 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 mb-2"
+                      >
+                        <img
+                          [src]="imgRoot + (evo?.pathImage ?? '')"
+                          [alt]="(evo?.name ?? '')"
+                          class="size-12 object-contain"
+                        />
                         <div class="min-w-0">
                           <p class="font-semibold text-sm truncate">{{ evo?.name }}</p>
                           <p class="text-xs text-muted">{{ evo?.whenEvolution }}</p>
@@ -204,10 +308,18 @@
                 }
                 @if (pokemon.evolvesTo?.length) {
                   <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-2">{{ 'details.evolvesTo' | t }}</p>
+                    <p class="text-xs font-semibold uppercase tracking-wider text-muted mb-2">
+                      {{ 'details.evolvesTo' | t }}
+                    </p>
                     @for (evo of pokemon.evolvesTo; track $index) {
-                      <div class="flex items-center gap-3 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 mb-2">
-                        <img [src]="imgRoot + evo?.pathImage" [alt]="evo?.name" class="size-12 object-contain" />
+                      <div
+                        class="flex items-center gap-3 rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 mb-2"
+                      >
+                        <img
+                          [src]="imgRoot + (evo?.pathImage ?? '')"
+                          [alt]="(evo?.name ?? '')"
+                          class="size-12 object-contain"
+                        />
                         <div class="min-w-0">
                           <p class="font-semibold text-sm truncate">{{ evo?.name }}</p>
                           <p class="text-xs text-muted">{{ evo?.whenEvolution }}</p>
@@ -224,37 +336,81 @@
 
       <!-- Galerie -->
       <section class="glass panel" [ngClass]="mobileTab('infos')">
-        <h2 class="section-title"><i class="pi pi-images text-sm text-muted"></i>{{ 'details.sprites' | t }}</h2>
+        <h2 class="section-title">
+          <i class="pi pi-images text-sm text-muted"></i>{{ 'details.sprites' | t }}
+        </h2>
         <!-- Mobile : rangée défilante ; ordinateur : grille -->
-        <div class="flex gap-2 overflow-x-auto snap-x pb-1 sm:grid sm:grid-cols-5 sm:gap-3 sm:overflow-visible sm:pb-0">
+        <div
+          class="flex gap-2 overflow-x-auto snap-x pb-1 sm:grid sm:grid-cols-5 sm:gap-3 sm:overflow-visible sm:pb-0"
+        >
           @if (pokemon.pathSpriteLegacy) {
-            <figure class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2">
-              <img [src]="imgRoot + pokemon.pathSpriteLegacy" [alt]="'details.sprite.retro' | t" class="h-12 sm:h-16 object-contain [image-rendering:pixelated]" />
-              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">{{ 'details.sprite.retro' | t }}</figcaption>
+            <figure
+              class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2"
+            >
+              <img
+                [src]="imgRoot + pokemon.pathSpriteLegacy"
+                [alt]="'details.sprite.retro' | t"
+                class="h-12 sm:h-16 object-contain [image-rendering:pixelated]"
+              />
+              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">
+                {{ 'details.sprite.retro' | t }}
+              </figcaption>
             </figure>
           }
           @if (pokemon.pathSpriteNormal) {
-            <figure class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2">
-              <img [src]="imgRoot + pokemon.pathSpriteNormal" [alt]="'details.sprite.normal' | t" class="h-12 sm:h-16 object-contain" />
-              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">{{ 'details.sprite.normal' | t }}</figcaption>
+            <figure
+              class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2"
+            >
+              <img
+                [src]="imgRoot + pokemon.pathSpriteNormal"
+                [alt]="'details.sprite.normal' | t"
+                class="h-12 sm:h-16 object-contain"
+              />
+              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">
+                {{ 'details.sprite.normal' | t }}
+              </figcaption>
             </figure>
           }
           @if (pokemon.pathSpriteShiny) {
-            <figure class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2">
-              <img [src]="imgRoot + pokemon.pathSpriteShiny" [alt]="'details.sprite.shiny' | t" class="h-12 sm:h-16 object-contain" />
-              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">{{ 'details.sprite.shiny' | t }}</figcaption>
+            <figure
+              class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2"
+            >
+              <img
+                [src]="imgRoot + pokemon.pathSpriteShiny"
+                [alt]="'details.sprite.shiny' | t"
+                class="h-12 sm:h-16 object-contain"
+              />
+              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">
+                {{ 'details.sprite.shiny' | t }}
+              </figcaption>
             </figure>
           }
           @if (pokemon.pathAnimatedImg) {
-            <figure class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2">
-              <img [src]="imgRoot + pokemon.pathAnimatedImg" [alt]="'details.sprite.animated' | t" class="h-12 sm:h-16 object-contain" />
-              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">{{ 'details.sprite.animated' | t }}</figcaption>
+            <figure
+              class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2"
+            >
+              <img
+                [src]="imgRoot + pokemon.pathAnimatedImg"
+                [alt]="'details.sprite.animated' | t"
+                class="h-12 sm:h-16 object-contain"
+              />
+              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">
+                {{ 'details.sprite.animated' | t }}
+              </figcaption>
             </figure>
           }
           @if (pokemon.pathAnimatedImgShiny) {
-            <figure class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2">
-              <img [src]="imgRoot + pokemon.pathAnimatedImgShiny" [alt]="'details.sprite.animatedShiny' | t" class="h-12 sm:h-16 object-contain" />
-              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">{{ 'details.sprite.animatedShiny' | t }}</figcaption>
+            <figure
+              class="shrink-0 w-24 sm:w-auto snap-start rounded-2xl bg-black/[0.04] dark:bg-white/[0.06] p-2 sm:p-3 flex flex-col items-center gap-1 sm:gap-2"
+            >
+              <img
+                [src]="imgRoot + pokemon.pathAnimatedImgShiny"
+                [alt]="'details.sprite.animatedShiny' | t"
+                class="h-12 sm:h-16 object-contain"
+              />
+              <figcaption class="text-[0.7rem] sm:text-xs text-muted text-center leading-tight">
+                {{ 'details.sprite.animatedShiny' | t }}
+              </figcaption>
             </figure>
           }
         </div>
@@ -263,7 +419,9 @@
       <!-- Évolutions et formes -->
       @if (hasForms) {
         <section class="glass panel space-y-6" [ngClass]="mobileTab('evolutions')">
-          <h2 class="section-title"><i class="pi pi-sync text-sm text-muted"></i>{{ 'details.evolutionsForms' | t }}</h2>
+          <h2 class="section-title">
+            <i class="pi pi-sync text-sm text-muted"></i>{{ 'details.evolutionsForms' | t }}
+          </h2>
           @for (formVm of forms; track formVm.name) {
             <app-pokemon-evolution class="block" [forms]="formVm"></app-pokemon-evolution>
           }
@@ -273,9 +431,14 @@
       <!-- Capacités -->
       @if (hasAttacks) {
         <section class="glass panel space-y-6" [ngClass]="mobileTab('capacites')">
-          <h2 class="section-title"><i class="pi pi-bolt text-sm text-muted"></i>{{ 'details.moves' | t }}</h2>
+          <h2 class="section-title">
+            <i class="pi pi-bolt text-sm text-muted"></i>{{ 'details.moves' | t }}
+          </h2>
           @for (typeLearnAttackVM of attacks; track typeLearnAttackVM.name) {
-            <app-pokemon-attack class="block" [typeLearnAttack]="typeLearnAttackVM"></app-pokemon-attack>
+            <app-pokemon-attack
+              class="block"
+              [typeLearnAttack]="typeLearnAttackVM"
+            ></app-pokemon-attack>
           }
         </section>
       }
