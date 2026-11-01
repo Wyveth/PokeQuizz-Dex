@@ -33,6 +33,7 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
   order = 1;
 
   question = signal<Question | null>(null);
+  imageUrl = signal<string | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
   selected = signal<number[]>([]);
@@ -80,6 +81,7 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
   readonly difficultyKey = difficultyKey;
 
   private subscription?: Subscription;
+  private imageRequest?: Subscription;
   private audio?: HTMLAudioElement;
 
   constructor(
@@ -103,11 +105,8 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription?.unsubscribe();
+    this.clearImage();
     this.audio?.pause();
-  }
-
-  get imageUrl(): string {
-    return this.quizzService.imageUrl(this.quizzId, this.order);
   }
 
   isSelected(answer: AnswerChoice) {
@@ -121,7 +120,7 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
   answerClass(answer: AnswerChoice): string {
     const selected = this.isSelected(answer);
     if (!this.answered())
-      return selected ? 'card-interactive border-brand-500' : 'card-interactive border-transparent';
+      return selected ? 'cursor-pointer border-brand-500' : 'cursor-pointer border-transparent';
     if (this.isCorrect(answer)) return 'border-emerald-500 bg-emerald-500/10';
     if (selected) return 'border-red-500 bg-red-500/10';
     return 'border-transparent opacity-60';
@@ -201,11 +200,14 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
     if (!keepSelection) {
       this.question.set(null);
       this.selected.set([]);
+      this.clearImage();
     }
 
     this.quizzService.getQuestion(this.quizzId, this.order, this.loc).subscribe({
       next: question => {
         this.question.set(question);
+        if (question.subject.hasImage && !this.imageUrl()) this.loadImage();
+        else if (!question.subject.hasImage) this.clearImage();
         if (question.result) this.selected.set(question.result.selectedAnswerIds);
         this.loading.set(false);
         this.submitting.set(false);
@@ -216,5 +218,21 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
         this.submitting.set(false);
       }
     });
+  }
+
+  private loadImage() {
+    this.imageRequest?.unsubscribe();
+    this.imageRequest = this.quizzService.image(this.quizzId, this.order).subscribe({
+      next: image => this.imageUrl.set(URL.createObjectURL(image)),
+      error: () => this.imageUrl.set(null)
+    });
+  }
+
+  private clearImage() {
+    this.imageRequest?.unsubscribe();
+    this.imageRequest = undefined;
+    const url = this.imageUrl();
+    if (url) URL.revokeObjectURL(url);
+    this.imageUrl.set(null);
   }
 }

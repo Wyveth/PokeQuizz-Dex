@@ -319,5 +319,18 @@ export const EN: Translations = {
   'admin.purge': 'Clear',
   'admin.done': 'Done: {0} quizzes, {1} questions, {2} answers and {3} hangman games deleted. {4} duel quizzes kept.',
   'hangman.easyHint': 'Hints appear as you make mistakes: types, generation, description, then silhouette.',
-  'hangman.normalHint': 'No hints: just your letters.'
+  'hangman.normalHint': 'No hints: just your letters.',
+  'password.forgotLink': 'Forgot password?',
+  'password.forgotTitle': 'Forgot password',
+  'password.forgotSubtitle': 'Enter your account e-mail: we will send you a link to choose a new one.',
+  'password.sendLink': 'Send the link',
+  'password.sent': 'If an account exists for {0}, an e-mail with a link has just been sent.',
+  'password.sentHint': 'The link is valid for 1 hour. Check your spam folder too.',
+  'password.backToLogin': 'Back to login',
+  'password.resetTitle': 'New password',
+  'password.new': 'New password',
+  'password.save': 'Save password',
+  'password.resetDone': 'Your password has been changed. You can now log in.',
+  'password.linkInvalid': 'This link is incomplete or invalid.',
+  'password.newLink': 'Request a new link'
 };

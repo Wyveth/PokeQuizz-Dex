@@ -94,6 +94,16 @@ export const routes: Routes = [
         loadComponent: () => import('src/app/views/admin/admin.component').then(m => m.AdminComponent)
       },
       {
+        path: ':loc/forgot-password',
+        loadComponent: () =>
+          import('src/app/views/password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+      },
+      {
+        path: ':loc/reset-password',
+        loadComponent: () =>
+          import('src/app/views/password/reset-password.component').then(m => m.ResetPasswordComponent)
+      },
+      {
         path: ':loc/login',
         loadComponent: () =>
           import('src/app/views/login/login.component').then(m => m.LoginComponent)

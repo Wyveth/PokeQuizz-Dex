@@ -71,6 +71,20 @@ export class AuthService {
       .pipe(switchMap(tokens => this.onAuthenticated(tokens)), catchError(this.toError));
   }
 
+  /** Mot de passe oublié : l'API envoie un lien par e-mail (réponse identique que le compte existe ou non). */
+  forgotPassword(email: string, lang: string): Observable<void> {
+    return this.http
+      .post(`${this.apiAuth}/forgot-password`, { email, lang })
+      .pipe(map(() => undefined), catchError(this.toError));
+  }
+
+  /** Nouveau mot de passe à partir du lien reçu par e-mail. */
+  resetPassword(email: string, token: string, newPassword: string): Observable<void> {
+    return this.http
+      .post(`${this.apiAuth}/reset-password`, { email, token, newPassword })
+      .pipe(map(() => undefined), catchError(this.toError));
+  }
+
   logout(): Observable<void> {
     const body = { token: this.token ?? '', refreshToken: read(REFRESH_KEY) ?? '' };
     this.clear();

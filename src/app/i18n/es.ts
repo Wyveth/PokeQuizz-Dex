@@ -319,5 +319,18 @@ export const ES: Translations = {
   'admin.purge': 'Vaciar',
   'admin.done': 'Hecho: {0} quiz, {1} preguntas, {2} respuestas y {3} partidas de ahorcado eliminados. {4} quiz de duelo conservados.',
   'hangman.easyHint': 'Las pistas aparecen con los errores: tipos, generación, descripción y silueta.',
-  'hangman.normalHint': 'Sin pistas: solo tus letras.'
+  'hangman.normalHint': 'Sin pistas: solo tus letras.',
+  'password.forgotLink': '¿Olvidaste tu contraseña?',
+  'password.forgotTitle': 'Contraseña olvidada',
+  'password.forgotSubtitle': 'Indica el correo de tu cuenta: te enviaremos un enlace para elegir una nueva.',
+  'password.sendLink': 'Enviar el enlace',
+  'password.sent': 'Si existe una cuenta para {0}, se acaba de enviar un correo con un enlace.',
+  'password.sentHint': 'El enlace es válido durante 1 hora. Revisa también la carpeta de spam.',
+  'password.backToLogin': 'Volver a iniciar sesión',
+  'password.resetTitle': 'Nueva contraseña',
+  'password.new': 'Nueva contraseña',
+  'password.save': 'Guardar la contraseña',
+  'password.resetDone': 'Tu contraseña se ha cambiado. Ya puedes iniciar sesión.',
+  'password.linkInvalid': 'Este enlace está incompleto o no es válido.',
+  'password.newLink': 'Pedir un nuevo enlace'
 };

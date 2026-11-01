@@ -111,7 +111,7 @@
     }
 
     <!-- ===== Question ===== -->
-    @if (question(); as q) {
+    @if (d.status !== 'Finished' && question(); as q) {
       @if (!isLive() && d.status !== 'InProgress' && d.isChallenger) {
         <p class="text-xs text-center text-muted mb-2 shrink-0">{{ 'duel.playNow' | t }}</p>
       }
@@ -175,7 +175,7 @@
         @for (answer of q.answers; track answer.id; let i = $index) {
           <button
             type="button"
-            class="card relative text-left min-w-0 px-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3 border-2 transition-colors"
+            class="card relative text-left min-w-0 px-2 sm:px-4 sm:py-3 flex items-center gap-2 sm:gap-3 border-2 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
             [ngClass]="answerClass(answer) + (longAnswers() ? ' py-1' : ' py-1.5')"
             [attr.aria-pressed]="isSelected(answer)"
             [disabled]="answered() || submitting() || timeUp()"

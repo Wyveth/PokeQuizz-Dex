@@ -162,7 +162,7 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
   answerClass(answer: AnswerChoice): string {
     const selected = this.isSelected(answer);
     if (!this.answered())
-      return selected ? 'card-interactive border-brand-500' : 'card-interactive border-transparent';
+      return selected ? 'cursor-pointer border-brand-500' : 'cursor-pointer border-transparent';
     if (this.isCorrect(answer)) return 'border-emerald-500 bg-emerald-500/10';
     if (selected) return 'border-red-500 bg-red-500/10';
     return 'border-transparent opacity-60';
@@ -343,6 +343,8 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
     this.duelService.getQuestion(this.duelId, order, this.loc).subscribe({
       next: question => {
         this.loadingOrder = null;
+        // Une réponse HTTP peut arriver après la notification de fin du duel.
+        if (this.duel()?.status === 'Finished') return;
         this.question.set(question);
         this.selected.set(question.result?.selectedAnswerIds ?? []);
         this.submitting.set(false);
@@ -361,6 +363,7 @@ export class DuelPlayComponent implements OnInit, OnDestroy {
   private reloadQuestion(order: number) {
     this.duelService.getQuestion(this.duelId, order, this.loc).subscribe({
       next: question => {
+        if (this.duel()?.status === 'Finished') return;
         this.question.set(question);
         this.selected.set(question.result?.selectedAnswerIds ?? this.selected());
         this.submitting.set(false);

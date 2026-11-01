@@ -319,5 +319,18 @@ export const IT: Translations = {
   'admin.purge': 'Svuota',
   'admin.done': 'Fatto: {0} quiz, {1} domande, {2} risposte e {3} partite di impiccato eliminati. {4} quiz di duello conservati.',
   'hangman.easyHint': 'Gli indizi arrivano con gli errori: tipi, generazione, descrizione e sagoma.',
-  'hangman.normalHint': 'Nessun indizio: solo le tue lettere.'
+  'hangman.normalHint': 'Nessun indizio: solo le tue lettere.',
+  'password.forgotLink': 'Password dimenticata?',
+  'password.forgotTitle': 'Password dimenticata',
+  'password.forgotSubtitle': 'Inserisci l\'e-mail del tuo account: ti invieremo un link per sceglierne una nuova.',
+  'password.sendLink': 'Invia il link',
+  'password.sent': 'Se esiste un account per {0}, è stata appena inviata un\'e-mail con un link.',
+  'password.sentHint': 'Il link è valido per 1 ora. Controlla anche lo spam.',
+  'password.backToLogin': 'Torna all\'accesso',
+  'password.resetTitle': 'Nuova password',
+  'password.new': 'Nuova password',
+  'password.save': 'Salva la password',
+  'password.resetDone': 'La password è stata modificata. Ora puoi accedere.',
+  'password.linkInvalid': 'Questo link è incompleto o non valido.',
+  'password.newLink': 'Richiedi un nuovo link'
 };

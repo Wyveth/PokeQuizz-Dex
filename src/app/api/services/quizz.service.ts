@@ -102,8 +102,8 @@ export class QuizzService extends AbstractService {
     );
   }
 
-  imageUrl(id: string, order: number): string {
-    return `${this.apiPlay}/${id}/questions/${order}/image`;
+  image(id: string, order: number): Observable<Blob> {
+    return this.httpClient.get(`${this.apiPlay}/${id}/questions/${order}/image`, { responseType: 'blob' });
   }
 
   soundUrl(id: string, order: number): string {

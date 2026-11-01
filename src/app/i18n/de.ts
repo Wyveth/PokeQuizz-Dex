@@ -319,5 +319,18 @@ export const DE: Translations = {
   'admin.purge': 'Leeren',
   'admin.done': 'Erledigt: {0} Quiz, {1} Fragen, {2} Antworten und {3} Galgenmännchen-Spiele gelöscht. {4} Duell-Quiz bleiben erhalten.',
   'hangman.easyHint': 'Hinweise erscheinen mit deinen Fehlern: Typen, Generation, Beschreibung, dann Silhouette.',
-  'hangman.normalHint': 'Keine Hinweise: nur deine Buchstaben.'
+  'hangman.normalHint': 'Keine Hinweise: nur deine Buchstaben.',
+  'password.forgotLink': 'Passwort vergessen?',
+  'password.forgotTitle': 'Passwort vergessen',
+  'password.forgotSubtitle': 'Gib die E-Mail deines Kontos ein: Wir senden dir einen Link, um ein neues zu wählen.',
+  'password.sendLink': 'Link senden',
+  'password.sent': 'Falls ein Konto für {0} existiert, wurde gerade eine E-Mail mit einem Link gesendet.',
+  'password.sentHint': 'Der Link ist 1 Stunde gültig. Sieh auch im Spam-Ordner nach.',
+  'password.backToLogin': 'Zurück zur Anmeldung',
+  'password.resetTitle': 'Neues Passwort',
+  'password.new': 'Neues Passwort',
+  'password.save': 'Passwort speichern',
+  'password.resetDone': 'Dein Passwort wurde geändert. Du kannst dich jetzt anmelden.',
+  'password.linkInvalid': 'Dieser Link ist unvollständig oder ungültig.',
+  'password.newLink': 'Neuen Link anfordern'
 };

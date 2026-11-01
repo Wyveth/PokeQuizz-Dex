@@ -22,15 +22,19 @@
       <a [routerLink]="['/', loc, 'quiz']" routerLinkActive="is-active" class="nav-link max-sm:!px-2" [title]="'nav.quiz' | t">
         <i class="pi pi-question-circle text-sm"></i><span class="hidden md:inline">{{ 'nav.quiz' | t }}</span>
       </a>
-      <a [routerLink]="['/', loc, 'duel']" routerLinkActive="is-active" class="nav-link max-sm:!px-2 relative" [title]="'nav.duel' | t">
-        <i class="pi pi-trophy text-sm"></i><span class="hidden md:inline">{{ 'nav.duel' | t }}</span>
-      </a>
+      @if (auth.isLoggedIn()) {
+        <a [routerLink]="['/', loc, 'duel']" routerLinkActive="is-active" class="nav-link max-sm:!px-2 relative" [title]="'nav.duel' | t">
+          <i class="pi pi-trophy text-sm"></i><span class="hidden md:inline">{{ 'nav.duel' | t }}</span>
+        </a>
+      }
       <a [routerLink]="['/', loc, 'hangman']" routerLinkActive="is-active" class="nav-link max-sm:!px-2 relative" [title]="'nav.hangman' | t">
         <i class="pi pi-pencil text-sm"></i><span class="hidden lg:inline">{{ 'nav.hangman' | t }}</span>
       </a>
-      <a [routerLink]="['/', loc, 'leaderboard']" routerLinkActive="is-active" class="nav-link max-sm:!px-2" [title]="'nav.leaderboard' | t">
-        <i class="pi pi-chart-bar text-sm"></i><span class="hidden lg:inline">{{ 'nav.leaderboard' | t }}</span>
-      </a>
+      @if (auth.isLoggedIn()) {
+        <a [routerLink]="['/', loc, 'leaderboard']" routerLinkActive="is-active" class="nav-link max-sm:!px-2" [title]="'nav.leaderboard' | t">
+          <i class="pi pi-chart-bar text-sm"></i><span class="hidden lg:inline">{{ 'nav.leaderboard' | t }}</span>
+        </a>
+      }
     </div>
 
     <div class="ml-auto flex items-center gap-0.5 sm:gap-1">

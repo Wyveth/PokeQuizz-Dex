@@ -321,7 +321,20 @@ export const FR = {
   'admin.purge': 'Vider',
   'admin.done': 'Purge terminée : {0} quiz, {1} questions, {2} réponses et {3} parties de pendu supprimés. {4} quiz de duel conservés.',
   'hangman.easyHint': 'Des indices apparaissent au fil des erreurs : types, génération, description puis silhouette.',
-  'hangman.normalHint': 'Aucun indice : seulement vos lettres.'
+  'hangman.normalHint': 'Aucun indice : seulement vos lettres.',
+  'password.forgotLink': 'Mot de passe oublié ?',
+  'password.forgotTitle': 'Mot de passe oublié',
+  'password.forgotSubtitle': 'Indiquez l\'adresse de votre compte : nous vous enverrons un lien pour en choisir un nouveau.',
+  'password.sendLink': 'Envoyer le lien',
+  'password.sent': 'Si un compte existe pour {0}, un e-mail avec un lien vient d\'être envoyé.',
+  'password.sentHint': 'Le lien est valable 1 heure. Pensez à vérifier vos courriers indésirables.',
+  'password.backToLogin': 'Retour à la connexion',
+  'password.resetTitle': 'Nouveau mot de passe',
+  'password.new': 'Nouveau mot de passe',
+  'password.save': 'Enregistrer le mot de passe',
+  'password.resetDone': 'Votre mot de passe a été modifié. Vous pouvez vous connecter.',
+  'password.linkInvalid': 'Ce lien est incomplet ou invalide.',
+  'password.newLink': 'Demander un nouveau lien'
 };
 
 export type TranslationKey = keyof typeof FR;
